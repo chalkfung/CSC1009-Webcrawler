@@ -28,10 +28,13 @@ public class BaseCrawler
                 for (Element page : linksOnPage)
                     getPageLinks(page.attr("abs:href"));
 
-            } catch (IOException e)
+            }
+            catch (IOException e)
             {
                 System.err.println("For '" + url + "': " + e.getMessage());
             }
+
+            
         }
     }
 
