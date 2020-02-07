@@ -5,5 +5,6 @@ package stonks_intellect.core;
  */
 public interface IBaseCrawler
 {
-    void getPageLinks(String url);
+    void traverse(String url);
+    String[] getLinks();
 }
