@@ -1,11 +1,16 @@
+package stonks_intellect;
+
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
+import org.jsoup.nodes.Element ;
 import org.jsoup.select.Elements;
 
 import java.io.IOException;
 import java.util.HashSet;
 
+/**
+ * BaseCrawler
+ */
 public class BaseCrawler
 {
     private HashSet<String> links;
@@ -33,14 +38,6 @@ public class BaseCrawler
             {
                 System.err.println("For '" + url + "': " + e.getMessage());
             }
-
-            
         }
-    }
-
-    public static void main(String[] args)
-    {
-        BaseCrawler tmp = new BaseCrawler();
-        tmp.getPageLinks("https://sites.google.com/view/loopohkok/home");
     }
 }
