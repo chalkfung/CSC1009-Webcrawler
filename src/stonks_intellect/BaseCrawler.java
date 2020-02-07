@@ -5,13 +5,16 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element ;
 import org.jsoup.select.Elements;
 
+
 import java.io.IOException;
 import java.util.HashSet;
+
+import stonks_intellect.core.IBaseCrawler;
 
 /**
  * BaseCrawler
  */
-public class BaseCrawler
+public class BaseCrawler implements IBaseCrawler
 {
     private HashSet<String> links;
 
