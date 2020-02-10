@@ -1,4 +1,4 @@
-package stonks_intellect;
+package ricardo_crawlos;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -8,12 +8,12 @@ import org.jsoup.select.Elements;
 import java.io.IOException;
 import java.util.HashSet;
 
-import stonks_intellect.core.IBaseCrawler;
+import ricardo_crawlos.core.ICrawler;
 
 /**
  * BaseCrawler
  */
-public class BaseCrawler implements IBaseCrawler
+public class BaseCrawler implements ICrawler
 {
     private HashSet<String> links;
 

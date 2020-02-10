@@ -1,9 +1,9 @@
-package stonks_intellect.core;
+package ricardo_crawlos.core;
 
 /**
  * IBaseCrawler
  */
-public interface IBaseCrawler
+public interface ICrawler
 {
     void traverse(String url);
     String[] getLinks();
