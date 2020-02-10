@@ -1,4 +1,4 @@
-package ricardo_crawlos;
+package ricardo_crawlos.base;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -13,7 +13,7 @@ import ricardo_crawlos.core.ICrawler;
 /**
  * BaseCrawler
  */
-public class BaseCrawler implements ICrawler
+public abstract class BaseCrawler implements ICrawler
 {
     private HashSet<String> links;
 
