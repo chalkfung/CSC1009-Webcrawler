@@ -25,17 +25,17 @@ public class PlatformManager implements IManager<Platform, String > {
 
     public int getID(String name)
     {
-        return platformList.get(name);
+        return this.platformList.get(name);
     }
 
 
     public boolean isExist(String name) {
-        return platformList.containsKey(name);
+        return this.platformList.containsKey(name);
     }
 
 
     public void append(String name)
     {
-        platformList.putIfAbsent(name,platformList.size());
+        this.platformList.putIfAbsent(name, this.platformList.size());
     }
 }

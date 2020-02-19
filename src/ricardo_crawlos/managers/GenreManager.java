@@ -24,16 +24,16 @@ public class GenreManager implements IManager<Genre, String>
 
     public int getID(String name)
     {
-        return genreMap.get(name);
+        return this.genreMap.get(name);
     }
 
     public boolean isExist(String name)
     {
-        return genreMap.containsKey(name);
+        return this.genreMap.containsKey(name);
     }
 
     public void append(String name)
     {
-        genreMap.putIfAbsent(name, genreMap.size());
+        this.genreMap.putIfAbsent(name, this.genreMap.size());
     }
 }
