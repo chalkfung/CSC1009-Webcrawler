@@ -1,0 +1,16 @@
+{
+  "gameName": "doto 3",
+  "gameId": 1,
+  "developer": "volvo",
+  "genres": [
+    1,
+    2,
+    3
+  ],
+  "platforms": [
+    1,
+    2,
+    3
+  ],
+  "releasedDate": "Mar 6, 2020, 8:38:08 PM"
+}
