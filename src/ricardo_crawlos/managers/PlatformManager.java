@@ -4,7 +4,8 @@ import ricardo_crawlos.core.IManager;
 import ricardo_crawlos.models.Platform;
 import java.util.HashMap;
 
-public class PlatformManager implements IManager<Platform, String > {
+public class PlatformManager implements IManager<Platform, String>
+{
 
     private static PlatformManager pmInstance = null;
 
@@ -17,22 +18,20 @@ public class PlatformManager implements IManager<Platform, String > {
 
     public static PlatformManager getInstance()
     {
-        if(pmInstance == null)
+        if (pmInstance == null)
             pmInstance = new PlatformManager();
         return pmInstance;
     }
-
 
     public int getID(String name)
     {
         return this.platformList.get(name);
     }
 
-
-    public boolean isExist(String name) {
+    public boolean isExist(String name)
+    {
         return this.platformList.containsKey(name);
     }
-
 
     public void append(String name)
     {
