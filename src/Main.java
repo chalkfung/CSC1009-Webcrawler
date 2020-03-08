@@ -1,14 +1,10 @@
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileWriter;
 import java.util.Arrays;
 import java.util.Date;
-import java.util.Scanner;
-
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import ricardo_crawlos.models.Game;
+import ricardo_crawlos.storage.TextWriter;
 
 public class Main
 {
@@ -19,35 +15,7 @@ public class Main
         Game doto = new Game("doto 3", 1, "volvo", Arrays.asList(1, 2, 3), Arrays.asList(1, 2, 3), new Date());
         Game hl3 = new Game("hl 3", 1, "volvo", Arrays.asList(1, 2, 3), Arrays.asList(1, 2, 3), new Date());
 
-        writeAllText("./database/extracted/games/doto.json", gson.toJson(doto));
-        writeAllText("./database/extracted/games/hl3.json", gson.toJson(hl3));
-    }
-
-    public static void writeAllText(String path, String text)
-    {
-        try
-        {
-            FileWriter writer = new FileWriter(path);
-            writer.write(text);
-            writer.close();
-        }
-        catch (FileNotFoundException e)
-        {
-            File file = new File(path);
-            try
-            {
-                file.getParentFile().mkdirs();
-                file.createNewFile();
-                writeAllText(path, text);
-            }
-            catch (Exception e1)
-            {
-                System.out.println("File Creation Error: " + e1.getClass() + " " + e1.getMessage());
-            }
-        }
-        catch (Exception e)
-        {
-            System.out.println("File Write Error: " + e.getClass() + " " + e.getMessage());
-        }
+        TextWriter.writeAllText("./database/extracted/games/doto.json", gson.toJson(doto));
+        TextWriter.writeAllText("./database/extracted/games/hl3.json", gson.toJson(hl3));
     }
 }

@@ -1,12 +1,11 @@
 package ricardo_crawlos.base;
 
+import java.io.IOException;
+import java.util.HashSet;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
-
-import java.io.IOException;
-import java.util.HashSet;
 
 import ricardo_crawlos.core.ICrawler;
 

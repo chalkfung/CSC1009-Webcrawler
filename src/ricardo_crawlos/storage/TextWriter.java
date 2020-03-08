@@ -4,7 +4,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 
-public class Writer
+public class TextWriter
 {
     public static void writeAllText(String path, String text)
     {
