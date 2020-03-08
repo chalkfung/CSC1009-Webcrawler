@@ -18,10 +18,6 @@ public class Main
         Game game = new Game("doto 3", 1, "volvo", Arrays.asList(1, 2, 3), Arrays.asList(1, 2, 3), new Date());
 
         String serialised = gson.toJson(game);
-        Game deserialised = gson.fromJson(serialised, Game.class);
-
-        System.out.println("Serialised: " + serialised);
-        System.out.println("Deserialised: " + gson.toJson(deserialised));
 
         writeAllText("./database/extracted/games/gameName_.json", serialised);
     }
