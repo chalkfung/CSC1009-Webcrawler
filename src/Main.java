@@ -11,7 +11,7 @@ public class Main
 {
     public static void main(String[] args)
     {
-        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").setPrettyPrinting().create();
 
         Game doto = new Game("doto 3", 1, "volvo", Arrays.asList(1, 2, 3), Arrays.asList(1, 2, 3), new Date());
         Game hl3 = new Game("hl 3", 1, "volvo", Arrays.asList(1, 2, 3), Arrays.asList(1, 2, 3), new Date());
