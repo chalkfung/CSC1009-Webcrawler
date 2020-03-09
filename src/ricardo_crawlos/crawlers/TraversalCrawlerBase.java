@@ -1,4 +1,4 @@
-package ricardo_crawlos.base;
+package ricardo_crawlos.crawlers;
 
 import java.io.IOException;
 import java.util.HashSet;
@@ -12,21 +12,22 @@ import ricardo_crawlos.core.ICrawler;
 /**
  * BaseCrawler
  */
-public abstract class BaseCrawler implements ICrawler
+public abstract class TraversalCrawlerBase implements ICrawler
 {
     private HashSet<String> links;
 
-    public BaseCrawler()
+    public TraversalCrawlerBase()
     {
         this.links = new HashSet<String>();
     }
 
+    protected abstract boolean canTraverse(String url);
+
     /**
      * Note: recursive
-     * 
+     *
      * @param url The url to the page to look for more urls
      */
-    @Override
     public void traverse(String url)
     {
         if (links.add(url)) // if can add to the hashmap, it is already unique
@@ -38,7 +39,13 @@ public abstract class BaseCrawler implements ICrawler
                 Elements linksOnPage = document.select("a[href]");
 
                 for (Element page : linksOnPage)
-                    traverse(page.attr("abs:href"));
+                {
+                    String traverseUrl = page.attr("abs:href");
+                    if (canTraverse(traverseUrl))
+                    {
+                        traverse(traverseUrl);
+                    }
+                }
             }
             catch (IOException e)
             {
