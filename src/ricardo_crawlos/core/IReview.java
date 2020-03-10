@@ -1,8 +1,10 @@
 package ricardo_crawlos.core;
 
+import java.util.Date;
+
 public interface IReview
 {
-    public java.util.Date getDataCreated();
+    public Date getDataCreated();
     public int getScore();
     public String getComments();
     public int getGameID();

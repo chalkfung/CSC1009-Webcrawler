@@ -20,6 +20,8 @@ public abstract class TraversalCrawlerBase implements ICrawler
     protected HashSet<String> links;
     protected List<Document> traversalResults;
 
+    
+
     public TraversalCrawlerBase()
     {
         links = new HashSet<String>();
@@ -33,7 +35,9 @@ public abstract class TraversalCrawlerBase implements ICrawler
         Elements linksOnPage = document.select("a[href]");
         return linksOnPage
             .stream()
-            .map(x -> x.attr("abs:href")).filter(this::canTraverse).distinct()
+            .map(x -> x.attr("abs:href"))
+            .filter(this::canTraverse)
+            .distinct()
             .toArray(String[]::new);
     }
 
