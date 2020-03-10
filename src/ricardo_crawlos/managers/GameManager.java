@@ -14,7 +14,7 @@ public class GameManager implements IManager<Game,String>{
         this.gameMap = new HashMap<String, Integer>();
     }
 
-    public static IManager getInstance()
+    public static GameManager getInstance()
     {
         if(gameManagerInstance == null)
             gameManagerInstance = new GameManager();
