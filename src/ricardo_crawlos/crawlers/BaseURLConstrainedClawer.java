@@ -21,6 +21,16 @@ public class BaseURLConstrainedClawer extends TraversalCrawlerBase
     }
 
     @Override
+    public void traverse(String url)
+    {
+        if (url.contains("#"))
+        {
+            url = url.split("#")[0];
+        }
+        super.traverse(url);
+    }
+
+    @Override
     public void run()
     {
         traverse(baseUrl);

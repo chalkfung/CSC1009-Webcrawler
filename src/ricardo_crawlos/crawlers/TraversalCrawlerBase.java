@@ -2,6 +2,8 @@ package ricardo_crawlos.crawlers;
 
 import java.io.IOException;
 import java.util.HashSet;
+import java.util.stream.Collectors;
+
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -14,7 +16,7 @@ import ricardo_crawlos.core.ICrawler;
  */
 public abstract class TraversalCrawlerBase implements ICrawler
 {
-    private HashSet<String> links;
+    protected HashSet<String> links;
 
     public TraversalCrawlerBase()
     {
@@ -22,6 +24,13 @@ public abstract class TraversalCrawlerBase implements ICrawler
     }
 
     protected abstract boolean canTraverse(String url);
+
+    public String[] getTraversableLinks(String url)
+    {
+        Document document = Jsoup.connect(url).get();
+        Elements linksOnPage = document.select("a[href]");
+        return (String[]) linksOnPage.stream().map(x -> x.attr("abs:href")).filter(this::canTraverse).collect(Collectors.toList()).toArray();
+    }
 
     /**
      * Note: recursive
@@ -55,7 +64,7 @@ public abstract class TraversalCrawlerBase implements ICrawler
     }
 
     @Override
-    public String[] getLinks()
+    public String[] getTraversedLinks()
     {
         return links.toArray(new String[links.size()]);
     }
@@ -63,6 +72,6 @@ public abstract class TraversalCrawlerBase implements ICrawler
     @Override
     public String toString()
     {
-        return "Links traversed: " + links.size() + "\nAll links:\n\t" + String.join("\n\t", getLinks());
+        return "Links traversed: " + links.size() + "\nAll links:\n\t" + String.join("\n\t", getTraversedLinks());
     }
 }
