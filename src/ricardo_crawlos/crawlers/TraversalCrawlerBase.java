@@ -1,8 +1,9 @@
 package ricardo_crawlos.crawlers;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.stream.Collectors;
+import java.util.List;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -17,19 +18,23 @@ import ricardo_crawlos.core.ICrawler;
 public abstract class TraversalCrawlerBase implements ICrawler
 {
     protected HashSet<String> links;
+    protected List<Document> traversalResults;
 
     public TraversalCrawlerBase()
     {
-        this.links = new HashSet<String>();
+        links = new HashSet<String>();
+        traversalResults = new ArrayList<>();
     }
 
     protected abstract boolean canTraverse(String url);
 
-    public String[] getTraversableLinks(String url)
+    public String[] getTraversableLinks(Document document)
     {
-        Document document = Jsoup.connect(url).get();
         Elements linksOnPage = document.select("a[href]");
-        return (String[]) linksOnPage.stream().map(x -> x.attr("abs:href")).filter(this::canTraverse).collect(Collectors.toList()).toArray();
+        return linksOnPage
+            .stream()
+            .map(x -> x.attr("abs:href")).filter(this::canTraverse).distinct()
+            .toArray(String[]::new);
     }
 
     /**
@@ -37,7 +42,7 @@ public abstract class TraversalCrawlerBase implements ICrawler
      *
      * @param url The url to the page to look for more urls
      */
-    public void traverse(String url)
+    protected void traverse(String url)
     {
         if (links.add(url)) // if can add to the hashmap, it is already unique
         {
@@ -55,6 +60,8 @@ public abstract class TraversalCrawlerBase implements ICrawler
                         traverse(traverseUrl);
                     }
                 }
+
+                traversalResults.add(document);
             }
             catch (IOException e)
             {
@@ -67,6 +74,12 @@ public abstract class TraversalCrawlerBase implements ICrawler
     public String[] getTraversedLinks()
     {
         return links.toArray(new String[links.size()]);
+    }
+
+    @Override
+    public Document[] getTraversalResults()
+    {
+        return traversalResults.toArray(Document[]::new);
     }
 
     @Override

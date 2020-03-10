@@ -1,5 +1,10 @@
 package ricardo_crawlos.crawlers;
 
+import java.io.IOException;
+
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+
 import ricardo_crawlos.crawlers.TraversalCrawlerBase;
 
 /**
@@ -7,11 +12,27 @@ import ricardo_crawlos.crawlers.TraversalCrawlerBase;
  */
 public class BaseURLConstrainedClawer extends TraversalCrawlerBase
 {
-    String baseUrl;
+    protected String baseUrl;
+    protected Document baseDocument;
 
     public BaseURLConstrainedClawer(String theBaseUrl)
     {
         baseUrl = theBaseUrl;
+
+        try
+        {
+            baseDocument = Jsoup.connect(baseUrl).get();
+        }
+        catch (IOException e)
+        {
+            System.err.println("For '" + this.baseUrl + "': " + e.getMessage());
+        }
+    }
+
+    @Override
+    public String[] getTraversableLinks()
+    {
+        return getTraversableLinks(baseDocument);
     }
 
     @Override

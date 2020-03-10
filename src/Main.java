@@ -2,20 +2,25 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.stream.DoubleStream;
 
+import org.jsoup.nodes.Document;
+
+import GUI.MainWindow;
+import ricardo_crawlos.core.ICrawler;
 import ricardo_crawlos.crawlers.BaseURLConstrainedClawer;
+import ricardo_crawlos.crawlers.GameSpotReviewsClawer;
 import ricardo_crawlos.crawlers.TraversalCrawlerBase;
 
 public class Main
 {
     public static void main(String[] args)
     {
-        BaseURLConstrainedClawer clawer = new BaseURLConstrainedClawer("https://www.gamespot.com/dota-2/reviews/");
+        // ICrawler clawler = new GameSpotReviewsClawer("dota-2");
+        // clawler.run();
 
-        clawer.traverse("https://www.gamespot.com/dota-2/reviews/?page=1");
+        // String[] cacheOutput = Arrays.stream(clawler.getTraversalResults()).map(x -> x.html()).toArray(String[]::new);
 
-        System.out.println(clawer);
-        
-        Arrays.asList(0.0).stream().mapToDouble(x -> x).reduce(0, (x,y) -> x);
-    
+        // TextWriter.writeAllText("database/cache/gamespot/dota-2/reviewPageCache" + ".json", JsonSerialiser.DefaultInstance().toJson(
+        //         cacheOutput));
+       // ShowWindow();
     }
 }
