@@ -1,0 +1,16 @@
+{
+  "gameName": "hl 3",
+  "gameId": 1,
+  "developer": "volvo",
+  "genres": [
+    1,
+    2,
+    3
+  ],
+  "platforms": [
+    1,
+    2,
+    3
+  ],
+  "releasedDate": "2020-03-10T15:51:02.055Z"
+}

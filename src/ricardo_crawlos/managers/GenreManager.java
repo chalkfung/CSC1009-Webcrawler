@@ -15,7 +15,7 @@ public class GenreManager implements IManager<Genre, String>
         this.genreMap = new HashMap<String, Integer>();
     }
 
-    public static IManager getInstance()
+    public static GenreManager getInstance()
     {
         if(gmInstance == null)
             gmInstance = new GenreManager();

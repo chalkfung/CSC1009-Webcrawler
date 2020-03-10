@@ -1,11 +1,16 @@
 package ricardo_crawlos.core;
 
+import org.jsoup.nodes.Document;
+
 /**
  * IBaseCrawler
  */
 public interface ICrawler
 {
-    void traverse(String url);
     void run();
-    String[] getLinks();
+    String[] getTraversableLinks();
+
+    String[] getTraversedLinks();
+
+    Document[] getTraversalResults();
 }
