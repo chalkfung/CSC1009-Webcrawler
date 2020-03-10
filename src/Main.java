@@ -2,6 +2,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.stream.DoubleStream;
 
+import GUI.MainWindow;
 import ricardo_crawlos.crawlers.BaseURLConstrainedClawer;
 import ricardo_crawlos.crawlers.TraversalCrawlerBase;
 import ricardo_crawlos.models.CriticReview;
@@ -12,8 +13,15 @@ public class Main
 {
     public static void main(String[] args)
     {
-        CriticReview criticReview = new CriticReview(1, 1, "test", new Date(), "www", "test1");
 
-        TextWriter.writeAllText("testfolder/reviewtest.json", JsonSerialiser.DefaultInstance().toJson(criticReview));
+       ShowWindow();
+    }
+
+    public static void ShowWindow()
+    {
+        MainWindow dialog = new MainWindow();
+        dialog.setSize(1280, 720);
+        dialog.setVisible(true);
+        System.exit(0);
     }
 }
