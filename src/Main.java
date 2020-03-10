@@ -1,22 +1,18 @@
 import java.util.Arrays;
 import java.util.Date;
-import java.util.Scanner;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 
 import ricardo_crawlos.models.Game;
+import ricardo_crawlos.storage.JsonSerialiser;
 import ricardo_crawlos.storage.TextWriter;
 
 public class Main
 {
     public static void main(String[] args)
     {
-        Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").setPrettyPrinting().create();
-
         Game doto = new Game("doto 3", 1, "volvo", Arrays.asList(1, 2, 3), Arrays.asList(1, 2, 3), new Date());
         Game hl3 = new Game("hl 3", 1, "volvo", Arrays.asList(1, 2, 3), Arrays.asList(1, 2, 3), new Date());
 
-        TextWriter.writeAllText("./database/extracted/games/doto.json", gson.toJson(doto));
-        TextWriter.writeAllText("./database/extracted/games/hl3.json", gson.toJson(hl3));
+        TextWriter.writeAllText("./database/extracted/games/doto.json", JsonSerialiser.DefaultInstance().toJson(doto));
+        TextWriter.writeAllText("./database/extracted/games/hl3.json", JsonSerialiser.DefaultInstance().toJson(hl3));
     }
 }

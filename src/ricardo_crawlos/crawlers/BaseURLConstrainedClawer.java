@@ -12,11 +12,6 @@ public class BaseURLConstrainedClawer extends TraversalCrawlerBase
     public BaseURLConstrainedClawer(String theBaseUrl)
     {
         baseUrl = theBaseUrl;
-
-
-
-
-
     }
 
     @Override
