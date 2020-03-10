@@ -1,5 +1,6 @@
 package ricardo_crawlos.models;
 
+import java.util.Date;
 import java.util.List;
 
 public class Game
@@ -9,7 +10,7 @@ public class Game
     private String developer;
     private List<Integer> genres;
     private List<Integer> platforms;
-    private java.util.Date releasedDate;
+    private Date releasedDate;
 
     public Game(String gameName_, int gameId_, String developer_, List<Integer> genres_, List<Integer> platforms_,
                 java.util.Date releasedDate_)

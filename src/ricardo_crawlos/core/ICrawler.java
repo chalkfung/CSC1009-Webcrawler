@@ -6,5 +6,5 @@ package ricardo_crawlos.core;
 public interface ICrawler
 {
     void run();
-    String[] getLinks();
+    String[] getTraversedLinks();
 }

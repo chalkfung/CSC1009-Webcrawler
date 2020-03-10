@@ -18,6 +18,8 @@ public abstract class TraversalCrawlerBase implements ICrawler
 {
     protected HashSet<String> links;
 
+    
+
     public TraversalCrawlerBase()
     {
         this.links = new HashSet<String>();
@@ -25,11 +27,10 @@ public abstract class TraversalCrawlerBase implements ICrawler
 
     protected abstract boolean canTraverse(String url);
 
-    public String[] getTraversableLinks(String url)
+    public String[] getTraversableLinks(Document document)
     {
-        Document document = Jsoup.connect(url).get();
         Elements linksOnPage = document.select("a[href]");
-        return (String[]) linksOnPage.stream().map(x -> x.attr("abs:href")).filter(this::canTraverse).collect(Collectors.toList()).toArray();
+        return linksOnPage.stream().map(x -> x.attr("abs:href")).filter(this::canTraverse).toArray(String[]::new);
     }
 
     /**
