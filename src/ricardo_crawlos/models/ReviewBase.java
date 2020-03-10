@@ -9,13 +9,15 @@ public class ReviewBase implements IReview
     private int score;
     private String comments;
     private int gameID;
+    private String author;
 
-    public ReviewBase (int gameID, int score, String comments, Date date)
+    public ReviewBase (int gameID, int score, String comments, Date date, String author)
     {
         this.gameID = gameID;
         this.score = score;
         this.comments = comments;
         this.date = date;
+        this.author = author;
     }
 
     @Override
@@ -41,4 +43,12 @@ public class ReviewBase implements IReview
     {
         return this.gameID;
     }
+
+    @Override
+    public String getAuthor()
+    {
+        return this.author;
+    }
+
+
 }

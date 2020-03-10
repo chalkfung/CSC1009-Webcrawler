@@ -6,4 +6,5 @@ public interface IReview
     public int getScore();
     public String getComments();
     public int getGameID();
+    public String getAuthor();
 }

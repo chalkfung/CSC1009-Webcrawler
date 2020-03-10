@@ -6,9 +6,9 @@ public class UserReview extends  ReviewBase
     private int helpfulCount;
     private int helpfulScore;
 
-    public UserReview(int gameID, int score, String comments, Date date, int helpfulScore, int helpfulCount)
+    public UserReview(int gameID, int score, String comments, Date date, String author, int helpfulScore, int helpfulCount)
     {
-        super(gameID, score, comments, date);
+        super(gameID, score, comments, date, author);
         this.helpfulScore = helpfulScore;
         this.helpfulCount = helpfulCount;
     }
