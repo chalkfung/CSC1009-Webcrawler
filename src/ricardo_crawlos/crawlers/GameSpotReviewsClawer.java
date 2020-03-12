@@ -1,11 +1,12 @@
 package ricardo_crawlos.crawlers;
 
 import ricardo_crawlos.core.IDomainSegmentClawer;
+import ricardo_crawlos.core.IWebsite;
 
 /**
  * GameSpotReviewClawer
  */
-public class GameSpotReviewsClawer extends BaseURLConstrainedClawer implements IDomainSegmentClawer
+public class GamespotReviewsClawer extends BaseURLConstrainedClawer implements IDomainSegmentClawer
 {
     protected String gamePath;
 
@@ -32,7 +33,7 @@ public class GameSpotReviewsClawer extends BaseURLConstrainedClawer implements I
         return "https://www.gamespot.com/" + gamePath + "/reviews/" + subPath;
     }
 
-    public GameSpotReviewsClawer(String theGamePath)
+    public GamespotReviewsClawer(String theGamePath)
     {
         super(getUrl(theGamePath, ""));
         this.gamePath = theGamePath;
@@ -43,5 +44,11 @@ public class GameSpotReviewsClawer extends BaseURLConstrainedClawer implements I
     public void run()
     {
         traverse(this.baseUrl + "?page=1");
+    }
+
+    @Override
+    public IWebsite getWebsiteInfo()
+    {
+        return Websites.getGamespot();
     }
 }

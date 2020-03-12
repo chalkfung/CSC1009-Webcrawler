@@ -5,6 +5,8 @@ package ricardo_crawlos.core;
  */
 public interface IDomainSegmentClawer extends ICrawler
 {
+    IWebsite getWebsiteInfo();
+    
     String getDomain();
 
     String getSegmentName();
