@@ -1,5 +1,7 @@
 package ricardo_crawlos.crawlers;
 
+import org.jsoup.Jsoup;
+
 import ricardo_crawlos.core.IDomainSegmentClawer;
 import ricardo_crawlos.core.IWebsite;
 
@@ -50,5 +52,11 @@ public class GamespotReviewsClawer extends BaseURLConstrainedClawer implements I
     public IWebsite getWebsiteInfo()
     {
         return Websites.getGamespot();
+    }
+
+    @Override
+    public String extractFrom(String html)
+    {
+        return Jsoup.parse(html).select("li.userReview-list__item").outerHtml();
     }
 }

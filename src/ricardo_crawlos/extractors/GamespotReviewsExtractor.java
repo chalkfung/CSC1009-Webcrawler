@@ -36,7 +36,7 @@ public class GamespotReviewsExtractor implements IReviewsExtractor
     }
 
     @Override
-    public IReview[] extract(String html)
+    public IReview[] extractFrom(String html)
     {
         return extractUserReviews(html);
     }
@@ -47,35 +47,36 @@ public class GamespotReviewsExtractor implements IReviewsExtractor
 
         return document.select("li.userReview-list__item").stream().map(element ->
         {
-            String title = element.select("h3.media-title > a").text();
-            Elements reviewComponents = element.getElementsByAttributeValueContaining("class", "userReview-list");
-            String comment = reviewComponents.get(2).text();
-            double score = Double.parseDouble(element.select("div.media-well--review-user > strong").text());
-            Element reviewMeta = reviewComponents.get(1);
-            String author = reviewMeta.select("a").text();
-            String[] dateFragments = reviewMeta.text()
-                    .replace(author, "")
-                    .split("Review Date: ")[1]
-                    .split("\\|")[0]
-                    .replace(",", "")
-                    .split(" ");
-            Date date;
-            try
-            {
-                date = dateParser.parse(String.join("-", dateFragments));
-            }
-            catch (ParseException e)
-            {
-                date = new Date();
-            }
-            String[] helpfulFragments = reviewComponents.get(3)
-                .text()
-                .substring(0, 16)
-                .split(" ");
-            int helpfulScore = Integer.parseInt(helpfulFragments[0]);
-            int helpfulCount = Integer.parseInt(helpfulFragments[2]);
+            var title = element.select("h3.media-title > a").text();
+            var reviewComponents = element.getElementsByAttributeValueContaining("class", "userReview-list");
+            var comment = reviewComponents.get(2).text();
+            var score = Double.parseDouble(element.select("div.media-well--review-user > strong").text());
+            var reviewMeta = reviewComponents.get(1);
+            var author = reviewMeta.select("a").text();
+            var date = parseDate(reviewMeta.text(), author);
+            var helpfulFragments = reviewComponents.get(3).text().substring(0, 16).split(" ");
+            var helpfulScore = Integer.parseInt(helpfulFragments[0]);
+            var helpfulCount = Integer.parseInt(helpfulFragments[2]);
 
             return new UserReview(gameId, score, title + "\n" + comment, date, author, helpfulScore, helpfulCount);
         }).toArray(UserReview[]::new);
+    }
+
+    private Date parseDate(String metaText, String author)
+    {
+        try 
+        {
+            var dateFragments = metaText.replace(author, "")
+                .split("Review Date: ")[1]
+                .split("\\|")[0]
+                .replace(",", "")
+                .split(" ");
+            
+            return dateParser.parse(String.join("-", dateFragments));
+        } 
+        catch (Exception e) 
+        {
+            return new Date(0);
+        }
     }
 }

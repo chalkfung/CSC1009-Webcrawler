@@ -43,7 +43,7 @@ public class CachedGameSiteCrawler
                 String[] htmlStrings = JsonSerialiser.DefaultInstance().fromJson(json, String[].class);
 
                 return Arrays.stream(htmlStrings)
-                        .map(x -> Jsoup.parse(x).select("li.userReview-list__item").outerHtml())
+                        .map(crawler::extractFrom)
                         .collect(Collectors.joining("\n"));
             }
             catch (IOException e)

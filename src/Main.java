@@ -3,6 +3,9 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.text.ParseException;
 import java.util.Arrays;
+import java.util.function.Function;
+import java.util.function.Predicate;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 import org.jsoup.Jsoup;
@@ -36,7 +39,7 @@ public class Main
         // Elements ratings = document.select("div.media-well--review-user > strong");
         var gamespotDotaReviewsExtractor = new GamespotReviewsExtractor(0);
 
-        var reviewsJson = JsonSerialiser.DefaultInstance().toJson(gamespotDotaReviewsExtractor.extract(document.html()));
+        var reviewsJson = JsonSerialiser.DefaultInstance().toJson(gamespotDotaReviewsExtractor.extractFrom(document.html()));
 
         TextWriter.writeAllText("database/extracted/reviews/dota-2/gamespot_user-reviews.json", reviewsJson);
     }
