@@ -3,7 +3,7 @@ package ricardo_crawlos.core;
 /**
  * IAnalyser
  */
-public interface IAnalyser
+public interface IAnalyser<T, U>
 {
-    void Analyse(String raw);
+    U Analyse(T input);
 }

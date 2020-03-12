@@ -36,12 +36,16 @@ public class Main
         ReviewBase rb4 = new ReviewBase(0, 8, "Pinoy doto lame doto", new Date(), "Sinkie2");
         ReviewBase rb5 = new ReviewBase(0, 10, "Pinoy doto win doto", new Date(), "Dumpster");
         ReviewBase rb6 = new ReviewBase(0, 0, "Pinoy doto lose doto", new Date(), "Sinkie3");
+        ReviewBase rb7 = new ReviewBase(0, 8, "Pinoy doto lame doto", new Date(), "Sinkie2");
+        ReviewBase rb8 = new ReviewBase(0, 8, "Pinoy doto lame doto", new Date(), "Sinkie2");
         rbList.add(rb1);
         rbList.add(rb2);
         rbList.add(rb3);
         rbList.add(rb4);
         rbList.add(rb5);
         rbList.add(rb6);
+        rbList.add(rb7);
+        rbList.add(rb8);
         AnalyserBase<ReviewBase> rbAnal = new AnalyserBase<>();
         System.out.println(rbAnal.getMax(rbList));
         System.out.println(rbAnal.getQ3(rbList));
@@ -61,6 +65,9 @@ public class Main
         {
           System.out.println(elem.getComments());
         }
-
+        for(int i = 0; i<11; ++i)
+        {
+            System.out.println(rbAnal.probabilityOfScore(rbList, i));
+        }
     }
 }

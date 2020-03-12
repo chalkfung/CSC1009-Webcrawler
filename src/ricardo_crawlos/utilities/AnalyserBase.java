@@ -3,9 +3,10 @@ package ricardo_crawlos.utilities;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import ricardo_crawlos.core.IAnalyser;
 import ricardo_crawlos.core.IReview;
 
-public class AnalyserBase<T extends IReview>
+public class AnalyserBase<T extends IReview> implements IAnalyser<List<T>, Statistics<Double,T>>
 {
     public double getMean(final List<T> inputs)
     {
@@ -99,5 +100,30 @@ public class AnalyserBase<T extends IReview>
                         && elem.getScore() > getMinAcceptableValues(inputs))).collect(Collectors.toList());
     }
 
+    public double probabilityOfScore(final List<T> inputs, double score)
+    {
+        double sd = getStandardDeviation(inputs);
+        return (1.0/(sd * Math.sqrt(2.0 * Math.PI)))
+                * Math.exp(-0.5 * ((score-getMean(inputs))/sd) * ((score-getMean(inputs))/sd));
+    }
 
+    @Override
+    public Statistics<Double,T> Analyse(List<T> input)
+    {
+        return new Statistics(
+                getMean(input),
+                getMax(input),
+                getMin(input),
+                getVariance(input),
+                getStandardDeviation(input),
+                getQ2(input),
+                getQ3(input),
+                getQ1(input),
+                getIQR(input),
+                getMinAcceptableValues(input),
+                getMaxAcceptableValues(input),
+                showOutliers(input),
+                removeOutliers(input)
+        );
+    }
 }
