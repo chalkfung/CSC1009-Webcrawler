@@ -27,17 +27,16 @@ public class Main
 
     private static void testExtraction()
     {
-        CachedGameSiteCrawler crawler = new CachedGameSiteCrawler(new GamespotReviewsClawer("dota-2"), "dota-2");
+        var crawler = new CachedGameSiteCrawler(new GamespotReviewsClawer("dota-2"), "dota-2");
 
-        Document document = Jsoup.parse(crawler.getOrCacheHTML());
+        var document = Jsoup.parse(crawler.getOrCacheHTML());
 
         TextWriter.writeAllText("extractedTest.html", document.html());
 
         // Elements ratings = document.select("div.media-well--review-user > strong");
-        IReviewsExtractor gamespotDotaReviewsExtractor = new GamespotReviewsExtractor(0);
+        var gamespotDotaReviewsExtractor = new GamespotReviewsExtractor(0);
 
-        String reviewsJson = JsonSerialiser.DefaultInstance()
-                .toJson(gamespotDotaReviewsExtractor.extract(document.html()));
+        var reviewsJson = JsonSerialiser.DefaultInstance().toJson(gamespotDotaReviewsExtractor.extract(document.html()));
 
         TextWriter.writeAllText("database/extracted/reviews/dota-2/gamespot_user-reviews.json", reviewsJson);
     }
