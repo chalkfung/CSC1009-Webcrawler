@@ -6,12 +6,12 @@ import java.util.Date;
 public class ReviewBase implements IReview
 {
     private Date date;
-    private int score;
+    private double score;
     private String comments;
     private int gameID;
     private String author;
 
-    public ReviewBase (int gameID, int score, String comments, Date date, String author)
+    public ReviewBase (int gameID, double score, String comments, Date date, String author)
     {
         this.gameID = gameID;
         this.score = score;
@@ -27,7 +27,7 @@ public class ReviewBase implements IReview
     }
 
     @Override
-    public int getScore()
+    public double getScore()
     {
         return this.score;
     }
