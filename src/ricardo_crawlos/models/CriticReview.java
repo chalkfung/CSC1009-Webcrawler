@@ -5,7 +5,7 @@ public class CriticReview extends ReviewBase
 {
     private String source;
 
-    public CriticReview (int gameID, int score, String comments, Date date, String source, String author)
+    public CriticReview (int gameID, double score, String comments, Date date, String source, String author)
     {
         super(gameID, score, comments, date, author);
         this.source = source;
@@ -16,7 +16,7 @@ public class CriticReview extends ReviewBase
         return super.getGameID();
     }
 
-    public int getScore()
+    public double getScore()
     {
         return super.getScore();
     }
@@ -28,7 +28,7 @@ public class CriticReview extends ReviewBase
 
     public Date getDateCreated()
     {
-        return super.getDataCreated();
+        return super.getDateCreated();
     }
 
     public String getAuthor()
