@@ -1,11 +1,15 @@
 import java.io.IOException;
 import java.text.ParseException;
+import java.util.Arrays;
 
 import org.jsoup.Jsoup;
 
 import GUI.MainWindow;
+import ricardo_crawlos.core.IReview;
 import ricardo_crawlos.crawlers.GamespotReviewsCrawler;
 import ricardo_crawlos.extractors.GamespotReviewsExtractor;
+import ricardo_crawlos.models.ReviewBase;
+import ricardo_crawlos.models.UserReview;
 import ricardo_crawlos.storage.CachedGameSiteCrawler;
 import ricardo_crawlos.storage.JsonSerialiser;
 import ricardo_crawlos.storage.TextWriter;
@@ -17,7 +21,7 @@ public class Main
     {
         testExtraction();
 
-        // ShowWindow();
+        //ShowWindow();
     }
 
     private static void testExtraction()
@@ -30,9 +34,8 @@ public class Main
 
         // Elements ratings = document.select("div.media-well--review-user > strong");
         var gamespotDotaReviewsExtractor = new GamespotReviewsExtractor(0);
-
-        var reviewsJson = JsonSerialiser.DefaultInstance().toJson(gamespotDotaReviewsExtractor.extractFrom(document.html()));
-
+        var gamespotReviewsArr = gamespotDotaReviewsExtractor.extractFrom(document.html());
+        var reviewsJson = JsonSerialiser.DefaultInstance().toJson(gamespotReviewsArr);
         TextWriter.writeAllText("database/extracted/reviews/dota-2/gamespot_user-reviews.json", reviewsJson);
     }
 

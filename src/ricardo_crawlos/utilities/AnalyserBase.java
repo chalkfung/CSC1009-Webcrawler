@@ -5,6 +5,7 @@ import java.util.stream.Collectors;
 
 import ricardo_crawlos.core.IAnalyser;
 import ricardo_crawlos.core.IReview;
+import ricardo_crawlos.models.UserReview;
 
 public class AnalyserBase<T extends IReview> implements IAnalyser<List<T>, Statistics<Double,T>>
 {
@@ -90,14 +91,39 @@ public class AnalyserBase<T extends IReview> implements IAnalyser<List<T>, Stati
 
     public List<T> removeOutliers(final List<T> inputs)
     {
-        return inputs.stream().filter(elem-> (elem.getScore() < getMaxAcceptableValues(inputs)
-                        && elem.getScore() > getMinAcceptableValues(inputs))).collect(Collectors.toList());
+        if(inputs.size() > 0 && inputs.get(0) instanceof UserReview)
+        {
+            return inputs.stream().map(x -> (UserReview) x).
+                filter(
+                        elem -> (elem.getScore() < getMaxAcceptableValues(inputs)
+                                && elem.getScore() > getMinAcceptableValues(inputs))
+                                || ((double)elem.getHelpfulScore()/(double)elem.getHelpfulCount() >= 0.5)
+                                ).map(x->(T) x).collect(Collectors.toList());
+        }
+        else
+        {
+            return inputs.stream().filter(elem -> (elem.getScore() < getMaxAcceptableValues(inputs)
+                    && elem.getScore() > getMinAcceptableValues(inputs))).collect(Collectors.toList());
+
+        }
     }
 
     public List<T> showOutliers(final List<T> inputs)
     {
-        return inputs.stream().filter(elem-> !(elem.getScore() < getMaxAcceptableValues(inputs)
-                        && elem.getScore() > getMinAcceptableValues(inputs))).collect(Collectors.toList());
+        if(inputs.size() > 0 && inputs.get(0) instanceof UserReview)
+        {
+            return inputs.stream().map(x -> (UserReview) x).
+                    filter(
+                            elem -> !(elem.getScore() < getMaxAcceptableValues(inputs)
+                            && elem.getScore() > getMinAcceptableValues(inputs))
+            && ((double)elem.getHelpfulScore()/(double)elem.getHelpfulCount() < 0.5)
+            ).map(x->(T) x).collect(Collectors.toList());
+        }
+        else
+        {
+            return inputs.stream().filter(elem-> !(elem.getScore() < getMaxAcceptableValues(inputs)
+                    && elem.getScore() > getMinAcceptableValues(inputs))).collect(Collectors.toList());
+        }
     }
 
     public double probabilityOfScore(final List<T> inputs, double score)
