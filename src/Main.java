@@ -1,5 +1,6 @@
 import java.io.IOException;
 import java.text.ParseException;
+import java.util.Date;
 
 import org.jsoup.Jsoup;
 
@@ -33,7 +34,11 @@ public class Main
         var reviewsJson = JsonSerialiser.DefaultInstance().toJson(gamespotDotaReviewsExtractor.extractFrom(document.html()));
 
         TextWriter.writeAllText("database/extracted/reviews/dota-2/gamespot_user-reviews.json", reviewsJson);
+
+        var
     }
+
+
 
     public static void ShowWindow()
     {

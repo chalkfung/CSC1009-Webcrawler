@@ -6,29 +6,11 @@ import ricardo_crawlos.core.IDomainSegmentClawer;
 import ricardo_crawlos.core.IWebsite;
 
 /**
- * GameSpotReviewClawer
+ * GameSpotReviewCrawler
  */
 public class GamespotReviewsCrawler extends BaseURLConstrainedCrawler implements IDomainSegmentClawer
 {
     protected String gamePath;
-
-    @Override
-    public String getDomain()
-    {
-        return "gamespot";
-    }
-
-    @Override
-    public String getSegmentName()
-    {
-        return "user-reviews";
-    }
-
-    @Override
-    public String fromSubpage(String subPath)
-    {
-        return getUrl(gamePath, subPath);
-    }
 
     private static String getUrl(String gamePath, String subPath)
     {
@@ -46,6 +28,24 @@ public class GamespotReviewsCrawler extends BaseURLConstrainedCrawler implements
     public void run()
     {
         traverse(this.baseUrl + "?page=1");
+    }
+
+    @Override
+    public String getDomain()
+    {
+        return "gamespot";
+    }
+
+    @Override
+    public String getSegmentName()
+    {
+        return "user-reviews";
+    }
+
+    @Override
+    public String fromSubpage(String subPath)
+    {
+        return getUrl(gamePath, subPath);
     }
 
     @Override
