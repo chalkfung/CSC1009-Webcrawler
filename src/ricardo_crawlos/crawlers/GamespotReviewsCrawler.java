@@ -8,7 +8,7 @@ import ricardo_crawlos.core.IWebsite;
 /**
  * GameSpotReviewClawer
  */
-public class GamespotReviewsClawer extends BaseURLConstrainedClawer implements IDomainSegmentClawer
+public class GamespotReviewsCrawler extends BaseURLConstrainedCrawler implements IDomainSegmentClawer
 {
     protected String gamePath;
 
@@ -35,7 +35,7 @@ public class GamespotReviewsClawer extends BaseURLConstrainedClawer implements I
         return "https://www.gamespot.com/" + gamePath + "/reviews/" + subPath;
     }
 
-    public GamespotReviewsClawer(String theGamePath)
+    public GamespotReviewsCrawler(String theGamePath)
     {
         super(getUrl(theGamePath, ""));
         this.gamePath = theGamePath;

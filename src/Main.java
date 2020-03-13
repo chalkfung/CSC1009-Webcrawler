@@ -1,19 +1,10 @@
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.text.ParseException;
-import java.util.Arrays;
-import java.util.function.Function;
-import java.util.function.Predicate;
-import java.util.function.Supplier;
-import java.util.stream.Collectors;
 
 import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
 
 import GUI.MainWindow;
-import ricardo_crawlos.core.IReviewsExtractor;
-import ricardo_crawlos.crawlers.GamespotReviewsClawer;
+import ricardo_crawlos.crawlers.GamespotReviewsCrawler;
 import ricardo_crawlos.extractors.GamespotReviewsExtractor;
 import ricardo_crawlos.storage.CachedGameSiteCrawler;
 import ricardo_crawlos.storage.JsonSerialiser;
@@ -30,7 +21,7 @@ public class Main
 
     private static void testExtraction()
     {
-        var crawler = new CachedGameSiteCrawler(new GamespotReviewsClawer("dota-2"), "dota-2");
+        var crawler = new CachedGameSiteCrawler(new GamespotReviewsCrawler("dota-2"), "dota-2");
 
         var document = Jsoup.parse(crawler.getOrCacheHTML());
 
