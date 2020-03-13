@@ -1,13 +1,9 @@
 package ricardo_crawlos.extractors;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
 
 import ricardo_crawlos.core.IReview;
 import ricardo_crawlos.core.IReviewsExtractor;
@@ -64,17 +60,17 @@ public class GamespotReviewsExtractor implements IReviewsExtractor
 
     private Date parseDate(String metaText, String author)
     {
-        try 
+        try
         {
             var dateFragments = metaText.replace(author, "")
-                .split("Review Date: ")[1]
-                .split("\\|")[0]
-                .replace(",", "")
-                .split(" ");
-            
+                    .split("Review Date: ")[1]
+                    .split("\\|")[0]
+                    .replace(",", "")
+                    .split(" ");
+
             return dateParser.parse(String.join("-", dateFragments));
-        } 
-        catch (Exception e) 
+        }
+        catch (Exception e)
         {
             return new Date(0);
         }
