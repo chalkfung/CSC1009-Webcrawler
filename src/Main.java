@@ -6,6 +6,7 @@ import java.util.stream.DoubleStream;
 
 import GUI.MainWindow;
 import ricardo_crawlos.core.ICrawler;
+import ricardo_crawlos.core.IReview;
 import ricardo_crawlos.crawlers.BaseURLConstrainedClawer;
 import ricardo_crawlos.crawlers.GameSpotReviewsClawer;
 import ricardo_crawlos.crawlers.TraversalCrawlerBase;
@@ -19,7 +20,7 @@ public class Main
 {
     public static void main(String[] args)
     {
-        /*
+        
         ICrawler clawler = new GameSpotReviewsClawer("dota-2");
         clawler.run();
 
@@ -27,8 +28,9 @@ public class Main
 
         TextWriter.writeAllText("database/cache/gamespot/dota-2/reviewPageCache" + ".json", JsonSerialiser.DefaultInstance().toJson(
                 cacheOutput));
-         */
+
        // ShowWindow();
+        /*
         List<ReviewBase> rbList = new ArrayList<>();
         ReviewBase rb1 = new ReviewBase(0, 9, "Pinoy doto bad doto", new Date(), "Sinkie");
         ReviewBase rb2 = new ReviewBase(0, 10, "Pinoy doto best doto", new Date(), "Trash");
@@ -47,27 +49,13 @@ public class Main
         rbList.add(rb7);
         rbList.add(rb8);
         AnalyserBase<ReviewBase> rbAnal = new AnalyserBase<>();
-        System.out.println(rbAnal.getMax(rbList));
-        System.out.println(rbAnal.getQ3(rbList));
-        System.out.println(rbAnal.getQ1(rbList));
-        System.out.println(rbAnal.getIQR(rbList));
-        System.out.println(rbAnal.getMean(rbList));
-        System.out.println(rbAnal.getVariance(rbList));
-        System.out.println(rbAnal.getStandardDeviation(rbList));
-        for (ReviewBase elem : rbAnal.removeOutliers(rbList)
-        )
+        Statistics<Double,ReviewBase> stats1 = rbAnal.Analyse(rbList);
+        System.out.println(stats1.getMean());
+        for(IReview elem : stats1.getNonOutliers())
         {
-            System.out.println(elem.getComments());
+            System.out.println(elem.getScore());
         }
-        System.out.println("Printing outliers...");
-        for (ReviewBase elem : rbAnal.showOutliers(rbList)
-             )
-        {
-          System.out.println(elem.getComments());
-        }
-        for(int i = 0; i<11; ++i)
-        {
-            System.out.println(rbAnal.probabilityOfScore(rbList, i));
-        }
+
+         */
     }
 }
