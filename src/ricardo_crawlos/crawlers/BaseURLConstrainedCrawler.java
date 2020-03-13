@@ -10,12 +10,12 @@ import ricardo_crawlos.crawlers.TraversalCrawlerBase;
 /**
  * CrawlerRunner
  */
-public class BaseURLConstrainedClawer extends TraversalCrawlerBase
+public class BaseURLConstrainedCrawler extends TraversalCrawlerBase
 {
     protected String baseUrl;
     protected Document baseDocument;
 
-    public BaseURLConstrainedClawer(String theBaseUrl)
+    public BaseURLConstrainedCrawler(String theBaseUrl)
     {
         baseUrl = theBaseUrl;
 
