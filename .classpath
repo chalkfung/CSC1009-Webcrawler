@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-13"/>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="lib" path="C:/Users/moon_/eclipse-workspace/GameReviewAnalyser/lib/jcommon-1.0.23.jar"/>
+	<classpathentry kind="lib" path="C:/Users/moon_/eclipse-workspace/GameReviewAnalyser/lib/jfreechart-1.0.19.jar"/>
+	<classpathentry kind="lib" path="C:/Users/moon_/eclipse-workspace/GameReviewAnalyser/lib/gson-2.8.6.jar"/>
+	<classpathentry kind="lib" path="C:/Users/moon_/eclipse-workspace/GameReviewAnalyser/lib/jsoup-1.12.1.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>

@@ -28,14 +28,13 @@ public class Main
             }
         }
     });
-        ICrawler clawler = new GameSpotReviewsClawer("dota-2");
+        /*ICrawler clawler = new GameSpotReviewsClawer("dota-2");
         clawler.run();
 
         String[] cacheOutput = Arrays.stream(clawler.getTraversalResults()).map(x -> x.html()).toArray(String[]::new);
 
         TextWriter.writeAllText("database/cache/gamespot/dota-2/reviewPageCache" + ".json", JsonSerialiser.DefaultInstance().toJson(
                 cacheOutput));
-       // ShowWindow();
-
+*/
     }
 }
