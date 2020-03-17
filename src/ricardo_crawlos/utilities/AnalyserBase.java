@@ -11,7 +11,7 @@ public class AnalyserBase<T extends IReview> implements IAnalyser<List<T>, Stati
 {
     public double getMean(final List<T> inputs)
     {
-        return inputs.stream().mapToDouble(x->x.getScore()).average().getAsDouble();
+        return Math.round(inputs.stream().mapToDouble(x->x.getScore()).average().getAsDouble() * 100.0)/100.0;
     }
 
     public double getMax(final List<T> inputs)
@@ -39,7 +39,7 @@ public class AnalyserBase<T extends IReview> implements IAnalyser<List<T>, Stati
 
     public double getStandardDeviation(final List<T> inputs)
     {
-        return Math.sqrt(getVariance(inputs));
+        return Math.round(Math.sqrt(getVariance(inputs)) * 100.0)/100.0;
     }
 
     public double getQ2(final List<T> inputs)

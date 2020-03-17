@@ -6,6 +6,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.NumberFormat;
 import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -26,13 +28,20 @@ import org.jfree.data.statistics.DefaultBoxAndWhiskerCategoryDataset;
 import javax.swing.JButton;
 import javax.swing.SwingConstants;
 
+import ricardo_crawlos.core.IReview;
+import ricardo_crawlos.utilities.AnalyserBase;
+import ricardo_crawlos.utilities.Statistics;
+
 public class GameReviewInformationPanel extends JPanel 
 {
 
 	private static final long serialVersionUID = 1L;
 
-	public GameReviewInformationPanel(JFrame jframe) 
+	public GameReviewInformationPanel(JFrame jframe, IReview[] results)
 	{
+		List<IReview> resultList = Arrays.asList(results);
+		Statistics<Double, IReview> withOutlierResult = new AnalyserBase<IReview>().Analyse(resultList);
+		Statistics<Double, IReview> withoutOutlierResult = new AnalyserBase<IReview>().Analyse(withOutlierResult.getNonOutliers());
 		setBackground(Color.WHITE);
 		
 		setLayout(null);
@@ -53,26 +62,31 @@ public class GameReviewInformationPanel extends JPanel
 		description_label.setBounds(15, 250, 145, 40);
 		add(description_label);
 		
-		JLabel avg_score_label = new JLabel("Average Score:");
-		avg_score_label.setFont(new Font("Tahoma", Font.PLAIN, 26));
-		avg_score_label.setBounds(15, 350, 200, 40);
-		add(avg_score_label);
-		
-		JLabel std_score_label = new JLabel("Standard Deviation Score:");
-		std_score_label.setFont(new Font("Tahoma", Font.PLAIN, 26));
-		std_score_label.setBounds(15, 450, 400, 40);
-		add(std_score_label);
-		
+		JLabel avg_score_label_outlier = new JLabel("Avg Score with Outliers:");
+		avg_score_label_outlier.setFont(new Font("Tahoma", Font.PLAIN, 26));
+		avg_score_label_outlier.setBounds(15, 350, 400, 40);
+		add(avg_score_label_outlier);
+
+
+		JLabel std_score_label_outlier = new JLabel("S.D. Score with Outliers:");
+		std_score_label_outlier.setFont(new Font("Tahoma", Font.PLAIN, 26));
+		std_score_label_outlier.setBounds(15, 450, 400, 40);
+		add(std_score_label_outlier);
+
+
 		DefaultBoxAndWhiskerCategoryDataset boxData = new DefaultBoxAndWhiskerCategoryDataset();
-        boxData.add(Arrays.asList(30, 36, 46, 55, 65, 76, 81, 80, 71, 59, 44, 34), "Reviews", "Critic");
-        boxData.add(Arrays.asList(22, 25, 34, 44, 54, 63, 69, 67, 59, 48, 38, 28), "Reviews", "User");
+
+        //boxData.add(resultList.stream().map(x->x.getScore()).collect(Collectors.toList()), "Reviews"
+		//		, "User (w/Outliers)");
+        boxData.add(withOutlierResult.getNonOutliers().stream().map(x->x.getScore()).collect(Collectors.toList())
+				, "Reviews", "User (w/o Outliers)");
         
         BoxAndWhiskerRenderer boxRenderer = new BoxAndWhiskerRenderer();
-     
+
         DefaultCategoryDataset catData = new DefaultCategoryDataset();
         catData.addValue(boxData.getMeanValue(0, 0), "Mean", boxData.getColumnKey(0));
-        catData.addValue(boxData.getMeanValue(0, 1), "Mean", boxData.getColumnKey(1));
-        
+        //catData.addValue(boxData.getMeanValue(0, 1), "Mean", boxData.getColumnKey(1));
+
         LineAndShapeRenderer lineRenderer = new LineAndShapeRenderer();
         CategoryAxis xAxis = new CategoryAxis("Type of Reviews");
         NumberAxis yAxis = new NumberAxis("Score");
@@ -82,11 +96,13 @@ public class GameReviewInformationPanel extends JPanel
         plot.setDataset(1, catData);
         plot.setRenderer(1, lineRenderer);
         plot.setDatasetRenderingOrder(DatasetRenderingOrder.FORWARD);
-        
+
         JFreeChart chart = new JFreeChart("", JFreeChart.DEFAULT_TITLE_FONT, plot, true);
         
 		String tooltipformat = "<html><body>Q1: {6}<br>Q3: {7}<br>Min: {4}<br>Max: {5}<br>Median: {3}<br>Mean: {2}</body></html>";
 		boxRenderer.setBaseToolTipGenerator(new BoxAndWhiskerToolTipGenerator(tooltipformat,NumberFormat.getNumberInstance()));
+		boxRenderer.setMeanVisible(false);
+
 		ChartPanel panel = new ChartPanel(chart);
 		panel.setBackground(Color.WHITE);
 		panel.setBounds(500, 100, 500, 700);
@@ -109,28 +125,30 @@ public class GameReviewInformationPanel extends JPanel
 		back_button.setBounds(157, 718, 164, 50);
 		add(back_button);
 		
-		JLabel game_name_value = new JLabel("<placeholder>");
+		JLabel game_name_value = new JLabel(String.valueOf(results[0].getGameID()));
 		game_name_value.setVerticalAlignment(SwingConstants.TOP);
 		game_name_value.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		game_name_value.setBounds(15, 200, 455, 40);
 		add(game_name_value);
 		
-		JLabel description_value = new JLabel("<placeholder>");
+		JLabel description_value = new JLabel(String.valueOf(results[0].getGameID()));
 		description_value.setVerticalAlignment(SwingConstants.TOP);
 		description_value.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		description_value.setBounds(15, 300, 455, 40);
 		add(description_value);
-		
-		JLabel avg_score_value = new JLabel("<Score>");
+
+		JLabel avg_score_value = new JLabel(withOutlierResult.getMean().toString() + " (w/ Outliers) "
+				+ withoutOutlierResult.getMean().toString() + " (w/o Outliers)");
 		avg_score_value.setVerticalAlignment(SwingConstants.TOP);
 		avg_score_value.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		avg_score_value.setBounds(15, 400, 100, 40);
+		avg_score_value.setBounds(15, 400, 400, 40);
 		add(avg_score_value);
-		
-		JLabel std_score_value = new JLabel("<Std Score>");
-		std_score_value.setVerticalAlignment(SwingConstants.TOP);
-		std_score_value.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		std_score_value.setBounds(15, 500, 150, 40);
-		add(std_score_value);
+
+		JLabel std_score_value_outliers = new JLabel(withOutlierResult.getSd().toString() + " (w/ Outliers) "
+				+ withoutOutlierResult.getSd().toString() + " (w/o Outliers)");
+		std_score_value_outliers.setVerticalAlignment(SwingConstants.TOP);
+		std_score_value_outliers.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		std_score_value_outliers.setBounds(15, 500, 400, 40);
+		add(std_score_value_outliers);
 	}
 }

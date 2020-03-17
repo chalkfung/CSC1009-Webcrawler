@@ -12,6 +12,15 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.List;
+
+import org.jsoup.Jsoup;
+
+import ricardo_crawlos.core.IReview;
+import ricardo_crawlos.crawlers.GamespotReviewsCrawler;
+import ricardo_crawlos.extractors.GamespotReviewsExtractor;
+import ricardo_crawlos.storage.CachedGameSiteCrawler;
+import ricardo_crawlos.storage.TextWriter;
 
 
 public class GameReviewHomePanel extends JPanel  
@@ -19,6 +28,7 @@ public class GameReviewHomePanel extends JPanel
 
 	private static final long serialVersionUID = 1L;
 	private JTextField txtSearchYourGame;
+	private IReview[] searchResults;
 
 	public GameReviewHomePanel(JFrame jframe) 
 	{
@@ -33,7 +43,7 @@ public class GameReviewHomePanel extends JPanel
 		add(txtSearchYourGame);
 
 		JButton search_button = new JButton("Search");
-		search_button.setForeground(Color.WHITE);
+		search_button.setForeground(Color.BLACK);
 		search_button.setFont(new Font("Consolas", Font.PLAIN, 31));
 		search_button.setBackground(new Color(101, 101, 238));
 		search_button.setBounds(433, 574, 164, 50);
@@ -70,8 +80,16 @@ public class GameReviewHomePanel extends JPanel
 						// Search Method
 						String keyword = txtSearchYourGame.getText();
 						System.out.println(keyword);
+						var crawler = new CachedGameSiteCrawler(new GamespotReviewsCrawler(keyword), keyword);
 
-						Thread.sleep(3000);
+						var document = Jsoup.parse(crawler.getOrCacheHTML());
+
+						TextWriter.writeAllText(keyword + ".html", document.html());
+
+						var gamespotReviewsExtractor = new GamespotReviewsExtractor(0);
+
+						searchResults = gamespotReviewsExtractor.extractFrom(document.html());
+						//Thread.sleep(3000);
 						return null;
 					}
 
@@ -91,7 +109,7 @@ public class GameReviewHomePanel extends JPanel
 					System.out.print("Error Message: " + swing_exception.getMessage());
 				}
 
-				GameReviewInformationPanel infoPanel = new GameReviewInformationPanel(jframe);
+				GameReviewInformationPanel infoPanel = new GameReviewInformationPanel(jframe, searchResults);
 				jframe.setContentPane(infoPanel);
 			}				
 		});
