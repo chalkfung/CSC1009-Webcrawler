@@ -32,7 +32,7 @@ import ricardo_crawlos.core.IReview;
 import ricardo_crawlos.utilities.AnalyserBase;
 import ricardo_crawlos.utilities.Statistics;
 
-public class GameReviewInformationPanel extends JPanel 
+public class GameReviewInformationPanel extends JPanel
 {
 
 	private static final long serialVersionUID = 1L;
@@ -43,25 +43,25 @@ public class GameReviewInformationPanel extends JPanel
 		Statistics<Double, IReview> withOutlierResult = new AnalyserBase<IReview>().Analyse(resultList);
 		Statistics<Double, IReview> withoutOutlierResult = new AnalyserBase<IReview>().Analyse(withOutlierResult.getNonOutliers());
 		setBackground(Color.WHITE);
-		
+
 		setLayout(null);
 		setSize(1000, 800);
-		
+
 		JLabel header_label = new JLabel("");
 		header_label.setIcon(new ImageIcon(GameReviewInformationPanel.class.getResource("/GUI/Image/HeaderLogo.png")));
 		header_label.setBounds(0, 0, 1000, 100);
 		add(header_label);
-		
+
 		JLabel game_name_label = new JLabel("Game Name:");
 		game_name_label.setFont(new Font("Tahoma", Font.PLAIN, 26));
 		game_name_label.setBounds(15, 150, 200, 40);
 		add(game_name_label);
-		
+
 		JLabel description_label = new JLabel("Description:");
 		description_label.setFont(new Font("Tahoma", Font.PLAIN, 26));
 		description_label.setBounds(15, 250, 145, 40);
 		add(description_label);
-		
+
 		JLabel avg_score_label_outlier = new JLabel("Avg Score with Outliers:");
 		avg_score_label_outlier.setFont(new Font("Tahoma", Font.PLAIN, 26));
 		avg_score_label_outlier.setBounds(15, 350, 400, 40);
@@ -80,7 +80,7 @@ public class GameReviewInformationPanel extends JPanel
 		//		, "User (w/Outliers)");
         boxData.add(withOutlierResult.getNonOutliers().stream().map(x->x.getScore()).collect(Collectors.toList())
 				, "Reviews", "User (w/o Outliers)");
-        
+
         BoxAndWhiskerRenderer boxRenderer = new BoxAndWhiskerRenderer();
 
         DefaultCategoryDataset catData = new DefaultCategoryDataset();
@@ -92,13 +92,13 @@ public class GameReviewInformationPanel extends JPanel
         NumberAxis yAxis = new NumberAxis("Score");
         yAxis.setAutoRangeIncludesZero(false);
         CategoryPlot plot = new CategoryPlot(boxData, xAxis, yAxis, boxRenderer);
-        
+
         plot.setDataset(1, catData);
         plot.setRenderer(1, lineRenderer);
         plot.setDatasetRenderingOrder(DatasetRenderingOrder.FORWARD);
 
         JFreeChart chart = new JFreeChart("", JFreeChart.DEFAULT_TITLE_FONT, plot, true);
-        
+
 		String tooltipformat = "<html><body>Q1: {6}<br>Q3: {7}<br>Min: {4}<br>Max: {5}<br>Median: {3}<br>Mean: {2}</body></html>";
 		boxRenderer.setBaseToolTipGenerator(new BoxAndWhiskerToolTipGenerator(tooltipformat,NumberFormat.getNumberInstance()));
 		boxRenderer.setMeanVisible(false);
@@ -108,11 +108,11 @@ public class GameReviewInformationPanel extends JPanel
 		panel.setBounds(500, 100, 500, 700);
 		panel.setAlignmentY(CENTER_ALIGNMENT);
 		add(panel);
-		
+
 		JButton back_button = new JButton("Back");
-		back_button.addActionListener(new ActionListener() 
+		back_button.addActionListener(new ActionListener()
 		{
-			public void actionPerformed(ActionEvent e) 
+			public void actionPerformed(ActionEvent e)
 			{
 				//Go the Display Info panel
 				GameReviewHomePanel searchPanel = new GameReviewHomePanel(jframe);
@@ -124,13 +124,13 @@ public class GameReviewInformationPanel extends JPanel
 		back_button.setBackground(new Color(101, 101, 238));
 		back_button.setBounds(157, 718, 164, 50);
 		add(back_button);
-		
+
 		JLabel game_name_value = new JLabel(String.valueOf(results[0].getGameID()));
 		game_name_value.setVerticalAlignment(SwingConstants.TOP);
 		game_name_value.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		game_name_value.setBounds(15, 200, 455, 40);
 		add(game_name_value);
-		
+
 		JLabel description_value = new JLabel(String.valueOf(results[0].getGameID()));
 		description_value.setVerticalAlignment(SwingConstants.TOP);
 		description_value.setFont(new Font("Tahoma", Font.PLAIN, 20));
