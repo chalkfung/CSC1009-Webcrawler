@@ -27,7 +27,7 @@ public class GameReviewHomePanel extends JPanel
 		setSize(1000, 800);
 
 		txtSearchYourGame = new JTextField();
-		txtSearchYourGame.setToolTipText("Search your game by typing the game name");
+		txtSearchYourGame.setToolTipText("Enter Game Title");
 		txtSearchYourGame.setFont(new Font("Consolas", Font.PLAIN, 29));
 		txtSearchYourGame.setBounds(223, 450, 588, 50);
 		add(txtSearchYourGame);
