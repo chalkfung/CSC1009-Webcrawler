@@ -6,17 +6,17 @@ import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.stream.Collectors;
 
-import ricardo_crawlos.core.IPaginatedCrawler;
+import ricardo_crawlos.core.IExtractableCrawler;
 
 /**
  * CachedCrawler
  */
 public class CachedGamesiteCrawler
 {
-    private IPaginatedCrawler crawler;
+    private IExtractableCrawler crawler;
     private String gamePathName;
 
-    public CachedGamesiteCrawler(IPaginatedCrawler theCrawler, String theGamePathName)
+    public CachedGamesiteCrawler(IExtractableCrawler theCrawler, String theGamePathName)
     {
         crawler = theCrawler;
         gamePathName = theGamePathName;
@@ -59,6 +59,6 @@ public class CachedGamesiteCrawler
     public String getCachedPath()
     {
         return "database/cache/" + gamePathName + "/" + crawler.getWebsiteInfo().getDomain() + "_"
-                + crawler.getPathName() + ".json";
+                + crawler.getExtractionName() + ".json";
     }
 }

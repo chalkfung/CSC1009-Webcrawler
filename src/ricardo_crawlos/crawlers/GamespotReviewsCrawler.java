@@ -37,7 +37,7 @@ public class GamespotReviewsCrawler extends BaseURLConstrainedCrawler implements
     }
 
     @Override
-    public String getPathName()
+    public String getExtractionName()
     {
         return "user-reviews";
     }
@@ -46,6 +46,12 @@ public class GamespotReviewsCrawler extends BaseURLConstrainedCrawler implements
     public String fromSubpage(String subPath)
     {
         return getUrl(gamePath, "/" + subPath);
+    }
+
+    @Override
+    public int getPageCount()
+    {
+        return this.links.size() - 1;
     }
 
     @Override

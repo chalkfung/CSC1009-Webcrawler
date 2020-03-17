@@ -54,7 +54,7 @@ public class MetacriticUserReviewsCrawler extends BaseURLConstrainedCrawler impl
     }
 
     @Override
-    public String getPathName()
+    public String getExtractionName()
     {
         return "user-reviews";
     }
@@ -69,5 +69,11 @@ public class MetacriticUserReviewsCrawler extends BaseURLConstrainedCrawler impl
     public String extractFrom(String html)
     {
         return Jsoup.parse(html).select("ol.reviews.user_reviews").outerHtml();
+    }
+
+    @Override
+    public int getPageCount()
+    {
+        return this.links.size() - 1;
     }
 }
