@@ -11,12 +11,13 @@ import ricardo_crawlos.core.IReview;
 import ricardo_crawlos.core.IReviewsExtractor;
 import ricardo_crawlos.core.IWebsite;
 import ricardo_crawlos.crawlers.Websites;
+import ricardo_crawlos.models.CriticReview;
 import ricardo_crawlos.models.ReviewBase;
 import ricardo_crawlos.models.UserReview;
 
-public class MetacriticUserReviewsExtractor extends MetacriticReviewsExtractorBase
+public class MetacriticCriticReviewsExtractor extends MetacriticReviewsExtractorBase
 {
-    public MetacriticUserReviewsExtractor(int theGameId)
+    public MetacriticCriticReviewsExtractor(int theGameId)
     {
         super(theGameId);
     }
@@ -27,26 +28,25 @@ public class MetacriticUserReviewsExtractor extends MetacriticReviewsExtractorBa
         return extractUserReviews(html);
     }
 
-    public UserReview[] extractUserReviews(String html)
+    public CriticReview[] extractUserReviews(String html)
     {
         Document document = Jsoup.parse(html);
 
-        return document.select("li.review.user_review")
+        return document.select("li.review.critic_review")
                 .stream()
                 .map(this::parseElement)
                 .sorted(Comparator.comparing(ReviewBase::getDateCreated))
-                .toArray(UserReview[]::new);
+                .toArray(CriticReview[]::new);
     }
 
-    private UserReview parseElement(Element element)
+    private CriticReview parseElement(Element element)
     {
-        var author = element.select("div.name > a").text();
+        var author = element.select("div.source > a").text();
         var comment = element.select("div.review_body").text();
         var score = Double.parseDouble(element.select("div.review_grade > div").text());
         var date = parseDate(element.select("div.date").text());
-        var helpfulScore = Integer.parseInt(element.select("span.total_ups").text());
-        var helpfulCount = Integer.parseInt(element.select("span.total_thumbs").text());
+        var source = element.select("li.review_action.full_review > a").attr("abs:href");
 
-        return new UserReview(gameId, score, comment, date, author, helpfulScore, helpfulCount);
+        return new CriticReview(gameId, score / 10, comment, date, source, author);
     }
 }
