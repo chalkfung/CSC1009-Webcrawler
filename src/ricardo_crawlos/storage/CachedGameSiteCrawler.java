@@ -59,6 +59,6 @@ public class CachedGameSiteCrawler
     public String getCachedPath()
     {
         return "database/cache/" + gamePathName + "/" + crawler.getWebsiteInfo().getDomain() + "_"
-                + crawler.getSegmentName() + ".json";
+                + crawler.getPathName() + ".json";
     }
 }

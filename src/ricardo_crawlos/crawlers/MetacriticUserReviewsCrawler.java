@@ -1,23 +1,18 @@
 package ricardo_crawlos.crawlers;
 
-import org.jsoup.Jsoup;
-
 import ricardo_crawlos.core.IPaginatedCrawler;
 import ricardo_crawlos.core.IWebsite;
 
-/**
- * GameSpotReviewCrawler
- */
-public class GamespotReviewsCrawler extends BaseURLConstrainedCrawler implements IPaginatedCrawler
+public class MetacriticUserReviewsCrawler extends BaseURLConstrainedCrawler implements IPaginatedCrawler
 {
     protected String gamePath;
 
     private static String getUrl(String gamePath, String subPath)
     {
-        return "https://www.gamespot.com/" + gamePath + "/reviews/" + subPath;
+        return "https://www.metacritic.com/" + gamePath + "/user-reviews/" + subPath;
     }
 
-    public GamespotReviewsCrawler(String theGamePath)
+    public MetacriticUserReviewsCrawler(String theGamePath)
     {
         super(getUrl(theGamePath, ""));
         this.gamePath = theGamePath;
@@ -27,13 +22,19 @@ public class GamespotReviewsCrawler extends BaseURLConstrainedCrawler implements
     @Override
     public void run()
     {
-        traverse(this.baseUrl + "?page=1");
+        traverse(this.baseUrl + "?sort-by=date&num_items=100&page=0");
+    }
+
+    @Override
+    public IWebsite getWebsiteInfo()
+    {
+        Websites.getMetacritic();
     }
 
     @Override
     public String getDomain()
     {
-        return "gamespot";
+        return "metacritic";
     }
 
     @Override
@@ -49,14 +50,8 @@ public class GamespotReviewsCrawler extends BaseURLConstrainedCrawler implements
     }
 
     @Override
-    public IWebsite getWebsiteInfo()
+    public String extractFrom(String source)
     {
-        return Websites.getGamespot();
-    }
-
-    @Override
-    public String extractFrom(String html)
-    {
-        return Jsoup.parse(html).select("li.userReview-list__item").outerHtml();
+        return null;
     }
 }

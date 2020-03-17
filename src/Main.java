@@ -8,6 +8,7 @@ import org.jsoup.Jsoup;
 import GUI.*;
 import ricardo_crawlos.core.IReview;
 import ricardo_crawlos.crawlers.GamespotReviewsCrawler;
+import ricardo_crawlos.crawlers.MetacriticUserReviewsCrawler;
 import ricardo_crawlos.extractors.GamespotReviewsExtractor;
 import ricardo_crawlos.models.UserReview;
 import ricardo_crawlos.storage.CachedGameSiteCrawler;
@@ -23,21 +24,18 @@ public class Main
     {
         //testExtraction();
 
-        showWindow();
+        // showWindow();
     }
 
     private static void testExtraction()
     {
-        var crawler = new CachedGameSiteCrawler(new GamespotReviewsCrawler("dota-2"), "dota-2");
-
+        var crawler = new CachedGameSiteCrawler(new MetacriticUserReviewsCrawler("game/pc/dota-2"), "dota-2");
         var document = Jsoup.parse(crawler.getOrCacheHTML());
 
         TextWriter.writeAllText("extractedTest.html", document.html());
 
         var gamespotDotaReviewsExtractor = new GamespotReviewsExtractor(0);
-
         var extractedReviews = gamespotDotaReviewsExtractor.extractFrom(document.html());
-
         var reviewsJson = JsonSerialiser.DefaultInstance().toJson(extractedReviews);
 
         TextWriter.writeAllText("database/extracted/reviews/dota-2/gamespot_user-reviews.json", reviewsJson);
