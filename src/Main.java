@@ -18,25 +18,22 @@ public class Main
 {
     public static void main(String[] args)
     {
-        EventQueue.invokeLater(new Runnable() {
-        public void run() {
-            try {
-                MainReviewFrame frame = new MainReviewFrame();
-                frame.setVisible(true);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-    });
-        /*ICrawler clawler = new GameSpotReviewsClawer("dota-2");
-        clawler.run();
-
-        String[] cacheOutput = Arrays.stream(clawler.getTraversalResults()).map(x -> x.html()).toArray(String[]::new);
-
-        TextWriter.writeAllText("database/cache/gamespot/dota-2/reviewPageCache" + ".json", JsonSerialiser.DefaultInstance().toJson(
-                cacheOutput));
-*/
+        showWindow();
     }
 
-
+    public static void showWindow()
+    {
+        EventQueue.invokeLater(() ->
+        {
+            try
+            {
+                MainReviewFrame frame = new MainReviewFrame();
+                frame.setVisible(true);
+            }
+            catch (Exception e)
+            {
+                e.printStackTrace();
+            }
+        });
+    }
 }
