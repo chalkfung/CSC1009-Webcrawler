@@ -12,14 +12,14 @@ public class GamespotReviewsCrawler extends BaseURLConstrainedCrawler implements
 {
     protected String gamePath;
 
-    private static String getUrl(String gamePath, String subPath)
+    private static String getUrl(String gamePath, String subPathQuery)
     {
-        return "https://www.gamespot.com/" + gamePath + "/reviews/" + subPath;
+        return "https://www.gamespot.com/" + gamePath + "/reviews" + subPathQuery;
     }
 
     public GamespotReviewsCrawler(String theGamePath)
     {
-        super(getUrl(theGamePath, ""));
+        super(getUrl(theGamePath, "/"));
         this.gamePath = theGamePath;
         this.links.add(this.baseUrl);
     }
@@ -37,7 +37,7 @@ public class GamespotReviewsCrawler extends BaseURLConstrainedCrawler implements
     }
 
     @Override
-    public String getSegmentName()
+    public String getExtractionName()
     {
         return "user-reviews";
     }
@@ -45,7 +45,13 @@ public class GamespotReviewsCrawler extends BaseURLConstrainedCrawler implements
     @Override
     public String fromSubpage(String subPath)
     {
-        return getUrl(gamePath, subPath);
+        return getUrl(gamePath, "/" + subPath);
+    }
+
+    @Override
+    public int getPageCount()
+    {
+        return this.links.size() - 1;
     }
 
     @Override

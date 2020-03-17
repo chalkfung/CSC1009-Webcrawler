@@ -3,15 +3,11 @@ package ricardo_crawlos.core;
 import java.util.function.Function;
 
 /**
- * IDomainPath
+ * IPaginatedCrawler
  */
-public interface IPaginatedCrawler extends ICrawler, IExtractable<String, String>
+public interface IPaginatedCrawler extends IExtractableCrawler
 {
-    IWebsite getWebsiteInfo();
-    
-    String getDomain();
-
-    String getSegmentName();
-
     String fromSubpage(String subPath);
+
+    int getPageCount();
 }
