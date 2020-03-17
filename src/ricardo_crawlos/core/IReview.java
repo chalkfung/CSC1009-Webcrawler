@@ -4,10 +4,8 @@ import java.util.Date;
 
 public interface IReview
 {
-    public Date getDataCreated();
-
+    public Date getDateCreated();
     public double getScore();
-
     public String getComments();
 
     public int getGameID();

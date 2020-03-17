@@ -21,7 +21,7 @@ public class ReviewBase implements IReview
     }
 
     @Override
-    public Date getDataCreated()
+    public Date getDateCreated()
     {
         return this.date;
     }

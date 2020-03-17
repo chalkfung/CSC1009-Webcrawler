@@ -28,7 +28,7 @@ public class CriticReview extends ReviewBase
 
     public Date getDateCreated()
     {
-        return super.getDataCreated();
+        return super.getDateCreated();
     }
 
     public String getAuthor()
