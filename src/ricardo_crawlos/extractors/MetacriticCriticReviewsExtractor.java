@@ -1,0 +1,52 @@
+package ricardo_crawlos.extractors;
+
+import java.text.SimpleDateFormat;
+import java.util.Comparator;
+import java.util.Date;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+
+import ricardo_crawlos.core.IReview;
+import ricardo_crawlos.core.IReviewsExtractor;
+import ricardo_crawlos.core.IWebsite;
+import ricardo_crawlos.crawlers.Websites;
+import ricardo_crawlos.models.CriticReview;
+import ricardo_crawlos.models.ReviewBase;
+import ricardo_crawlos.models.UserReview;
+
+public class MetacriticCriticReviewsExtractor extends MetacriticReviewsExtractorBase
+{
+    public MetacriticCriticReviewsExtractor(int theGameId)
+    {
+        super(theGameId);
+    }
+
+    @Override
+    public IReview[] extractFrom(String html)
+    {
+        return extractUserReviews(html);
+    }
+
+    public CriticReview[] extractUserReviews(String html)
+    {
+        Document document = Jsoup.parse(html);
+
+        return document.select("li.review.critic_review")
+                .stream()
+                .map(this::parseElement)
+                .sorted(Comparator.comparing(ReviewBase::getDateCreated))
+                .toArray(CriticReview[]::new);
+    }
+
+    private CriticReview parseElement(Element element)
+    {
+        var author = element.select("div.source > a").text();
+        var comment = element.select("div.review_body").text();
+        var score = Double.parseDouble(element.select("div.review_grade > div").text());
+        var date = parseDate(element.select("div.date").text());
+        var source = element.select("li.review_action.full_review > a").attr("abs:href");
+
+        return new CriticReview(gameId, score / 10, comment, date, source, author);
+    }
+}

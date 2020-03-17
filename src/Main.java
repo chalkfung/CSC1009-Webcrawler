@@ -1,46 +1,40 @@
-import javax.xml.stream.FactoryConfigurationError;
-import java.io.IOException;
-import java.text.ParseException;
-import java.util.Date;
+import java.awt.*;
 
-import org.jsoup.Jsoup;
-
-import GUI.*;
-import ricardo_crawlos.core.IReview;
+import GUI.MainReviewFrame;
+import ricardo_crawlos.core.IExtractableCrawler;
+import ricardo_crawlos.core.IReviewsExtractor;
 import ricardo_crawlos.crawlers.GamespotReviewsCrawler;
+import ricardo_crawlos.crawlers.MetacriticCriticReviewsCrawler;
+import ricardo_crawlos.crawlers.MetacriticUserReviewsCrawler;
 import ricardo_crawlos.extractors.GamespotReviewsExtractor;
-import ricardo_crawlos.models.UserReview;
-import ricardo_crawlos.storage.CachedGameSiteCrawler;
+import ricardo_crawlos.extractors.MetacriticCriticReviewsExtractor;
+import ricardo_crawlos.extractors.MetacriticUserReviewsExtractor;
+import ricardo_crawlos.storage.CachedGamesiteCrawler;
 import ricardo_crawlos.storage.JsonSerialiser;
 import ricardo_crawlos.storage.TextWriter;
-import ricardo_crawlos.utilities.*;
-
-import java.awt.EventQueue;
 
 public class Main
 {
     public static void main(String[] args)
     {
-        //testExtraction();
-
-        showWindow();
+        //showWindow();
+        fetchReviewsGamePC("dota-2");
     }
 
-    private static void testExtraction()
+    private static void fetchReviewsGamePC(String gameKey)
     {
-        var crawler = new CachedGameSiteCrawler(new GamespotReviewsCrawler("dota-2"), "dota-2");
+        storeReviews(gameKey, new GamespotReviewsCrawler(gameKey), new GamespotReviewsExtractor(0));
+        storeReviews(gameKey,  new MetacriticUserReviewsCrawler("game/pc/" + gameKey), new MetacriticUserReviewsExtractor(0));
+        storeReviews(gameKey,  new MetacriticCriticReviewsCrawler("game/pc/" + gameKey), new MetacriticCriticReviewsExtractor(0));
+    }
 
-        var document = Jsoup.parse(crawler.getOrCacheHTML());
-
-        TextWriter.writeAllText("extractedTest.html", document.html());
-
-        var gamespotDotaReviewsExtractor = new GamespotReviewsExtractor(0);
-
-        var extractedReviews = gamespotDotaReviewsExtractor.extractFrom(document.html());
-
+    private static void storeReviews(String referenceName, IExtractableCrawler crawler, IReviewsExtractor extractor)
+    {
+        System.out.println("Extracting: " + crawler.getDomain() + " " + crawler.getExtractionName() + " -> " + referenceName );
+        var cachedCrawler = new CachedGamesiteCrawler(crawler, referenceName);
+        var extractedReviews = extractor.extractFrom(cachedCrawler.getOrCacheHTML());
         var reviewsJson = JsonSerialiser.DefaultInstance().toJson(extractedReviews);
-
-        TextWriter.writeAllText("database/extracted/reviews/dota-2/gamespot_user-reviews.json", reviewsJson);
+        TextWriter.writeAllText("database/extracted/reviews/" + referenceName + "/" + crawler.getDomain()  + "_" + crawler.getExtractionName() + ".json", reviewsJson);
     }
 
     public static void showWindow()
