@@ -2,13 +2,13 @@ package ricardo_crawlos.crawlers;
 
 import org.jsoup.Jsoup;
 
-import ricardo_crawlos.core.IDomainSegmentClawer;
+import ricardo_crawlos.core.IPaginatedCrawler;
 import ricardo_crawlos.core.IWebsite;
 
 /**
  * GameSpotReviewCrawler
  */
-public class GamespotReviewsCrawler extends BaseURLConstrainedCrawler implements IDomainSegmentClawer
+public class GamespotReviewsCrawler extends BaseURLConstrainedCrawler implements IPaginatedCrawler
 {
     protected String gamePath;
 

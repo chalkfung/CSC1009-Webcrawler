@@ -6,20 +6,17 @@ import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.stream.Collectors;
 
-import org.jsoup.Jsoup;
-
-import ricardo_crawlos.core.IDomainSegmentClawer;
-import ricardo_crawlos.core.IWebsite;
+import ricardo_crawlos.core.IPaginatedCrawler;
 
 /**
  * CachedCrawler
  */
 public class CachedGameSiteCrawler
 {
-    private IDomainSegmentClawer crawler;
+    private IPaginatedCrawler crawler;
     private String gamePathName;
 
-    public CachedGameSiteCrawler(IDomainSegmentClawer theCrawler, String theGamePathName)
+    public CachedGameSiteCrawler(IPaginatedCrawler theCrawler, String theGamePathName)
     {
         crawler = theCrawler;
         gamePathName = theGamePathName;

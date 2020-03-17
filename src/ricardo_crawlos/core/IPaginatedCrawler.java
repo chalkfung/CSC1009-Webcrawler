@@ -5,7 +5,7 @@ import java.util.function.Function;
 /**
  * IDomainPath
  */
-public interface IDomainSegmentClawer extends ICrawler, IExtractable<String, String>
+public interface IPaginatedCrawler extends ICrawler, IExtractable<String, String>
 {
     IWebsite getWebsiteInfo();
     
