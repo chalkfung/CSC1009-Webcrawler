@@ -5,7 +5,7 @@ import java.util.Date;
 
 import org.jsoup.Jsoup;
 
-import GUI.MainWindow;
+import GUI.*;
 import ricardo_crawlos.core.IReview;
 import ricardo_crawlos.crawlers.GamespotReviewsCrawler;
 import ricardo_crawlos.extractors.GamespotReviewsExtractor;
