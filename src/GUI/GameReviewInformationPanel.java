@@ -132,5 +132,6 @@ public class GameReviewInformationPanel extends JPanel
 		std_score_value.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		std_score_value.setBounds(15, 500, 150, 40);
 		add(std_score_value);
+
 	}
 }

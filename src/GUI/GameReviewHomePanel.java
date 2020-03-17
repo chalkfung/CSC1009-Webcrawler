@@ -1,26 +1,26 @@
 package GUI;
 
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
-import javax.swing.SwingWorker;
-import javax.swing.JButton;
-import javax.swing.JDialog;
-import javax.swing.JLabel;
-import javax.swing.ImageIcon;
+import org.jsoup.*;
+import ricardo_crawlos.crawlers.GamespotReviewsCrawler;
+import ricardo_crawlos.managers.*;
+import ricardo_crawlos.storage.CachedGameSiteCrawler;
+
+import javax.swing.*;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
+import java.nio.file.attribute.UserDefinedFileAttributeView;
 
 
-public class GameReviewHomePanel extends JPanel  
+public class GameReviewHomePanel extends JPanel
 {
 
 	private static final long serialVersionUID = 1L;
 	private JTextField txtSearchYourGame;
 
-	public GameReviewHomePanel(JFrame jframe) 
+	public GameReviewHomePanel(JFrame jframe)
 	{
 		setBackground(new Color(25, 32, 96));
 		setLayout(null);
@@ -51,27 +51,50 @@ public class GameReviewHomePanel extends JPanel
 				JDialog load = new JDialog(jframe, true);
 				load.getContentPane().setBackground(Color.gray);
 
-				JLabel gifLabel = new JLabel("Fetching Data!"); 
+				JLabel gifLabel = new JLabel("Searching!");
 				gifLabel.setIcon(new ImageIcon(this.getClass().getResource("/GUI/Image/25.gif")));
 
 				load.getContentPane().add(gifLabel); 
 				load.setUndecorated(true);
 				load.setBounds(300, 300, 50, 50);
 				load.setLocationRelativeTo(jframe);
-				load.pack(); 
+				load.setSize(165,75);
 
 				SwingWorker<String, Void> s_worker = new SwingWorker<String, Void>() 
 				{
 
 					@Override
-					protected String doInBackground() throws Exception 
+					protected String doInBackground()
 					{
 						// TODO Auto-generated method stub
 						// Search Method
 						String keyword = txtSearchYourGame.getText();
-						System.out.println(keyword);
+						GameSearchManager key = new GameSearchManager(keyword);
+//						System.out.println(key.getGameSpotKey() + "\n" + key.getMetaKey());
 
-						Thread.sleep(3000);
+						try
+						{
+							startCrawl(key);
+						}
+						catch (Exception e)
+						{
+							e.printStackTrace();
+
+							GameReviewHomePanel searchPanel = new GameReviewHomePanel(jframe);
+							jframe.setContentPane(searchPanel);
+							return null;
+						}
+
+						gifLabel.setText("Fetching Data!");
+
+						//Thread.sleep(1000);
+						gifLabel.setText("Extracting Data!");
+
+						//Thread.sleep(1000);
+						gifLabel.setText("Analysing Data!");
+						GameReviewInformationPanel infoPanel = new GameReviewInformationPanel(jframe);
+						jframe.setContentPane(infoPanel);
+						//Thread.sleep(1000);
 						return null;
 					}
 
@@ -79,6 +102,7 @@ public class GameReviewHomePanel extends JPanel
 					protected void done()
 					{
 						load.dispose();
+
 					}
 				};
 
@@ -90,10 +114,13 @@ public class GameReviewHomePanel extends JPanel
 				}catch(Exception swing_exception){
 					System.out.print("Error Message: " + swing_exception.getMessage());
 				}
-
-				GameReviewInformationPanel infoPanel = new GameReviewInformationPanel(jframe);
-				jframe.setContentPane(infoPanel);
 			}				
 		});
+	}
+
+	public void startCrawl(GameSearchManager key) throws HttpStatusException, IOException
+	{
+		Jsoup.connect("https://www.gamespot.com/" + key.getGameSpotKey()).get();
+		var crawler = new CachedGameSiteCrawler(new GamespotReviewsCrawler(key.getGameSpotKey()), key.getGameSpotKey());
 	}
 }
