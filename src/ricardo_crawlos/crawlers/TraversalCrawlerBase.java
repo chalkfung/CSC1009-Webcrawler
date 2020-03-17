@@ -20,8 +20,6 @@ public abstract class TraversalCrawlerBase implements ICrawler
     protected HashSet<String> links;
     protected List<Document> traversalResults;
 
-    
-
     public TraversalCrawlerBase()
     {
         links = new HashSet<String>();

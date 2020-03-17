@@ -1,5 +1,8 @@
 package ricardo_crawlos.crawlers;
 
+import javax.xml.stream.FactoryConfigurationError;
+import org.jsoup.Jsoup;
+
 import ricardo_crawlos.core.IPaginatedCrawler;
 import ricardo_crawlos.core.IWebsite;
 
@@ -9,7 +12,7 @@ public class MetacriticUserReviewsCrawler extends BaseURLConstrainedCrawler impl
 
     private static String getUrl(String gamePath, String subPath)
     {
-        return "https://www.metacritic.com/" + gamePath + "/user-reviews/" + subPath;
+        return "https://www.metacritic.com/" + gamePath + "/user-reviews" + subPath;
     }
 
     public MetacriticUserReviewsCrawler(String theGamePath)
@@ -26,9 +29,22 @@ public class MetacriticUserReviewsCrawler extends BaseURLConstrainedCrawler impl
     }
 
     @Override
+    protected boolean canTraverse(String url)
+    {
+        if (url.contains("dota-2/user-reviews?sort-by=date&num_items=100"))
+        {
+            return super.canTraverse(url);
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    @Override
     public IWebsite getWebsiteInfo()
     {
-        Websites.getMetacritic();
+        return Websites.getMetacritic();
     }
 
     @Override
@@ -50,8 +66,8 @@ public class MetacriticUserReviewsCrawler extends BaseURLConstrainedCrawler impl
     }
 
     @Override
-    public String extractFrom(String source)
+    public String extractFrom(String html)
     {
-        return null;
+        return Jsoup.parse(html).select("ol.reviews.user_reviews").outerHtml();
     }
 }
