@@ -1,17 +1,11 @@
 package GUI;
 
-import org.jsoup.*;
-import ricardo_crawlos.crawlers.GamespotReviewsCrawler;
 import ricardo_crawlos.managers.*;
-import ricardo_crawlos.storage.CachedGameSiteCrawler;
-
 import javax.swing.*;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.IOException;
-import java.nio.file.attribute.UserDefinedFileAttributeView;
 
 
 public class GameReviewHomePanel extends JPanel
@@ -74,12 +68,12 @@ public class GameReviewHomePanel extends JPanel
 
 						try
 						{
-							startCrawl(key);
+							GameSearchManager.probeURL(key);
 						}
 						catch (Exception e)
 						{
 							e.printStackTrace();
-
+							JOptionPane.showMessageDialog(null,  "Unable to find the game", "Search Error", JOptionPane.ERROR_MESSAGE);
 							GameReviewHomePanel searchPanel = new GameReviewHomePanel(jframe);
 							jframe.setContentPane(searchPanel);
 							return null;
@@ -92,6 +86,7 @@ public class GameReviewHomePanel extends JPanel
 
 						//Thread.sleep(1000);
 						gifLabel.setText("Analysing Data!");
+
 						GameReviewInformationPanel infoPanel = new GameReviewInformationPanel(jframe);
 						jframe.setContentPane(infoPanel);
 						//Thread.sleep(1000);
@@ -116,11 +111,5 @@ public class GameReviewHomePanel extends JPanel
 				}
 			}				
 		});
-	}
-
-	public void startCrawl(GameSearchManager key) throws HttpStatusException, IOException
-	{
-		Jsoup.connect("https://www.gamespot.com/" + key.getGameSpotKey()).get();
-		var crawler = new CachedGameSiteCrawler(new GamespotReviewsCrawler(key.getGameSpotKey()), key.getGameSpotKey());
 	}
 }

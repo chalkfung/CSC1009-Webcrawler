@@ -17,25 +17,13 @@ public class Main
 {
     public static void main(String[] args)
     {
-        //showWindow();
-        fetchReviewsGamePC("dota-2");
+        showWindow();
+        //fetchReviewsGamePC("dota-2");
     }
 
-    private static void fetchReviewsGamePC(String gameKey)
-    {
-        storeReviews(gameKey, new GamespotReviewsCrawler(gameKey), new GamespotReviewsExtractor(0));
-        storeReviews(gameKey,  new MetacriticUserReviewsCrawler("game/pc/" + gameKey), new MetacriticUserReviewsExtractor(0));
-        storeReviews(gameKey,  new MetacriticCriticReviewsCrawler("game/pc/" + gameKey), new MetacriticCriticReviewsExtractor(0));
-    }
 
-    private static void storeReviews(String referenceName, IExtractableCrawler crawler, IReviewsExtractor extractor)
-    {
-        System.out.println("Extracting: " + crawler.getDomain() + " " + crawler.getExtractionName() + " -> " + referenceName );
-        var cachedCrawler = new CachedGamesiteCrawler(crawler, referenceName);
-        var extractedReviews = extractor.extractFrom(cachedCrawler.getOrCacheHTML());
-        var reviewsJson = JsonSerialiser.DefaultInstance().toJson(extractedReviews);
-        TextWriter.writeAllText("database/extracted/reviews/" + referenceName + "/" + crawler.getDomain()  + "_" + crawler.getExtractionName() + ".json", reviewsJson);
-    }
+
+
 
     public static void showWindow()
     {
