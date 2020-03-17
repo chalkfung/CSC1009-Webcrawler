@@ -15,13 +15,15 @@ import ricardo_crawlos.storage.JsonSerialiser;
 import ricardo_crawlos.storage.TextWriter;
 import ricardo_crawlos.utilities.*;
 
+import java.awt.EventQueue;
+
 public class Main
 {
     public static void main(String[] args)
     {
-        testExtraction();
+        //testExtraction();
 
-        //ShowWindow();
+        showWindow();
     }
 
     private static void testExtraction()
@@ -41,11 +43,19 @@ public class Main
         TextWriter.writeAllText("database/extracted/reviews/dota-2/gamespot_user-reviews.json", reviewsJson);
     }
 
-    public static void ShowWindow()
+    public static void showWindow()
     {
-        MainWindow dialog = new MainWindow();
-        dialog.setSize(1280, 720);
-        dialog.setVisible(true);
-        System.exit(0);
+        EventQueue.invokeLater(() ->
+        {
+            try
+            {
+                MainReviewFrame frame = new MainReviewFrame();
+                frame.setVisible(true);
+            }
+            catch (Exception e)
+            {
+                e.printStackTrace();
+            }
+        });
     }
 }
