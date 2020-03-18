@@ -12,10 +12,7 @@ import java.util.Dictionary;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.JLabel;
-import javax.swing.ImageIcon;
+import javax.swing.*;
 
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
@@ -29,10 +26,10 @@ import org.jfree.chart.renderer.category.LineAndShapeRenderer;
 import org.jfree.data.category.DefaultCategoryDataset;
 import org.jfree.data.statistics.BoxAndWhiskerItem;
 import org.jfree.data.statistics.DefaultBoxAndWhiskerCategoryDataset;
-import javax.swing.JButton;
-import javax.swing.SwingConstants;
 
 import ricardo_crawlos.core.IReview;
+import ricardo_crawlos.managers.GenreManager;
+import ricardo_crawlos.models.Game;
 import ricardo_crawlos.utilities.AnalyserBase;
 import ricardo_crawlos.utilities.Statistics;
 
@@ -41,9 +38,29 @@ public class GameReviewInformationPanel extends JPanel
 
 	private static final long serialVersionUID = 1L;
 
-	public GameReviewInformationPanel(JFrame jframe, Dictionary<Integer, Statistics<Double, IReview>> results)
+	public GameReviewInformationPanel(JFrame jframe, Dictionary<Integer, Statistics<Double, IReview>> results, Game game)
 	{
 		setBackground(Color.WHITE);
+		try
+		{
+			UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
+		}
+		catch (ClassNotFoundException e)
+		{
+			e.printStackTrace();
+		}
+		catch (InstantiationException e)
+		{
+			e.printStackTrace();
+		}
+		catch (IllegalAccessException e)
+		{
+			e.printStackTrace();
+		}
+		catch (UnsupportedLookAndFeelException e)
+		{
+			e.printStackTrace();
+		}
 
 		setLayout(null);
 		setSize(1000, 800);
@@ -231,13 +248,13 @@ public class GameReviewInformationPanel extends JPanel
 		});
 
 
-		JLabel game_name_value = new JLabel(String.valueOf("DOTO"));
+		JLabel game_name_value = new JLabel(game.getGameName());
 		game_name_value.setVerticalAlignment(SwingConstants.TOP);
 		game_name_value.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		game_name_value.setBounds(15, 200, 455, 40);
 		add(game_name_value);
 
-		JLabel description_value = new JLabel("DOTO");
+		JLabel description_value = new JLabel("Developer: " + game.getDeveloper());
 		description_value.setVerticalAlignment(SwingConstants.TOP);
 		description_value.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		description_value.setBounds(15, 300, 455, 40);
@@ -255,8 +272,6 @@ public class GameReviewInformationPanel extends JPanel
 		{
 			count_value = new JLabel(usrScores.size() + " (User w/o Outliers), "
 					+ results.get(2).getOriginal().size() + " (Critics)");
-
-			System.out.println(results.get(2).getIqr());
 			
 		}
 
