@@ -2,6 +2,8 @@ package ricardo_crawlos.managers;
 
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Dictionary;
+import java.util.Hashtable;
 import java.util.stream.Stream;
 import org.jfree.util.ArrayUtilities;
 import org.jsoup.HttpStatusException;
@@ -22,6 +24,8 @@ import ricardo_crawlos.models.UserReview;
 import ricardo_crawlos.storage.CachedGamesiteCrawler;
 import ricardo_crawlos.storage.JsonSerialiser;
 import ricardo_crawlos.storage.TextWriter;
+import ricardo_crawlos.utilities.AnalyserBase;
+import ricardo_crawlos.utilities.Statistics;
 
 public class SearchContextGamePC implements ISearchContext
 {
@@ -93,7 +97,7 @@ public class SearchContextGamePC implements ISearchContext
 
     public IReview[] getAllUserReviews()
     {
-        return Stream.concat(Arrays.stream(gamespotUserReviews), Arrays.stream(metacriticCriticReviews))
+        return Stream.concat(Arrays.stream(gamespotUserReviews), Arrays.stream(metacriticUserReviews))
                 .toArray(IReview[]::new);
     }
 
@@ -103,8 +107,13 @@ public class SearchContextGamePC implements ISearchContext
     }
 
     @Override
-    public void analyse()
+    public Dictionary<Integer, Statistics<Double, IReview>> analyse()
     {
-
+        Dictionary<Integer, Statistics<Double, IReview>> result = new Hashtable<>();
+        AnalyserBase<IReview> analyser = new AnalyserBase<>();
+        result.put(0, analyser.Analyse(Arrays.asList(getAllUserReviews())));
+        result.put(1, analyser.Analyse(result.get(0).getNonOutliers()));
+        result.put(2, analyser.Analyse(Arrays.asList(getAllCriticReviews())));
+        return result;
     }
 }

@@ -6,6 +6,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.NumberFormat;
 import java.util.Arrays;
+import java.util.Dictionary;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -37,11 +38,8 @@ public class GameReviewInformationPanel extends JPanel
 
 	private static final long serialVersionUID = 1L;
 
-	public GameReviewInformationPanel(JFrame jframe, IReview[] results)
+	public GameReviewInformationPanel(JFrame jframe, Dictionary<Integer, Statistics<Double, IReview>> results)
 	{
-		List<IReview> resultList = Arrays.asList(results);
-		Statistics<Double, IReview> withOutlierResult = new AnalyserBase<IReview>().Analyse(resultList);
-		Statistics<Double, IReview> withoutOutlierResult = new AnalyserBase<IReview>().Analyse(withOutlierResult.getNonOutliers());
 		setBackground(Color.WHITE);
 
 		setLayout(null);
@@ -76,16 +74,15 @@ public class GameReviewInformationPanel extends JPanel
 
 		DefaultBoxAndWhiskerCategoryDataset boxData = new DefaultBoxAndWhiskerCategoryDataset();
 
-        //boxData.add(resultList.stream().map(x->x.getScore()).collect(Collectors.toList()), "Reviews"
-		//		, "User (w/Outliers)");
-        boxData.add(withOutlierResult.getNonOutliers().stream().map(x->x.getScore()).collect(Collectors.toList())
+        boxData.add(results.get(0).getNonOutliers().stream().map(x->x.getScore()).collect(Collectors.toList())
 				, "Reviews", "User (w/o Outliers)");
-
+		boxData.add(results.get(2).getNonOutliers().stream().map(x->x.getScore()).collect(Collectors.toList())
+				, "Reviews", "Critics");
         BoxAndWhiskerRenderer boxRenderer = new BoxAndWhiskerRenderer();
 
         DefaultCategoryDataset catData = new DefaultCategoryDataset();
         catData.addValue(boxData.getMeanValue(0, 0), "Mean", boxData.getColumnKey(0));
-        //catData.addValue(boxData.getMeanValue(0, 1), "Mean", boxData.getColumnKey(1));
+        catData.addValue(boxData.getMeanValue(0, 1), "Mean", boxData.getColumnKey(1));
 
         LineAndShapeRenderer lineRenderer = new LineAndShapeRenderer();
         CategoryAxis xAxis = new CategoryAxis("Type of Reviews");
@@ -125,27 +122,27 @@ public class GameReviewInformationPanel extends JPanel
 		back_button.setBounds(157, 718, 164, 50);
 		add(back_button);
 
-		JLabel game_name_value = new JLabel(String.valueOf(results[0].getGameID()));
+		JLabel game_name_value = new JLabel(String.valueOf("DOTO"));
 		game_name_value.setVerticalAlignment(SwingConstants.TOP);
 		game_name_value.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		game_name_value.setBounds(15, 200, 455, 40);
 		add(game_name_value);
 
-		JLabel description_value = new JLabel(String.valueOf(results[0].getGameID()));
+		JLabel description_value = new JLabel("DOTO");
 		description_value.setVerticalAlignment(SwingConstants.TOP);
 		description_value.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		description_value.setBounds(15, 300, 455, 40);
 		add(description_value);
 
-		JLabel avg_score_value = new JLabel(withOutlierResult.getMean().toString() + " (w/ Outliers) "
-				+ withoutOutlierResult.getMean().toString() + " (w/o Outliers)");
+		JLabel avg_score_value = new JLabel(results.get(0).getMean().toString() + " (w/ Outliers) "
+				+ results.get(1).getMean().toString() + " (w/o Outliers)");
 		avg_score_value.setVerticalAlignment(SwingConstants.TOP);
 		avg_score_value.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		avg_score_value.setBounds(15, 400, 400, 40);
 		add(avg_score_value);
 
-		JLabel std_score_value_outliers = new JLabel(withOutlierResult.getSd().toString() + " (w/ Outliers) "
-				+ withoutOutlierResult.getSd().toString() + " (w/o Outliers)");
+		JLabel std_score_value_outliers = new JLabel(results.get(0).getSd().toString() + " (w/ Outliers) "
+				+ results.get(1).getSd().toString() + " (w/o Outliers)");
 		std_score_value_outliers.setVerticalAlignment(SwingConstants.TOP);
 		std_score_value_outliers.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		std_score_value_outliers.setBounds(15, 500, 400, 40);
