@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.Dictionary;
 import java.util.Hashtable;
+import java.util.Objects;
 import java.util.stream.Stream;
 import org.jsoup.Connection;
 import org.jsoup.HttpStatusException;
@@ -63,14 +64,36 @@ public class SearchContextGamePC implements ISearchContext
         var gameSpotLink = "https://www.gamespot.com/" + getGamespotKey();
         var metacriticLink = "https://www.metacritic.com/" + getMetacriticKey();
 
-        System.out.println("Probing " + gameSpotLink);
-        Jsoup.connect(gameSpotLink).method(Connection.Method.HEAD).execute();
-        System.out.println("Probing " + metacriticLink);
-        Jsoup.connect(metacriticLink).method(Connection.Method.HEAD).execute();
+        var probeErrors = Arrays.asList(gameSpotLink, metacriticLink)
+                .stream()
+                .parallel()
+                .map(x ->
+                {
+                    try
+                    {
+                        System.out.println("Probing " + x);
+                        Jsoup.connect(x).method(Connection.Method.HEAD).execute();
+                    }
+                    catch (IOException e)
+                    {
+                        System.out.println("Probe failed for " + x);
+                        return e;
+                    }
+                    return null;
+                })
+                .filter(Objects::nonNull)
+                .toArray(IOException[]::new);
 
+        if (probeErrors.length > 0)
+        {
+            throw probeErrors[0];
+        }
+
+        System.out.println("Starting crawlers");
         gamespotUserReviewExtractable = new GamespotReviewsCrawler(gameReference);
         metacriticUserReviewExtractable = new MetacriticUserReviewsCrawler(getMetacriticKey());
         metacriticCriticReviewExtractable = new MetacriticCriticReviewsCrawler(getMetacriticKey());
+        System.out.println("Started crawlers");
     }
 
     @Override
@@ -93,8 +116,8 @@ public class SearchContextGamePC implements ISearchContext
     {
         var extractedReviews = extractor.extractFrom(rawHTML);
         var reviewsJson = JsonSerialiser.DefaultInstance().toJson(extractedReviews);
-        System.out.println("Storing extracted data: " + crawler.getDomain() + " " + crawler.getExtractionName() + " -> " + gameReference );
-        TextWriter.writeAllText("database/extracted/reviews/" + gameReference + "/" + crawler.getDomain()  + "_" + crawler.getExtractionName() + ".json", reviewsJson);
+        System.out.println("Storing extracted data: " + crawler.getDomain() + " " + crawler.getExtractionName() + " " + extractedReviews.length + " -> " + gameReference);
+        TextWriter.writeAllText("database/extracted/reviews/" + gameReference + "/" + crawler.getDomain() + "_" + crawler.getExtractionName() + ".json", reviewsJson);
         return extractedReviews;
     }
 

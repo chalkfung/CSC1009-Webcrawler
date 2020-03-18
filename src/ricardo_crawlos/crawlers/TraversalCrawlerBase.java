@@ -1,9 +1,10 @@
 package ricardo_crawlos.crawlers;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.stream.Collectors;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -17,13 +18,13 @@ import ricardo_crawlos.core.ICrawler;
  */
 public abstract class TraversalCrawlerBase implements ICrawler
 {
-    protected HashSet<String> links;
-    protected List<Document> traversalResults;
+    protected final Set<String> links;
+    protected final Queue<Document> traversalResults;
 
     public TraversalCrawlerBase()
     {
-        links = new HashSet<String>();
-        traversalResults = new ArrayList<>();
+        links = Collections.newSetFromMap(new ConcurrentHashMap<>());
+        traversalResults = new ConcurrentLinkedQueue<>();
     }
 
     protected abstract boolean canTraverse(String url);
@@ -32,11 +33,11 @@ public abstract class TraversalCrawlerBase implements ICrawler
     {
         Elements linksOnPage = document.select("a[href]");
         return linksOnPage
-            .stream()
-            .map(x -> x.attr("abs:href"))
-            .filter(this::canTraverse)
-            .distinct()
-            .toArray(String[]::new);
+                .stream()
+                .map(x -> x.attr("abs:href"))
+                .filter(this::canTraverse)
+                .distinct()
+                .toArray(String[]::new);
     }
 
     /**
@@ -46,24 +47,21 @@ public abstract class TraversalCrawlerBase implements ICrawler
      */
     protected void traverse(String url)
     {
-        if (links.add(url)) // if can add to the hashmap, it is already unique
+        if (links.add(url))
         {
             System.out.println("Traversing: " + url);
             try
             {
                 Document document = Jsoup.connect(url).get();
-                Elements linksOnPage = document.select("a[href]");
-
-                for (Element page : linksOnPage)
-                {
-                    String traverseUrl = page.attr("abs:href");
-                    if (canTraverse(traverseUrl))
-                    {
-                        traverse(traverseUrl);
-                    }
-                }
 
                 traversalResults.add(document);
+
+                document.select("a[href]")
+                        .stream()
+                        .parallel()
+                        .map(x -> x.attr("abs:href"))
+                        .filter(this::canTraverse)
+                        .forEach(this::traverse);
             }
             catch (IOException e)
             {
@@ -75,7 +73,7 @@ public abstract class TraversalCrawlerBase implements ICrawler
     @Override
     public String[] getTraversedLinks()
     {
-        return links.toArray(new String[links.size()]);
+        return links.toArray(String[]::new);
     }
 
     @Override
