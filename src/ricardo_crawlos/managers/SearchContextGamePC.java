@@ -3,7 +3,6 @@ package ricardo_crawlos.managers;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.stream.Stream;
-import org.jfree.util.ArrayUtilities;
 import org.jsoup.HttpStatusException;
 import org.jsoup.Jsoup;
 
@@ -17,8 +16,6 @@ import ricardo_crawlos.crawlers.MetacriticUserReviewsCrawler;
 import ricardo_crawlos.extractors.GamespotReviewsExtractor;
 import ricardo_crawlos.extractors.MetacriticCriticReviewsExtractor;
 import ricardo_crawlos.extractors.MetacriticUserReviewsExtractor;
-import ricardo_crawlos.models.CriticReview;
-import ricardo_crawlos.models.UserReview;
 import ricardo_crawlos.storage.CachedGamesiteCrawler;
 import ricardo_crawlos.storage.JsonSerialiser;
 import ricardo_crawlos.storage.TextWriter;
