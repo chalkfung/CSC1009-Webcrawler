@@ -14,7 +14,7 @@ import org.jsoup.HttpStatusException;
 
 public class GameReviewHomePanel extends JPanel
 {
-
+    private final int SLEEPTIME = 0;
     private static final long serialVersionUID = 1L;
     private JTextField txtSearchYourGame;
 
@@ -103,13 +103,13 @@ public class GameReviewHomePanel extends JPanel
                         gifLabel.setText("Fetching Data!");
                         searchContext.fetch();
 
-                        Thread.sleep(1000);
+                        Thread.sleep(SLEEPTIME);
                         gifLabel.setText("Extracting Data!");
 						searchContext.extract();
-                        Thread.sleep(1000);
+                        Thread.sleep(SLEEPTIME);
                         gifLabel.setText("Analysing Data!");
                         searchContext.analyse();
-                        Thread.sleep(1000);
+                        Thread.sleep(SLEEPTIME);
                         GameReviewInformationPanel infoPanel = new GameReviewInformationPanel(jframe);
                         jframe.setContentPane(infoPanel);
                         return null;
