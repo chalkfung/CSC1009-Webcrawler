@@ -1,6 +1,5 @@
 package ricardo_crawlos.crawlers;
 
-import javax.xml.stream.FactoryConfigurationError;
 import org.jsoup.Jsoup;
 
 import ricardo_crawlos.core.IPaginatedCrawler;
@@ -31,7 +30,7 @@ public class MetacriticUserReviewsCrawler extends BaseURLConstrainedCrawler impl
     @Override
     protected boolean canTraverse(String url)
     {
-        if (url.contains("dota-2/user-reviews?sort-by=date&num_items=100"))
+        if (url.contains("user-reviews?sort-by=date&num_items=100"))
         {
             return super.canTraverse(url);
         }

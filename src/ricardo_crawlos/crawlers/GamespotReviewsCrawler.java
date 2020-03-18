@@ -1,6 +1,8 @@
 package ricardo_crawlos.crawlers;
 
+import java.util.stream.Collectors;
 import org.jsoup.Jsoup;
+import org.jsoup.select.Elements;
 
 import ricardo_crawlos.core.IPaginatedCrawler;
 import ricardo_crawlos.core.IWebsite;
@@ -63,6 +65,16 @@ public class GamespotReviewsCrawler extends BaseURLConstrainedCrawler implements
     @Override
     public String extractFrom(String html)
     {
-        return Jsoup.parse(html).select("li.userReview-list__item").outerHtml();
+        return Jsoup.parse(html)
+                .select("li.userReview-list__item")
+                .stream()
+                .filter(x ->
+                {
+                    // Remove double counting reviews from the most helpful sections
+                    var helpfulHeader = x.parent().parent().selectFirst("header.pod-header");
+                    return helpfulHeader == null || !helpfulHeader.html().contains("Most Helpful");
+                })
+                .collect(Collectors.toCollection(Elements::new))
+                .outerHtml();
     }
 }

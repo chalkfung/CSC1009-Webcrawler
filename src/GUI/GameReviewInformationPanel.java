@@ -4,6 +4,8 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.text.NumberFormat;
 import java.util.Arrays;
 import java.util.Dictionary;
@@ -134,6 +136,11 @@ public class GameReviewInformationPanel extends JPanel
 		add(panel);
 
 		JButton back_button = new JButton("Back");
+		back_button.setForeground(Color.WHITE);
+		back_button.setFont(new Font("Consolas", Font.PLAIN, 14));
+		back_button.setBackground(new Color(101, 101, 238));
+		back_button.setBounds(161, 750, 180, 40);
+		add(back_button);
 		back_button.addActionListener(new ActionListener()
 		{
 			public void actionPerformed(ActionEvent e)
@@ -143,11 +150,86 @@ public class GameReviewInformationPanel extends JPanel
 				jframe.setContentPane(searchPanel);
 			}
 		});
-		back_button.setForeground(Color.WHITE);
-		back_button.setFont(new Font("Consolas", Font.PLAIN, 31));
-		back_button.setBackground(new Color(101, 101, 238));
-		back_button.setBounds(157, 718, 164, 50);
-		add(back_button);
+		back_button.addKeyListener(new KeyListener()
+		{
+			@Override
+			public void keyTyped(KeyEvent e){}
+
+			@Override
+			public void keyPressed(KeyEvent e)
+			{
+				GameReviewHomePanel searchPanel = new GameReviewHomePanel(jframe);
+				jframe.setContentPane(searchPanel);
+			}
+
+			@Override
+			public void keyReleased(KeyEvent e){}
+		});
+
+		JButton UserWord_cloud = new JButton("User Word Cloud");
+		UserWord_cloud.setForeground(Color.WHITE);
+		UserWord_cloud.setFont(new Font("Consolas", Font.PLAIN, 14));
+		UserWord_cloud.setBackground(new Color(101, 101, 238));
+		UserWord_cloud.setBounds(40, 650, 180, 40);
+		add(UserWord_cloud);
+		UserWord_cloud.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent e)
+			{
+				//Go the Display Info panel
+				GameReviewHomePanel searchPanel = new GameReviewHomePanel(jframe);
+				jframe.setContentPane(searchPanel);
+			}
+		});
+
+		JButton CriticWord_cloud = new JButton("Critic Word Cloud");
+		CriticWord_cloud.setForeground(Color.WHITE);
+		CriticWord_cloud.setFont(new Font("Consolas", Font.PLAIN, 14));
+		CriticWord_cloud.setBackground(new Color(101, 101, 238));
+		CriticWord_cloud.setBounds(280, 650, 180, 40);
+		add(CriticWord_cloud);
+		CriticWord_cloud.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent e)
+			{
+				//Go the Display Info panel
+				GameReviewHomePanel searchPanel = new GameReviewHomePanel(jframe);
+				jframe.setContentPane(searchPanel);
+			}
+		});
+
+		JButton ShowUser_Review = new JButton("Show User Review");
+		ShowUser_Review.setForeground(Color.WHITE);
+		ShowUser_Review.setFont(new Font("Consolas", Font.PLAIN, 14));
+		ShowUser_Review.setBackground(new Color(101, 101, 238));
+		ShowUser_Review.setBounds(40, 700, 180, 40);
+		add(ShowUser_Review);
+		ShowUser_Review.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent e)
+			{
+				//Go the Display Info panel
+				GameReviewHomePanel searchPanel = new GameReviewHomePanel(jframe);
+				jframe.setContentPane(searchPanel);
+			}
+		});
+
+		JButton ShowCritic_Review = new JButton("Show Critic Review");
+		ShowCritic_Review.setForeground(Color.WHITE);
+		ShowCritic_Review.setFont(new Font("Consolas", Font.PLAIN, 14));
+		ShowCritic_Review.setBackground(new Color(101, 101, 238));
+		ShowCritic_Review.setBounds(280, 700, 180, 40);
+		add(ShowCritic_Review);
+		ShowCritic_Review.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent e)
+			{
+				//Go the Display Info panel
+				GameReviewHomePanel searchPanel = new GameReviewHomePanel(jframe);
+				jframe.setContentPane(searchPanel);
+			}
+		});
+
 
 		JLabel game_name_value = new JLabel(String.valueOf("DOTO"));
 		game_name_value.setVerticalAlignment(SwingConstants.TOP);
