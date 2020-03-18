@@ -5,7 +5,7 @@ import java.util.Arrays;
 import java.util.Dictionary;
 import java.util.Hashtable;
 import java.util.stream.Stream;
-import org.jfree.util.ArrayUtilities;
+import org.jsoup.Connection;
 import org.jsoup.HttpStatusException;
 import org.jsoup.Jsoup;
 
@@ -19,8 +19,6 @@ import ricardo_crawlos.crawlers.MetacriticUserReviewsCrawler;
 import ricardo_crawlos.extractors.GamespotReviewsExtractor;
 import ricardo_crawlos.extractors.MetacriticCriticReviewsExtractor;
 import ricardo_crawlos.extractors.MetacriticUserReviewsExtractor;
-import ricardo_crawlos.models.CriticReview;
-import ricardo_crawlos.models.UserReview;
 import ricardo_crawlos.storage.CachedGamesiteCrawler;
 import ricardo_crawlos.storage.JsonSerialiser;
 import ricardo_crawlos.storage.TextWriter;
@@ -56,14 +54,19 @@ public class SearchContextGamePC implements ISearchContext
 
     private String getMetacriticKey()
     {
-        return "game/pc/";
+        return "game/pc/" + gameReference;
     }
 
     @Override
-    public void probe() throws HttpStatusException, IOException
+    public void probe() throws IOException
     {
-        Jsoup.connect("https://www.gamespot.com/" + getGamespotKey()).get();
-        Jsoup.connect("https://www.metacritic.com/" + getMetacriticKey()).get();
+        var gameSpotLink = "https://www.gamespot.com/" + getGamespotKey();
+        var metacriticLink = "https://www.metacritic.com/" + getMetacriticKey();
+
+        System.out.println("Probing " + gameSpotLink);
+        Jsoup.connect(gameSpotLink).method(Connection.Method.HEAD).execute();
+        System.out.println("Probing " + metacriticLink);
+        Jsoup.connect(metacriticLink).method(Connection.Method.HEAD).execute();
 
         gamespotUserReviewExtractable = new GamespotReviewsCrawler(gameReference);
         metacriticUserReviewExtractable = new MetacriticUserReviewsCrawler(getMetacriticKey());
