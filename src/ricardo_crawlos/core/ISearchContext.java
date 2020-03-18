@@ -12,6 +12,6 @@ public interface ISearchContext
     void probe() throws IOException;
     void fetch();
     void extract();
-    Game getGameInfo();
+    IGame getGameInfo();
     Dictionary<Integer, Statistics<Double, IReview>> analyse();
 }

@@ -13,30 +13,34 @@ import java.util.HashMap;
 import java.util.Map;
 import com.google.gson.reflect.TypeToken;
 
-public class GameManager implements IManager<Game, String>
+public class GameManager extends ItemStoreManagerBase<Game, String>
 {
-
     private static GameManager gameManagerInstance = null;
-    private Map<String, Integer> gameMap;
 
-    private String savePath = "database/managers/game_manager.json";
+    @Override
+    protected String getStoragePath()
+    {
+        return "database/managers/game_manager.json";
+    }
 
     private GameManager()
     {
-        gameMap = new HashMap<>();
+        super();
+    }
 
-        var path = Path.of(savePath);
-        if (Files.exists(path))
+    @Override
+    public Game getFromID(int id)
+    {
+        try
         {
-            try
-            {
-                Type type = new TypeToken<Map<String, Integer>>(){}.getType();
-                gameMap = JsonSerialiser.DefaultInstance().fromJson(Files.readString(path), type);
-            }
-            catch (IOException e)
-            {
-                e.printStackTrace();
-            }
+            var name = reverseLookupMap.get(id);
+            var cached = Files.readString(Path.of("database/extracted/games/" + new SearchManager(name).getGameReference() + ".json"));
+            return JsonSerialiser.DefaultInstance().fromJson(cached, Game.class);
+        }
+        catch (IOException e)
+        {
+            System.out.println("Game id not found: " + id);
+            return null;
         }
     }
 
@@ -45,31 +49,5 @@ public class GameManager implements IManager<Game, String>
         if (gameManagerInstance == null)
             gameManagerInstance = new GameManager();
         return gameManagerInstance;
-    }
-
-    public int getID(String name)
-    {
-        return this.gameMap.get(name);
-    }
-
-    public boolean isExist(String name)
-    {
-        return this.gameMap.containsKey(name);
-    }
-
-    public void append(String name)
-    {
-        if (!isExist(name))
-        {
-            this.gameMap.put(name, this.gameMap.size());
-            var serialised = JsonSerialiser.DefaultInstance().toJson(this.gameMap);
-            TextWriter.writeAllText(savePath, serialised);
-        }
-    }
-
-    @Override
-    public Game getFromID(int id)
-    {
-        return null;
     }
 }

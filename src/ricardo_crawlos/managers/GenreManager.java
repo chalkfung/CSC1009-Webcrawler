@@ -13,31 +13,25 @@ import java.util.HashMap;
 import java.util.Map;
 import com.google.gson.reflect.TypeToken;
 
-public class GenreManager implements IManager<Genre, String>
+public class GenreManager extends ItemStoreManagerBase<Genre, String>
 {
-
     private static GenreManager gmInstance = null;
-    private Map<String, Integer> genreMap;
 
-    private String savePath = "database/managers/genre_manager.json";
+    @Override
+    protected String getStoragePath()
+    {
+        return "database/managers/genre_manager.json";
+    }
 
     private GenreManager()
     {
-        this.genreMap = new HashMap<>();
+        super();
+    }
 
-        var path = Path.of(savePath);
-        if (Files.exists(path))
-        {
-            try
-            {
-                Type type = new TypeToken<Map<String, Integer>>(){}.getType();
-                genreMap = JsonSerialiser.DefaultInstance().fromJson(Files.readString(path), type);
-            }
-            catch (IOException e)
-            {
-                e.printStackTrace();
-            }
-        }
+    @Override
+    public Genre getFromID(int id)
+    {
+        return new Genre(reverseLookupMap.get(id), id);
     }
 
     public static GenreManager getInstance()
@@ -45,41 +39,5 @@ public class GenreManager implements IManager<Genre, String>
         if(gmInstance == null)
             gmInstance = new GenreManager();
         return gmInstance;
-    }
-
-    public int getID(String name)
-    {
-        return this.genreMap.get(name);
-    }
-
-    public boolean isExist(String name)
-    {
-        return this.genreMap.containsKey(name);
-    }
-
-    public void append(String name)
-    {
-        if (!isExist(name))
-        {
-            this.genreMap.put(name, this.genreMap.size());
-            var serialised = JsonSerialiser.DefaultInstance().toJson(this.genreMap);
-            TextWriter.writeAllText(savePath, serialised);
-        }
-    }
-
-    @Override
-    public Genre getFromID(int id)
-    {
-        if (genreMap.containsValue(id))
-        {
-            for (String key : genreMap.keySet())
-            {
-                if (genreMap.get(key) == id)
-                {
-                    return new Genre(key, id);
-                }
-            }
-        }
-        return new Genre("Unknown Genre", -1);
     }
 }

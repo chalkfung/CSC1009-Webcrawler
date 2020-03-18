@@ -6,5 +6,6 @@
   "Shooter": 4,
   "Tactical": 5,
   "Third-Person": 6,
-  "Action": 7
+  "Action": 7,
+  "First-Person": 8
 }

@@ -36,10 +36,12 @@ public class GamespotGameinfoExtractor implements IExtractable<String, Game>
 
         var date = parseDate(document.select("dd.pod-objectStats-info__release li > span").text());
 
+        var description = document.select("dd.pod-objectStats-info__deck").text();
+
         genres.forEach(GenreManager.getInstance()::append);
         var genreIds = genres.stream().map(x -> GenreManager.getInstance().getID(x)).collect(Collectors.toList());
 
-        return new Game(title, GameManager.getInstance().getID(title), developer, genreIds, date);
+        return new Game(title, GameManager.getInstance().getID(title), developer, genreIds, date, description);
     }
 
     Date parseDate(String text)

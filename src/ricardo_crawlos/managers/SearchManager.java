@@ -18,4 +18,9 @@ public class SearchManager
     {
         return new SearchContextGamePC(gameSpotKey);
     }
+
+    public String getGameReference()
+    {
+        return gameSpotKey;
+    }
 }

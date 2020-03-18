@@ -1,14 +1,15 @@
 package ricardo_crawlos.crawlers;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Queue;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
-import java.util.stream.Collectors;
-
+import java.util.concurrent.atomic.AtomicInteger;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import ricardo_crawlos.core.ICrawler;
@@ -21,7 +22,7 @@ public abstract class TraversalCrawlerBase implements ICrawler
     protected final Set<String> links;
     protected final Queue<Document> traversalResults;
 
-    private Integer maxPage = 0;
+    private AtomicInteger maxPageSeen = new AtomicInteger(0);
 
     public TraversalCrawlerBase()
     {
@@ -42,6 +43,27 @@ public abstract class TraversalCrawlerBase implements ICrawler
                 .toArray(String[]::new);
     }
 
+    public double estimateTraversalProgress(String currentUrl)
+    {
+        try
+        {
+            var currentPage = Integer.parseInt(currentUrl.split("page=")[1]);
+            if (maxPageSeen.get() < currentPage)
+            {
+                maxPageSeen.set(currentPage);
+            }
+            if (maxPageSeen.get() < 4)
+            {
+                return 0;
+            }
+            return (traversalResults.size() / ((double) maxPageSeen.get())) * 100;
+        }
+        catch (Exception e)
+        {
+            return 0;
+        }
+    }
+
     /**
      * Note: recursive
      *
@@ -51,23 +73,9 @@ public abstract class TraversalCrawlerBase implements ICrawler
     {
         if (links.add(url))
         {
-            var progress = "";
-            try
-            {
-                var currentPage = Integer.parseInt(url.split("page=")[1]);
-                synchronized (maxPage)
-                {
-                    if (maxPage < currentPage)
-                    {
-                        maxPage = currentPage;
-                    }
-                }
-                progress = String.format("~%.2f%% ", (traversalResults.size() / (double) maxPage) * 100);
-            }
-            catch (NumberFormatException e)
-            {
-            }
-            System.out.println("Traversing: " + progress + url);
+            var progress = estimateTraversalProgress(url);
+
+            System.out.println("Traversing: " + (progress == 0 ? "" : String.format("est %.2f%% ", progress)) + url);
             try
             {
                 Document document = Jsoup.connect(url).get();

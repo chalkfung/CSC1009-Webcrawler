@@ -1,5 +1,6 @@
 package ricardo_crawlos.core;
 
+import java.util.Date;
 import java.util.List;
 
 public interface IGame
@@ -12,5 +13,7 @@ public interface IGame
 
     List<Integer> getGenres();
 
-    java.util.Date getReleasedDate();
+    Date getReleasedDate();
+
+    String getDescription();
 }
