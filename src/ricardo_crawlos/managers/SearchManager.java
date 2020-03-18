@@ -6,6 +6,7 @@ import org.jsoup.Jsoup;
 
 import ricardo_crawlos.core.IExtractableCrawler;
 import ricardo_crawlos.core.IReviewsExtractor;
+import ricardo_crawlos.core.ISearchContext;
 import ricardo_crawlos.crawlers.GamespotReviewsCrawler;
 import ricardo_crawlos.crawlers.MetacriticCriticReviewsCrawler;
 import ricardo_crawlos.crawlers.MetacriticUserReviewsCrawler;
@@ -16,26 +17,21 @@ import ricardo_crawlos.storage.CachedGamesiteCrawler;
 import ricardo_crawlos.storage.JsonSerialiser;
 import ricardo_crawlos.storage.TextWriter;
 
-public class GameSearchManager
+public class SearchManager
 {
     private String gameSpotKey;
     private String metaKey = "game/pc/";
 
-    public GameSearchManager(String key)
+    public SearchManager(String key)
     {
         key = key.toLowerCase();
         this.gameSpotKey = key.replaceAll(" ", "-");
         this.metaKey += this.gameSpotKey;
     }
 
-    public String getGameSpotKey()
+    public ISearchContext retrieve()
     {
-        return this.gameSpotKey;
-    }
-
-    public String getMetaKey()
-    {
-        return this.metaKey;
+        return new SearchContextGamePC(gameSpotKey);
     }
 
     public static void fetchReviewsGamePC(String gameKey)
@@ -53,16 +49,4 @@ public class GameSearchManager
         var reviewsJson = JsonSerialiser.DefaultInstance().toJson(extractedReviews);
         TextWriter.writeAllText("database/extracted/reviews/" + referenceName + "/" + crawler.getDomain()  + "_" + crawler.getExtractionName() + ".json", reviewsJson);
     }
-
-//    public static void fetchReview(String gameKey)
-//    {
-//        var cachedCrawler = new CachedGamesiteCrawler(gameKey, gameKey);
-//    }
-
-    public static void probeURL(GameSearchManager key) throws HttpStatusException, IOException
-    {
-        Jsoup.connect("https://www.gamespot.com/" + key.getGameSpotKey()).get();
-        Jsoup.connect("https://www.metacritic.com/" + key.getMetaKey()).get();
-    }
-
 }

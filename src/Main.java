@@ -18,12 +18,7 @@ public class Main
     public static void main(String[] args)
     {
         showWindow();
-        //fetchReviewsGamePC("dota-2");
     }
-
-
-
-
 
     public static void showWindow()
     {
