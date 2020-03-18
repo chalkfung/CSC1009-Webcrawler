@@ -19,9 +19,10 @@ public class GameReviewHomePanel extends JPanel
     private final int SLEEPTIME = 0;
     private static final long serialVersionUID = 1L;
     private JTextField txtSearchYourGame;
-
+    private JFrame jframe;
     public GameReviewHomePanel(JFrame jframe)
     {
+        this.jframe = jframe;
         setBackground(new Color(25, 32, 96));
         setLayout(null);
         setSize(1000, 800);
@@ -48,90 +49,7 @@ public class GameReviewHomePanel extends JPanel
         {
             public void actionPerformed(ActionEvent e)
             {
-                JDialog load = new JDialog(jframe, true);
-                load.getContentPane().setBackground(Color.gray);
-
-                JLabel gifLabel = new JLabel("Searching!");
-                gifLabel.setIcon(new ImageIcon(this.getClass().getResource("/GUI/Image/25.gif")));
-
-                load.getContentPane().add(gifLabel);
-                load.setUndecorated(true);
-                load.setBounds(300, 300, 50, 50);
-                load.setLocationRelativeTo(jframe);
-                load.setSize(165, 75);
-
-                SwingWorker<String, Void> s_worker = new SwingWorker<String, Void>()
-                {
-
-                    @Override
-                    protected String doInBackground() throws InterruptedException
-                    {
-                        // TODO Auto-generated method stub
-                        // Search Method
-                        String keyword = txtSearchYourGame.getText();
-                        SearchManager searchManager = new SearchManager(keyword);
-//						System.out.println(key.getGameSpotKey() + "\n" + key.getMetaKey());
-                        ISearchContext searchContext = searchManager.retrieve();
-
-                        try
-                        {
-                            searchContext.probe();
-                        }
-                        catch (IOException e)
-                        {
-                            System.out.println(e.getMessage());
-                            if (e instanceof HttpStatusException)
-                            {
-                                var httpException = (HttpStatusException) e;
-                                if (httpException.getStatusCode() == 404)
-                                {
-                                    JOptionPane.showMessageDialog(null, "Unable to find the game", "Search Error", JOptionPane.ERROR_MESSAGE);
-                                }
-                                else
-                                {
-                                    JOptionPane.showMessageDialog(null, "HTTP Raised Status: " + httpException.getStatusCode(), "Search Error", JOptionPane.ERROR_MESSAGE);
-                                }
-                            }
-                            else
-                            {
-                            	e.printStackTrace();
-                                JOptionPane.showMessageDialog(null, "IO Exception: " + e.getMessage(), "Search Error", JOptionPane.ERROR_MESSAGE);
-                            }
-                            GameReviewHomePanel searchPanel = new GameReviewHomePanel(jframe);
-                            jframe.setContentPane(searchPanel);
-                            return null;
-                        }
-
-                        gifLabel.setText("Fetching Data!");
-                        searchContext.fetch();
-
-                        Thread.sleep(SLEEPTIME);
-                        gifLabel.setText("Extracting Data!");
-						searchContext.extract();
-                        Thread.sleep(SLEEPTIME);
-                        gifLabel.setText("Analysing Data!");
-                        GameReviewInformationPanel infoPanel = new GameReviewInformationPanel(jframe, searchContext.analyse());
-                        jframe.setContentPane(infoPanel);
-                        return null;
-                    }
-
-                    @Override
-                    protected void done()
-                    {
-                        load.dispose();
-                    }
-                };
-
-                s_worker.execute();
-                load.setVisible(true);
-                try
-                {
-                    s_worker.get();
-                }
-                catch (Exception swing_exception)
-                {
-                    System.out.print("Error Message: " + swing_exception.getMessage());
-                }
+                doSearch();
             }
         });
 
@@ -145,90 +63,7 @@ public class GameReviewHomePanel extends JPanel
             {
                 if (e.getKeyCode() == KeyEvent.VK_ENTER)
                 {
-                    JDialog load = new JDialog(jframe, true);
-                    load.getContentPane().setBackground(Color.gray);
-
-                    JLabel gifLabel = new JLabel("Searching!");
-                    gifLabel.setIcon(new ImageIcon(this.getClass().getResource("/GUI/Image/25.gif")));
-
-                    load.getContentPane().add(gifLabel);
-                    load.setUndecorated(true);
-                    load.setBounds(300, 300, 50, 50);
-                    load.setLocationRelativeTo(jframe);
-                    load.setSize(165, 75);
-
-                    SwingWorker<String, Void> s_worker = new SwingWorker<String, Void>()
-                    {
-
-                        @Override
-                        protected String doInBackground() throws InterruptedException
-                        {
-                            // TODO Auto-generated method stub
-                            // Search Method
-                            String keyword = txtSearchYourGame.getText();
-                            SearchManager searchManager = new SearchManager(keyword);
-//						System.out.println(key.getGameSpotKey() + "\n" + key.getMetaKey());
-                            ISearchContext searchContext = searchManager.retrieve();
-
-                            try
-                            {
-                                searchContext.probe();
-                            }
-                            catch (IOException e)
-                            {
-                                System.out.println(e.getMessage());
-                                if (e instanceof HttpStatusException)
-                                {
-                                    var httpException = (HttpStatusException) e;
-                                    if (httpException.getStatusCode() == 404)
-                                    {
-                                        JOptionPane.showMessageDialog(null, "Unable to find the game", "Search Error", JOptionPane.ERROR_MESSAGE);
-                                    }
-                                    else
-                                    {
-                                        JOptionPane.showMessageDialog(null, "HTTP Raised Status: " + httpException.getStatusCode(), "Search Error", JOptionPane.ERROR_MESSAGE);
-                                    }
-                                }
-                                else
-                                {
-                                    e.printStackTrace();
-                                    JOptionPane.showMessageDialog(null, "IO Exception: " + e.getMessage(), "Search Error", JOptionPane.ERROR_MESSAGE);
-                                }
-                                GameReviewHomePanel searchPanel = new GameReviewHomePanel(jframe);
-                                jframe.setContentPane(searchPanel);
-                                return null;
-                            }
-
-                            gifLabel.setText("Fetching Data!");
-                            searchContext.fetch();
-
-                            Thread.sleep(SLEEPTIME);
-                            gifLabel.setText("Extracting Data!");
-                            searchContext.extract();
-                            Thread.sleep(SLEEPTIME);
-                            gifLabel.setText("Analysing Data!");
-                            GameReviewInformationPanel infoPanel = new GameReviewInformationPanel(jframe, searchContext.analyse());
-                            jframe.setContentPane(infoPanel);
-                            return null;
-                        }
-
-                        @Override
-                        protected void done()
-                        {
-                            load.dispose();
-                        }
-                    };
-
-                    s_worker.execute();
-                    load.setVisible(true);
-                    try
-                    {
-                        s_worker.get();
-                    }
-                    catch (Exception swing_exception)
-                    {
-                        System.out.print("Error Message: " + swing_exception.getMessage());
-                    }
+                    doSearch();
                 }
 
             }
@@ -236,5 +71,95 @@ public class GameReviewHomePanel extends JPanel
             @Override
             public void keyReleased(KeyEvent e){}
         });
+
+
+    }
+
+    public void doSearch()
+    {
+        JDialog load = new JDialog(jframe, true);
+        load.getContentPane().setBackground(Color.gray);
+
+        JLabel gifLabel = new JLabel("Searching!");
+        gifLabel.setIcon(new ImageIcon(this.getClass().getResource("/GUI/Image/25.gif")));
+
+        load.getContentPane().add(gifLabel);
+        load.setUndecorated(true);
+        load.setBounds(300, 300, 50, 50);
+        load.setLocationRelativeTo(jframe);
+        load.setSize(165, 75);
+
+        SwingWorker<String, Void> s_worker = new SwingWorker<String, Void>()
+        {
+
+            @Override
+            protected String doInBackground() throws InterruptedException
+            {
+                // TODO Auto-generated method stub
+                // Search Method
+                String keyword = txtSearchYourGame.getText();
+                SearchManager searchManager = new SearchManager(keyword);
+//						System.out.println(key.getGameSpotKey() + "\n" + key.getMetaKey());
+                ISearchContext searchContext = searchManager.retrieve();
+
+                try
+                {
+                    searchContext.probe();
+                }
+                catch (IOException e)
+                {
+                    System.out.println(e.getMessage());
+                    if (e instanceof HttpStatusException)
+                    {
+                        var httpException = (HttpStatusException) e;
+                        if (httpException.getStatusCode() == 404)
+                        {
+                            JOptionPane.showMessageDialog(null, "Unable to find the game", "Search Error", JOptionPane.ERROR_MESSAGE);
+                        }
+                        else
+                        {
+                            JOptionPane.showMessageDialog(null, "HTTP Raised Status: " + httpException.getStatusCode(), "Search Error", JOptionPane.ERROR_MESSAGE);
+                        }
+                    }
+                    else
+                    {
+                        e.printStackTrace();
+                        JOptionPane.showMessageDialog(null, "IO Exception: " + e.getMessage(), "Search Error", JOptionPane.ERROR_MESSAGE);
+                    }
+                    GameReviewHomePanel searchPanel = new GameReviewHomePanel(jframe);
+                    jframe.setContentPane(searchPanel);
+                    return null;
+                }
+
+                gifLabel.setText("Fetching Data!");
+                searchContext.fetch();
+
+                Thread.sleep(SLEEPTIME);
+                gifLabel.setText("Extracting Data!");
+                searchContext.extract();
+                Thread.sleep(SLEEPTIME);
+                gifLabel.setText("Analysing Data!");
+                GameReviewInformationPanel infoPanel = new GameReviewInformationPanel(jframe, searchContext.analyse(), searchContext.getGameInfo());
+                jframe.setContentPane(infoPanel);
+                return null;
+            }
+
+            @Override
+            protected void done()
+            {
+                load.dispose();
+            }
+        };
+
+        s_worker.execute();
+        load.setVisible(true);
+        try
+        {
+            s_worker.get();
+        }
+        catch (Exception swing_exception)
+        {
+            System.out.print("Error Message: " + swing_exception.getMessage());
+        }
     }
 }
