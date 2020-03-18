@@ -91,39 +91,24 @@ public class AnalyserBase<T extends IReview> implements IAnalyser<List<T>, Stati
 
     public List<T> removeOutliers(final List<T> inputs)
     {
-        if(inputs.size() > 0 && inputs.get(0) instanceof UserReview)
-        {
-            return inputs.stream().map(x -> (UserReview) x).
-                filter(
-                        elem -> (elem.getScore() < getMaxAcceptableValues(inputs)
-                                && elem.getScore() > getMinAcceptableValues(inputs))
-                                || ((double)elem.getHelpfulScore()/(double)elem.getHelpfulCount() >= 0.5)
-                                ).map(x->(T) x).collect(Collectors.toList());
-        }
-        else
-        {
-            return inputs.stream().filter(elem -> (elem.getScore() < getMaxAcceptableValues(inputs)
-                    && elem.getScore() > getMinAcceptableValues(inputs))).collect(Collectors.toList());
 
-        }
+       return inputs.stream().filter(elem -> (elem.getScore() < getMaxAcceptableValues(inputs)
+                && elem.getScore() > getMinAcceptableValues(inputs))).collect(Collectors.toList());
     }
 
-    public List<T> showOutliers(final List<T> inputs)
+    public List<T> showAcceptableOutliers(final List<T> inputs)
     {
         if(inputs.size() > 0 && inputs.get(0) instanceof UserReview)
         {
             return inputs.stream().map(x -> (UserReview) x).
                     filter(
                             elem -> !(elem.getScore() < getMaxAcceptableValues(inputs)
-                            && elem.getScore() > getMinAcceptableValues(inputs))
-            && ((double)elem.getHelpfulScore()/(double)elem.getHelpfulCount() < 0.5)
-            ).map(x->(T) x).collect(Collectors.toList());
+                                    && elem.getScore() > getMinAcceptableValues(inputs))
+                                    && ((double)elem.getHelpfulScore()/(double)elem.getHelpfulCount() > 0.5)
+                    ).map(x->(T) x).collect(Collectors.toList());
         }
         else
-        {
-            return inputs.stream().filter(elem-> !(elem.getScore() < getMaxAcceptableValues(inputs)
-                    && elem.getScore() > getMinAcceptableValues(inputs))).collect(Collectors.toList());
-        }
+            return null;
     }
 
     public double probabilityOfScore(final List<T> inputs, double score)
@@ -148,7 +133,7 @@ public class AnalyserBase<T extends IReview> implements IAnalyser<List<T>, Stati
                 getIQR(input),
                 getMinAcceptableValues(input),
                 getMaxAcceptableValues(input),
-                showOutliers(input),
+                showAcceptableOutliers(input),
                 removeOutliers(input),
                 input
         );

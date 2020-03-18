@@ -116,7 +116,13 @@ public class SearchContextGamePC implements ISearchContext
         AnalyserBase<IReview> analyser = new AnalyserBase<>();
         result.put(0, analyser.Analyse(Arrays.asList(getAllUserReviews())));
         result.put(1, analyser.Analyse(result.get(0).getNonOutliers()));
-        result.put(2, analyser.Analyse(Arrays.asList(getAllCriticReviews())));
+        if(result.get(0).getOutliers().size() > 0)
+        {
+            result.put(2, analyser.Analyse(result.get(0).getOutliers()));
+            result.put(3, analyser.Analyse(Arrays.asList(getAllCriticReviews())));
+        }
+        else
+            result.put(2, analyser.Analyse(Arrays.asList(getAllCriticReviews())));
         return result;
     }
 }

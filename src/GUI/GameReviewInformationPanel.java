@@ -25,6 +25,7 @@ import org.jfree.chart.plot.DatasetRenderingOrder;
 import org.jfree.chart.renderer.category.BoxAndWhiskerRenderer;
 import org.jfree.chart.renderer.category.LineAndShapeRenderer;
 import org.jfree.data.category.DefaultCategoryDataset;
+import org.jfree.data.statistics.BoxAndWhiskerItem;
 import org.jfree.data.statistics.DefaultBoxAndWhiskerCategoryDataset;
 import javax.swing.JButton;
 import javax.swing.SwingConstants;
@@ -60,29 +61,55 @@ public class GameReviewInformationPanel extends JPanel
 		description_label.setBounds(15, 250, 145, 40);
 		add(description_label);
 
-		JLabel avg_score_label_outlier = new JLabel("Avg Score with Outliers:");
-		avg_score_label_outlier.setFont(new Font("Tahoma", Font.PLAIN, 26));
-		avg_score_label_outlier.setBounds(15, 350, 400, 40);
-		add(avg_score_label_outlier);
+
+		JLabel count_label = new JLabel("Count");
+		count_label.setFont(new Font("Tahoma", Font.PLAIN, 26));
+		count_label.setBounds(15, 350, 400, 40);
+		add(count_label);
+
+		JLabel mean_label = new JLabel("Mean Score");
+		mean_label.setFont(new Font("Tahoma", Font.PLAIN, 26));
+		mean_label.setBounds(15, 450, 400, 40);
+		add(mean_label);
 
 
-		JLabel std_score_label_outlier = new JLabel("S.D. Score with Outliers:");
-		std_score_label_outlier.setFont(new Font("Tahoma", Font.PLAIN, 26));
-		std_score_label_outlier.setBounds(15, 450, 400, 40);
-		add(std_score_label_outlier);
+		JLabel std_label = new JLabel("S.D. Score");
+		std_label.setFont(new Font("Tahoma", Font.PLAIN, 26));
+		std_label.setBounds(15, 550, 400, 40);
+		add(std_label);
 
+
+		List<Double> usrScores = results.get(1).getNonOutliers().stream().map(x->x.getScore()).collect(Collectors.toList());
+		BoxAndWhiskerItem outBW = null;
+		BoxAndWhiskerItem criticBW;
+
+		if(results.size() > 3)
+		{
+			outBW = new BoxAndWhiskerItem(results.get(2).getMean(), results.get(2).getQ2(),results.get(2).getQ1(),
+					results.get(2).getQ3(), results.get(2).getMin(), results.get(2).getMax(), null, null,null);
+			criticBW = new BoxAndWhiskerItem(results.get(3).getMean(), results.get(3).getQ2(),results.get(3).getQ1(),
+					results.get(3).getQ3(), results.get(3).getMin(), results.get(3).getMax(), null, null,null);
+		}
+		else
+			criticBW = new BoxAndWhiskerItem(results.get(2).getMean(), results.get(2).getQ2(),results.get(2).getQ1(),
+					results.get(2).getQ3(), results.get(2).getMin(), results.get(2).getMax(), null, null,null);
 
 		DefaultBoxAndWhiskerCategoryDataset boxData = new DefaultBoxAndWhiskerCategoryDataset();
-		System.out.println(results.get(0).getQ1());
-        boxData.add(results.get(1).getNonOutliers().stream().map(x->x.getScore()).collect(Collectors.toList())
-				, "Reviews", "User (w/o Outliers)");
-		boxData.add(results.get(2).getOriginal().stream().map(x->x.getScore()).collect(Collectors.toList())
-				, "Reviews", "Critics");
-        BoxAndWhiskerRenderer boxRenderer = new BoxAndWhiskerRenderer();
+        boxData.add( usrScores, "Reviews", "User (w/o Outliers)");
+		if(results.size() > 3 && outBW != null)
+		{
+			boxData.add(outBW, "Reviews", "Acceptable Outliers");
+		}
+		boxData.add(criticBW, "Reviews", "Critics");
 
+
+        BoxAndWhiskerRenderer boxRenderer = new BoxAndWhiskerRenderer();
         DefaultCategoryDataset catData = new DefaultCategoryDataset();
         catData.addValue(boxData.getMeanValue(0, 0), "Mean", boxData.getColumnKey(0));
-        catData.addValue(boxData.getMeanValue(0, 1), "Mean", boxData.getColumnKey(1));
+		if(results.size() > 3 && outBW != null)
+        	catData.addValue(boxData.getMeanValue(0, 2), "Mean", boxData.getColumnKey(2));
+		else
+			catData.addValue(boxData.getMeanValue(0, 1), "Mean", boxData.getColumnKey(1));
 
         LineAndShapeRenderer lineRenderer = new LineAndShapeRenderer();
         CategoryAxis xAxis = new CategoryAxis("Type of Reviews");
@@ -98,7 +125,7 @@ public class GameReviewInformationPanel extends JPanel
 
 		String tooltipformat = "<html><body>Q1: {6}<br>Q3: {7}<br>Min: {4}<br>Max: {5}<br>Median: {3}<br>Mean: {2}</body></html>";
 		boxRenderer.setBaseToolTipGenerator(new BoxAndWhiskerToolTipGenerator(tooltipformat,NumberFormat.getNumberInstance()));
-		//boxRenderer.setMeanVisible(false);
+		boxRenderer.setMeanVisible(false);
 
 		ChartPanel panel = new ChartPanel(chart);
 		panel.setBackground(Color.WHITE);
@@ -134,18 +161,60 @@ public class GameReviewInformationPanel extends JPanel
 		description_value.setBounds(15, 300, 455, 40);
 		add(description_value);
 
-		JLabel avg_score_value = new JLabel(results.get(0).getMean().toString() + " (w/ Outliers) "
-				+ results.get(1).getMean().toString() + " (w/o Outliers)");
+		JLabel count_value = null;
+
+		if(results.size() > 3 && outBW != null)
+		{
+			count_value = new JLabel(usrScores.size() + " (User w/o Outliers), "
+					+ results.get(2).getOriginal().size() + " (Acceptable User Outliers), "
+					+ results.get(3).getOriginal().size() + " (Critics)");
+		}
+		else
+		{
+			count_value = new JLabel(usrScores.size() + " (User w/o Outliers), "
+					+ results.get(2).getOriginal().size() + " (Critics)");
+
+			System.out.println(results.get(2).getIqr());
+			
+		}
+
+		count_value.setVerticalAlignment(SwingConstants.TOP);
+		count_value.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		count_value.setBounds(15, 400, 500, 100);
+		add(count_value);
+
+		JLabel avg_score_value = null;
+		if(results.size() > 3 && outBW != null)
+		{
+			avg_score_value = new JLabel(results.get(1).getMean().toString() + " (User w/o Outliers), "
+					+ results.get(2).getMean().toString() + " (Acceptable User Outliers), "
+					+ results.get(3).getMean().toString() + " (Critics)");
+		}
+		else
+		{
+			avg_score_value = new JLabel(results.get(1).getMean().toString() + " (User w/o Outliers), "
+					+ results.get(2).getMean().toString() + " (Critics)");
+		}
 		avg_score_value.setVerticalAlignment(SwingConstants.TOP);
-		avg_score_value.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		avg_score_value.setBounds(15, 400, 400, 40);
+		avg_score_value.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		avg_score_value.setBounds(15, 500, 500, 100);
 		add(avg_score_value);
 
-		JLabel std_score_value_outliers = new JLabel(results.get(0).getSd().toString() + " (w/ Outliers) "
-				+ results.get(1).getSd().toString() + " (w/o Outliers)");
-		std_score_value_outliers.setVerticalAlignment(SwingConstants.TOP);
-		std_score_value_outliers.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		std_score_value_outliers.setBounds(15, 500, 400, 40);
-		add(std_score_value_outliers);
+		JLabel std_score_value = null;
+		if(results.size() > 3 && outBW != null)
+		{
+			std_score_value = new JLabel(results.get(1).getSd().toString() + " (User w/o Outliers), "
+					+ results.get(2).getSd().toString() + " (Acceptable Outliers), "
+					+ results.get(3).getSd().toString() + " (Critics)");
+		}
+		else
+		{
+			std_score_value = new JLabel(results.get(1).getSd().toString() + " (User w/o Outliers), "
+					+ results.get(2).getSd().toString() + " (Critics)");
+		}
+		std_score_value.setVerticalAlignment(SwingConstants.TOP);
+		std_score_value.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		std_score_value.setBounds(15, 600, 500, 100);
+		add(std_score_value);
 	}
 }
