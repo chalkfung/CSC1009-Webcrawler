@@ -25,13 +25,13 @@ public class MetacriticUserReviewsCrawler extends BaseURLConstrainedCrawler impl
     @Override
     public void run()
     {
-        traverse(this.baseUrl + "?sort-by=date&num_items=30&page=0");
+        traverse(this.baseUrl + "?sort-by=date&num_items=100&page=0");
     }
 
     @Override
     protected boolean canTraverse(String url)
     {
-        if (url.contains("user-reviews?sort-by=date&num_items=30"))
+        if (url.contains("user-reviews?sort-by=date&num_items=100"))
         {
             return super.canTraverse(url);
         }

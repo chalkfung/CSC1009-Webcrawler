@@ -21,6 +21,8 @@ public abstract class TraversalCrawlerBase implements ICrawler
     protected final Set<String> links;
     protected final Queue<Document> traversalResults;
 
+    private Integer maxPage = 0;
+
     public TraversalCrawlerBase()
     {
         links = Collections.newSetFromMap(new ConcurrentHashMap<>());
@@ -49,7 +51,23 @@ public abstract class TraversalCrawlerBase implements ICrawler
     {
         if (links.add(url))
         {
-            System.out.println("Traversing: " + url);
+            var progress = "";
+            try
+            {
+                var currentPage = Integer.parseInt(url.split("page=")[1]);
+                synchronized (maxPage)
+                {
+                    if (maxPage < currentPage)
+                    {
+                        maxPage = currentPage;
+                    }
+                }
+                progress = String.format("~%.2f%% ", (traversalResults.size() / (double) maxPage) * 100);
+            }
+            catch (NumberFormatException e)
+            {
+            }
+            System.out.println("Traversing: " + progress + url);
             try
             {
                 Document document = Jsoup.connect(url).get();
@@ -61,6 +79,7 @@ public abstract class TraversalCrawlerBase implements ICrawler
                         .parallel()
                         .map(x -> x.attr("abs:href"))
                         .filter(this::canTraverse)
+                        .sorted(Comparator.comparing((String x) -> x).reversed())
                         .forEach(this::traverse);
             }
             catch (IOException e)
