@@ -1,6 +1,9 @@
 package ricardo_crawlos.models;
 
-public class Genre {
+import ricardo_crawlos.core.IGenre;
+
+public class Genre implements IGenre
+{
     private String genreName;
     private int genreId;
 
@@ -10,11 +13,13 @@ public class Genre {
         this.genreId = genreId_;
     }
 
+    @Override
     public String getGenreName()
     {
         return this.genreName;
     }
 
+    @Override
     public int getGenreId()
     {
         return this.genreId;

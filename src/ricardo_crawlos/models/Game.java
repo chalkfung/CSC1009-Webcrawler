@@ -3,7 +3,9 @@ package ricardo_crawlos.models;
 import java.util.Date;
 import java.util.List;
 
-public class Game
+import ricardo_crawlos.core.IGame;
+
+public class Game implements IGame
 {
     private String gameName;
     private int gameId;
@@ -21,26 +23,31 @@ public class Game
         this.releasedDate = releasedDate_;
     }
 
+    @Override
     public String getGameName()
     {
         return this.gameName;
     }
 
+    @Override
     public int getGameId()
     {
         return this.gameId;
     }
 
+    @Override
     public String getDeveloper()
     {
         return this.developer;
     }
 
+    @Override
     public List<Integer> getGenres()
     {
         return this.genres;
     }
 
+    @Override
     public java.util.Date getReleasedDate()
     {
         return this.releasedDate;

@@ -7,4 +7,6 @@ public interface IManager<T, U>
     boolean isExist(U name);
 
     void append(U name);
+
+    T getFromID(int id);
 }

@@ -66,4 +66,20 @@ public class GenreManager implements IManager<Genre, String>
             TextWriter.writeAllText(savePath, serialised);
         }
     }
+
+    @Override
+    public Genre getFromID(int id)
+    {
+        if (genreMap.containsValue(id))
+        {
+            for (String key : genreMap.keySet())
+            {
+                if (genreMap.get(key) == id)
+                {
+                    return new Genre(key, id);
+                }
+            }
+        }
+        return new Genre("Unknown Genre", -1);
+    }
 }

@@ -66,4 +66,10 @@ public class GameManager implements IManager<Game, String>
             TextWriter.writeAllText(savePath, serialised);
         }
     }
+
+    @Override
+    public Game getFromID(int id)
+    {
+        return null;
+    }
 }
