@@ -149,7 +149,8 @@ public class AnalyserBase<T extends IReview> implements IAnalyser<List<T>, Stati
                 getMinAcceptableValues(input),
                 getMaxAcceptableValues(input),
                 showOutliers(input),
-                removeOutliers(input)
+                removeOutliers(input),
+                input
         );
     }
 }

@@ -76,7 +76,7 @@ public class GameReviewInformationPanel extends JPanel
 
         boxData.add(results.get(0).getNonOutliers().stream().map(x->x.getScore()).collect(Collectors.toList())
 				, "Reviews", "User (w/o Outliers)");
-		boxData.add(results.get(2).getNonOutliers().stream().map(x->x.getScore()).collect(Collectors.toList())
+		boxData.add(results.get(2).getOriginal().stream().map(x->x.getScore()).collect(Collectors.toList())
 				, "Reviews", "Critics");
         BoxAndWhiskerRenderer boxRenderer = new BoxAndWhiskerRenderer();
 
