@@ -35,6 +35,7 @@ public class MetacriticCriticReviewsExtractor extends MetacriticReviewsExtractor
         return document.select("li.review.critic_review")
                 .stream()
                 .map(this::parseElement)
+                .filter(x -> x.getScore() != -1)
                 .sorted(Comparator.comparing(ReviewBase::getDateCreated))
                 .toArray(CriticReview[]::new);
     }
@@ -43,10 +44,22 @@ public class MetacriticCriticReviewsExtractor extends MetacriticReviewsExtractor
     {
         var author = element.select("div.source > a").text();
         var comment = element.select("div.review_body").text();
-        var score = Double.parseDouble(element.select("div.review_grade > div").text());
+        var score = parseScore(element.select("div.review_grade > div").text());
         var date = parseDate(element.select("div.date").text());
         var source = element.select("li.review_action.full_review > a").attr("abs:href");
 
-        return new CriticReview(gameId, score / 10, comment, date, source, author);
+        return new CriticReview(gameId, score, comment, date, source, author);
+    }
+
+    private double parseScore(String text)
+    {
+        try
+        {
+            return Double.parseDouble(text) / 10;
+        }
+        catch (NumberFormatException e)
+        {
+            return -1;
+        }
     }
 }
