@@ -73,8 +73,8 @@ public class GameReviewInformationPanel extends JPanel
 
 
 		DefaultBoxAndWhiskerCategoryDataset boxData = new DefaultBoxAndWhiskerCategoryDataset();
-
-        boxData.add(results.get(0).getNonOutliers().stream().map(x->x.getScore()).collect(Collectors.toList())
+		System.out.println(results.get(0).getQ1());
+        boxData.add(results.get(1).getNonOutliers().stream().map(x->x.getScore()).collect(Collectors.toList())
 				, "Reviews", "User (w/o Outliers)");
 		boxData.add(results.get(2).getOriginal().stream().map(x->x.getScore()).collect(Collectors.toList())
 				, "Reviews", "Critics");
@@ -98,7 +98,7 @@ public class GameReviewInformationPanel extends JPanel
 
 		String tooltipformat = "<html><body>Q1: {6}<br>Q3: {7}<br>Min: {4}<br>Max: {5}<br>Median: {3}<br>Mean: {2}</body></html>";
 		boxRenderer.setBaseToolTipGenerator(new BoxAndWhiskerToolTipGenerator(tooltipformat,NumberFormat.getNumberInstance()));
-		boxRenderer.setMeanVisible(false);
+		//boxRenderer.setMeanVisible(false);
 
 		ChartPanel panel = new ChartPanel(chart);
 		panel.setBackground(Color.WHITE);
