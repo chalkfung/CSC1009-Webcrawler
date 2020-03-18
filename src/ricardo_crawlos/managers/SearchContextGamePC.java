@@ -9,16 +9,16 @@ import java.util.stream.Stream;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 
-import ricardo_crawlos.core.IExtractableCrawler;
-import ricardo_crawlos.core.IReview;
-import ricardo_crawlos.core.IReviewsExtractor;
-import ricardo_crawlos.core.ISearchContext;
+import ricardo_crawlos.core.*;
+import ricardo_crawlos.crawlers.GameInfoCrawler;
 import ricardo_crawlos.crawlers.GamespotReviewsCrawler;
 import ricardo_crawlos.crawlers.MetacriticCriticReviewsCrawler;
 import ricardo_crawlos.crawlers.MetacriticUserReviewsCrawler;
+import ricardo_crawlos.extractors.GamespotGameinfoExtractor;
 import ricardo_crawlos.extractors.GamespotReviewsExtractor;
 import ricardo_crawlos.extractors.MetacriticCriticReviewsExtractor;
 import ricardo_crawlos.extractors.MetacriticUserReviewsExtractor;
+import ricardo_crawlos.models.Game;
 import ricardo_crawlos.storage.CachedGamesiteCrawler;
 import ricardo_crawlos.storage.JsonSerialiser;
 import ricardo_crawlos.storage.TextWriter;
@@ -33,14 +33,17 @@ public class SearchContextGamePC implements ISearchContext
     private String cachedGamespotUserReviewRaw;
     private String cachedMetacriticUSerReviewRaw;
     private String cachedMetacriticCriticReviewRaw;
+    private String cachedGameinfoRaw;
 
     private IExtractableCrawler gamespotUserReviewExtractable;
     private IExtractableCrawler metacriticUserReviewExtractable;
     private IExtractableCrawler metacriticCriticReviewExtractable;
+    private IExtractableCrawler gameinfoExtractable;
 
     private IReview[] gamespotUserReviews;
     private IReview[] metacriticUserReviews;
     private IReview[] metacriticCriticReviews;
+    private Game gameInfo;
 
     public SearchContextGamePC(String theGameReference)
     {
@@ -92,6 +95,7 @@ public class SearchContextGamePC implements ISearchContext
         gamespotUserReviewExtractable = new GamespotReviewsCrawler(gameReference);
         metacriticUserReviewExtractable = new MetacriticUserReviewsCrawler(getMetacriticKey());
         metacriticCriticReviewExtractable = new MetacriticCriticReviewsCrawler(getMetacriticKey());
+        gameinfoExtractable = new GameInfoCrawler(gameReference);
         System.out.println("Started crawlers");
     }
 
@@ -101,21 +105,34 @@ public class SearchContextGamePC implements ISearchContext
         cachedGamespotUserReviewRaw = new CachedGamesiteCrawler(gamespotUserReviewExtractable, gameReference).getOrCacheHTML();
         cachedMetacriticUSerReviewRaw = new CachedGamesiteCrawler(metacriticUserReviewExtractable, gameReference).getOrCacheHTML();
         cachedMetacriticCriticReviewRaw = new CachedGamesiteCrawler(metacriticCriticReviewExtractable, gameReference).getOrCacheHTML();
+        cachedGameinfoRaw = new CachedGamesiteCrawler(gameinfoExtractable, gameReference).getOrCacheHTML();
     }
 
     @Override
     public void extract()
     {
+        gameInfo = extractAndStoreGameInfo(cachedGameinfoRaw, new GamespotGameinfoExtractor());
         gamespotUserReviews = extractAndStoreReviews(cachedGamespotUserReviewRaw, gamespotUserReviewExtractable, new GamespotReviewsExtractor(gameId));
         metacriticUserReviews = extractAndStoreReviews(cachedMetacriticUSerReviewRaw, metacriticUserReviewExtractable, new MetacriticUserReviewsExtractor(gameId));
         metacriticCriticReviews = extractAndStoreReviews(cachedMetacriticCriticReviewRaw, metacriticCriticReviewExtractable, new MetacriticCriticReviewsExtractor(gameId));
+
+    }
+
+    private Game extractAndStoreGameInfo(String rawHtml, IExtractable<String, Game> extractor)
+    {
+        var game = extractor.extractFrom(rawHtml);
+        var gameJson = JsonSerialiser.DefaultInstance().toJson(game);
+        System.out.println("Storing extracted game: " + game.getGameName());
+        TextWriter.writeAllText("database/extracted/games/" + gameReference + ".json", gameJson);
+        gameId = game.getGameId();
+        return game;
     }
 
     private IReview[] extractAndStoreReviews(String rawHTML, IExtractableCrawler crawler, IReviewsExtractor extractor)
     {
         var extractedReviews = extractor.extractFrom(rawHTML);
         var reviewsJson = JsonSerialiser.DefaultInstance().toJson(extractedReviews);
-        System.out.println("Storing extracted data: " + crawler.getDomain() + " " + crawler.getExtractionName() + " " + extractedReviews.length + " -> " + gameReference);
+        System.out.println("Storing extracted reviews: " + crawler.getDomain() + " " + crawler.getExtractionName() + " " + extractedReviews.length + " -> " + gameReference);
         TextWriter.writeAllText("database/extracted/reviews/" + gameReference + "/" + crawler.getDomain() + "_" + crawler.getExtractionName() + ".json", reviewsJson);
         return extractedReviews;
     }
@@ -146,5 +163,10 @@ public class SearchContextGamePC implements ISearchContext
         else
             result.put(2, analyser.Analyse(Arrays.asList(getAllCriticReviews())));
         return result;
+    }
+
+    public Game getGameInfo()
+    {
+        return gameInfo;
     }
 }

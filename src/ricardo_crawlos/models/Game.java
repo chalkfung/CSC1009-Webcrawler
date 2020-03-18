@@ -9,17 +9,15 @@ public class Game
     private int gameId;
     private String developer;
     private List<Integer> genres;
-    private List<Integer> platforms;
     private Date releasedDate;
 
-    public Game(String gameName_, int gameId_, String developer_, List<Integer> genres_, List<Integer> platforms_,
+    public Game(String gameName_, int gameId_, String developer_, List<Integer> genres_,
                 java.util.Date releasedDate_)
     {
         this.gameName = gameName_;
         this.gameId = gameId_;
         this.developer = developer_;
         this.genres = genres_;
-        this.platforms = platforms_;
         this.releasedDate = releasedDate_;
     }
 
@@ -43,13 +41,20 @@ public class Game
         return this.genres;
     }
 
-    public List<Integer> getPlatforms()
-    {
-        return this.platforms;
-    }
-
     public java.util.Date getReleasedDate()
     {
         return this.releasedDate;
+    }
+
+    @Override
+    public String toString()
+    {
+        return "Game{" +
+                "gameName='" + gameName + '\'' +
+                ", gameId=" + gameId +
+                ", developer='" + developer + '\'' +
+                ", genres=" + genres +
+                ", releasedDate=" + releasedDate +
+                '}';
     }
 }
