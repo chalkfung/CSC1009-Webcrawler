@@ -7,7 +7,6 @@ import java.util.Hashtable;
 import java.util.Objects;
 import java.util.stream.Stream;
 import org.jsoup.Connection;
-import org.jsoup.HttpStatusException;
 import org.jsoup.Jsoup;
 
 import ricardo_crawlos.core.IExtractableCrawler;
