@@ -138,10 +138,7 @@ public class GameReviewHomePanel extends JPanel
         txtSearchYourGame.addKeyListener(new KeyListener()
         {
             @Override
-            public void keyTyped(KeyEvent e)
-            {
-
-            }
+            public void keyTyped(KeyEvent e){}
 
             @Override
             public void keyPressed(KeyEvent e)
@@ -237,10 +234,7 @@ public class GameReviewHomePanel extends JPanel
             }
 
             @Override
-            public void keyReleased(KeyEvent e)
-            {
-
-            }
+            public void keyReleased(KeyEvent e){}
         });
     }
 }
