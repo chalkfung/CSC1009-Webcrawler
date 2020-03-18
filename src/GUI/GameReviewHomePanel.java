@@ -62,7 +62,7 @@ public class GameReviewHomePanel extends JPanel
                 {
 
                     @Override
-                    protected String doInBackground()
+                    protected String doInBackground() throws InterruptedException
                     {
                         // TODO Auto-generated method stub
                         // Search Method
@@ -103,16 +103,15 @@ public class GameReviewHomePanel extends JPanel
                         gifLabel.setText("Fetching Data!");
                         searchContext.fetch();
 
-                        //Thread.sleep(1000);
+                        Thread.sleep(1000);
                         gifLabel.setText("Extracting Data!");
 						searchContext.extract();
-                        //Thread.sleep(1000);
+                        Thread.sleep(1000);
                         gifLabel.setText("Analysing Data!");
                         searchContext.analyse();
-
+                        Thread.sleep(1000);
                         GameReviewInformationPanel infoPanel = new GameReviewInformationPanel(jframe);
                         jframe.setContentPane(infoPanel);
-                        //Thread.sleep(1000);
                         return null;
                     }
 
@@ -120,7 +119,6 @@ public class GameReviewHomePanel extends JPanel
                     protected void done()
                     {
                         load.dispose();
-
                     }
                 };
 
