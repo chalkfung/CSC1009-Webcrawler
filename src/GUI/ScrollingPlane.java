@@ -31,6 +31,11 @@ public class ScrollingPlane
         output = newOutput;
     }
 
+    public static ScrollingPlane createStatic(String output, int x, int y)
+    {
+        return new ScrollingPlane(output, x, y, false);
+    }
+
     public void showWindow(String title)
     {
         String[] button = new String[]{ "OK" };

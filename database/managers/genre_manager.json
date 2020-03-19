@@ -7,5 +7,6 @@
   "Tactical": 5,
   "Third-Person": 6,
   "Action": 7,
-  "First-Person": 8
+  "First-Person": 8,
+  "3D": 9
 }

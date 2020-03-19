@@ -97,6 +97,10 @@ public class SearchContextGamePC implements ISearchContext
                 throw probeErrors[0];
             }
         }
+        else
+        {
+            System.out.println("Found in cache for " + gameReference);
+        }
 
 
         System.out.println("Starting crawlers");

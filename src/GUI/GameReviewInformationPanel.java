@@ -25,7 +25,6 @@ import org.jfree.data.category.DefaultCategoryDataset;
 import org.jfree.data.statistics.BoxAndWhiskerItem;
 import org.jfree.data.statistics.DefaultBoxAndWhiskerCategoryDataset;
 
-import ricardo_crawlos.core.IGame;
 import ricardo_crawlos.core.IReview;
 import ricardo_crawlos.core.ISearchContext;
 import ricardo_crawlos.models.CriticReview;
@@ -183,9 +182,10 @@ public class GameReviewInformationPanel extends JPanel
         {
             public void actionPerformed(ActionEvent e)
             {
-                //Go the Display Info panel
-                GameReviewHomePanel searchPanel = new GameReviewHomePanel(jframe);
-                jframe.setContentPane(searchPanel);
+                WordCloudGenerator.showWorldCloud(Arrays.stream(context.getAllUserReviews())
+                        .map(x -> x.getComments())
+                        .collect(Collectors.toList())
+                );
             }
         });
 
@@ -199,9 +199,10 @@ public class GameReviewInformationPanel extends JPanel
         {
             public void actionPerformed(ActionEvent e)
             {
-                //Go the Display Info panel
-                GameReviewHomePanel searchPanel = new GameReviewHomePanel(jframe);
-                jframe.setContentPane(searchPanel);
+                WordCloudGenerator.showWorldCloud(Arrays.stream(context.getAllCriticReviews())
+                        .map(x -> x.getComments())
+                        .collect(Collectors.toList())
+                );
             }
         });
 
@@ -221,8 +222,7 @@ public class GameReviewInformationPanel extends JPanel
                                 + "Score: " + x.getScore() + "\n"
                                 + x.getComments())
                         .collect(Collectors.joining("\n\n"));
-                var plane = new ScrollingPlane(content, 640, 480, false);
-                plane.showWindow("User Comments Summary");
+                ScrollingPlane.createStatic(content, 640, 480).showWindow("User Comments Summary");
             }
         });
 
@@ -237,15 +237,14 @@ public class GameReviewInformationPanel extends JPanel
             public void actionPerformed(ActionEvent e)
             {
                 var content = Arrays.stream(context.getAllCriticReviews())
-                        .map(x -> (CriticReview)x)
+                        .map(x -> (CriticReview) x)
                         .map(x -> x.getAuthor() + "\n"
                                 + x.getSource() + "\n"
                                 + new SimpleDateFormat("dd-MMM-yyyy").format(x.getDateCreated()) + "\n"
                                 + "Score: " + x.getScore() + "\n"
                                 + x.getComments())
                         .collect(Collectors.joining("\n\n"));
-                var plane = new ScrollingPlane(content, 640, 480, false);
-                plane.showWindow("Critic Review Summary");
+                ScrollingPlane.createStatic(content, 640, 480).showWindow("Critic Review Summary");
             }
         });
 
