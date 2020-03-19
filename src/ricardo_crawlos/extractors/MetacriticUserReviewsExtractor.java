@@ -35,6 +35,7 @@ public class MetacriticUserReviewsExtractor extends MetacriticReviewsExtractorBa
                 .parallelStream()
                 .map(this::parseElement)
                 .sorted(Comparator.comparing(ReviewBase::getDateCreated))
+                .sequential()
                 .toArray(UserReview[]::new);
     }
 

@@ -37,6 +37,7 @@ public class MetacriticCriticReviewsExtractor extends MetacriticReviewsExtractor
                 .map(this::parseElement)
                 .filter(x -> x.getScore() != -1)
                 .sorted(Comparator.comparing(ReviewBase::getDateCreated))
+                .sequential()
                 .toArray(CriticReview[]::new);
     }
 

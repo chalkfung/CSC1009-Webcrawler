@@ -48,6 +48,7 @@ public class GamespotReviewsExtractor implements IReviewsExtractor
                 .parallelStream()
                 .map(this::parseElement)
                 .sorted(Comparator.comparing(ReviewBase::getDateCreated))
+                .sequential()
                 .toArray(UserReview[]::new);
     }
 
