@@ -65,12 +65,13 @@ public abstract class TraversalCrawlerBase implements ICrawler
     }
 
     /**
-     * Note: recursive
+     * Note: Concurrent and recursive
      *
      * @param url The url to the page to look for more urls
      */
     protected void traverse(String url)
     {
+        // Not to proceed if the set already contains the url, which means it has been crawled
         if (links.add(url))
         {
             var progress = estimateTraversalProgress(url);
@@ -78,16 +79,18 @@ public abstract class TraversalCrawlerBase implements ICrawler
             System.out.println("Traversing: " + (progress == 0 ? "" : String.format("est %.2f%% ", progress)) + url);
             try
             {
+                // Load the html document using jsoup
                 Document document = Jsoup.connect(url).get();
 
+                // Store the document to crawled result
                 traversalResults.add(document);
 
-                document.select("a[href]")
-                        .parallelStream()
-                        .map(x -> x.attr("abs:href"))
-                        .filter(this::canTraverse)
-                        .sorted(Comparator.comparing((String x) -> x).reversed())
-                        .forEach(this::traverse);
+                document.select("a[href]") // Select all anchors
+                        .parallelStream() // Using concurrency to speed up crawling
+                        .map(x -> x.attr("abs:href")) // Get the url of the anchors
+                        .filter(this::canTraverse) // Check if the url is valid candidate for the crawling context
+                        .sorted(Comparator.comparing((String x) -> x).reversed()) // Crawl the furthest page first
+                        .forEach(this::traverse); // Recursively call this function for each links
             }
             catch (IOException e)
             {

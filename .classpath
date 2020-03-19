@@ -8,7 +8,6 @@
 	<classpathentry kind="lib" path="lib/guava-mini-0.1.1.jar"/>
 	<classpathentry kind="lib" path="lib/jcommon-1.0.23.jar"/>
 	<classpathentry kind="lib" path="lib/jfreechart-1.0.19.jar"/>
-	<classpathentry kind="lib" path="lib/jsoup-1.11.3.jar"/>
 	<classpathentry kind="lib" path="lib/jsoup-1.12.1.jar"/>
 	<classpathentry kind="lib" path="lib/kumo-api-1.22.jar"/>
 	<classpathentry kind="lib" path="lib/kumo-core-1.22.jar"/>
