@@ -17,8 +17,8 @@ public class Statistics<T,U>
     private T maxAcceptableVal;
     private List<U> outliers;
     private List<U> nonOutliers;
-
-    public Statistics(T mean, T max, T min, T variance, T sd, T q2, T q3, T q1, T iqr, T minAcceptableVal, T maxAcceptableVal, List<U> outliers, List<U> nonOutliers)
+    private List<U> original;
+    public Statistics(T mean, T max, T min, T variance, T sd, T q2, T q3, T q1, T iqr, T minAcceptableVal, T maxAcceptableVal, List<U> outliers, List<U> nonOutliers, List<U> original)
     {
         this.mean = mean;
         this.max = max;
@@ -33,6 +33,7 @@ public class Statistics<T,U>
         this.maxAcceptableVal = maxAcceptableVal;
         this.outliers = outliers;
         this.nonOutliers = nonOutliers;
+        this.original = original;
     }
 
     public T getSd()
@@ -79,6 +80,8 @@ public class Statistics<T,U>
     {
         return nonOutliers;
     }
+
+    public List<U> getOriginal(){return original;};
 
     public T getMean()
     {

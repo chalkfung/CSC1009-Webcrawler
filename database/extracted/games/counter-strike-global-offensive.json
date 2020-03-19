@@ -1,0 +1,13 @@
+{
+  "gameName": "Counter-Strike: Global Offensive",
+  "gameId": 3,
+  "developer": "Valve Software",
+  "genres": [
+    7,
+    8,
+    4,
+    5
+  ],
+  "releasedDate": "2012-08-21T00:00:00.000Z",
+  "description": "Counter-Strike: Global Offensive features new maps, characters, and weapons, as well as delivers updated versions of the classic CS content."
+}

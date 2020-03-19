@@ -18,7 +18,11 @@ public class BaseURLConstrainedCrawler extends TraversalCrawlerBase
     public BaseURLConstrainedCrawler(String theBaseUrl)
     {
         baseUrl = theBaseUrl;
+    }
 
+    @Override
+    public String[] getTraversableLinks()
+    {
         try
         {
             baseDocument = Jsoup.connect(baseUrl).get();
@@ -27,11 +31,7 @@ public class BaseURLConstrainedCrawler extends TraversalCrawlerBase
         {
             System.err.println("For '" + this.baseUrl + "': " + e.getMessage());
         }
-    }
 
-    @Override
-    public String[] getTraversableLinks()
-    {
         return getTraversableLinks(baseDocument);
     }
 
