@@ -1,5 +1,13 @@
 [
   {
+    "source": "https://www.gameinformer.com/review/fortnite/an-epic-epoch",
+    "date": "2017-07-19T00:00:00.000Z",
+    "score": 9.5,
+    "comments": "Fortnite is an ever-shifting entity, but strong footing has solidified it as a verified phenomenon with fast, fun gameplay and ubiquitous reach. Anyone can play it and have a great time, and although Save the World might get grindy and shotgun climb-and-dives might get a little tiresome, there’s real magic here along with the promise of more in the months and years to come.",
+    "gameID": 2,
+    "author": "Game Informer"
+  },
+  {
     "source": "https://www.polygon.com/2017/8/3/16091000/fortnite-review-pc-ps4-xbox-one-epic-games",
     "date": "2017-08-04T00:00:00.000Z",
     "score": 7.5,
@@ -49,7 +57,7 @@
   },
   {
     "source": "https://www.gamespot.com/reviews/fortnite-battle-royale-review-laying-the-foundatio/1900-6416891/",
-    "date": "2018-04-09T00:00:00.000Z",
+    "date": "2018-04-19T00:00:00.000Z",
     "score": 8.0,
     "comments": "As the saying goes: It\u0027s easy to learn, hard to master. Although a few shortcomings in the map design eventually surface and fatigue in looting can set in, Fortnite rarely fails at challenging you in unexpected ways, resulting in something more than just another typical last-person-standing shooter.",
     "gameID": 2,
@@ -72,16 +80,8 @@
     "author": "Jeuxvideo.com"
   },
   {
-    "source": "https://www.gameinformer.com/review/fortnite/an-epic-epoch",
-    "date": "2018-07-19T00:00:00.000Z",
-    "score": 9.5,
-    "comments": "Fortnite is an ever-shifting entity, but strong footing has solidified it as a verified phenomenon with fast, fun gameplay and ubiquitous reach. Anyone can play it and have a great time, and although Save the World might get grindy and shotgun climb-and-dives might get a little tiresome, there’s real magic here along with the promise of more in the months and years to come.",
-    "gameID": 2,
-    "author": "Game Informer"
-  },
-  {
     "source": "http://www.pcgames.de/Fortnite-Spiel-16272/Tests/Rette-die-Welt-Battle-Royale-Early-Access-Review-Nintendo-Switch-Update-1253420/",
-    "date": "2018-09-09T00:00:00.000Z",
+    "date": "2018-09-19T00:00:00.000Z",
     "score": 8.0,
     "comments": "Although it has some flaws and typical free-to-play mannerisms, Fortnite is fun, both in co-op and in PvP.",
     "gameID": 2,

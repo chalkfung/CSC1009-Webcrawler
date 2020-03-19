@@ -95,11 +95,18 @@ public class GameReviewHomePanel extends JPanel
             @Override
             protected String doInBackground() throws InterruptedException
             {
-                // TODO Auto-generated method stub
                 // Search Method
                 String keyword = txtSearchYourGame.getText();
-                SearchManager searchManager = new SearchManager(keyword);
-//						System.out.println(key.getGameSpotKey() + "\n" + key.getMetaKey());
+                SearchManager searchManager;
+                try
+                {
+                    searchManager = new SearchManager(keyword);
+                }
+                catch (Error e)
+                {
+                    JOptionPane.showMessageDialog(null, e.getMessage(), "Search Error", JOptionPane.ERROR_MESSAGE);
+                    return null;
+                }
                 ISearchContext searchContext = searchManager.retrieve();
 
                 try
