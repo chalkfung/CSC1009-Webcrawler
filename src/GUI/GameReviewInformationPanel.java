@@ -32,7 +32,6 @@ import ricardo_crawlos.utilities.Statistics;
 
 public class GameReviewInformationPanel extends JPanel
 {
-
     private static final long serialVersionUID = 1L;
 
     public GameReviewInformationPanel(JFrame jframe, Dictionary<Integer, Statistics<Double, IReview>> results, ISearchContext context)
@@ -47,12 +46,12 @@ public class GameReviewInformationPanel extends JPanel
         header_label.setBounds(0, 0, 1000, 100);
         add(header_label);
 
-        JLabel game_name_label = new JLabel("Game Name:");
+        JLabel game_name_label = new JLabel("Game Name");
         game_name_label.setFont(new Font("Tahoma", Font.PLAIN, 26));
         game_name_label.setBounds(15, 100, 200, 40);
         add(game_name_label);
 
-        JLabel description_label = new JLabel("Game Information:");
+        JLabel description_label = new JLabel("Game Information");
         description_label.setFont(new Font("Tahoma", Font.PLAIN, 26));
         description_label.setBounds(15, 170, 400, 40);
         add(description_label);
@@ -174,7 +173,7 @@ public class GameReviewInformationPanel extends JPanel
         {
             public void actionPerformed(ActionEvent e)
             {
-                WordCloudGenerator.showWorldCloud(Arrays.stream(context.getAllUserReviews())
+                WordCloudGenerator.showWorldCloud("User Word Cloud", Arrays.stream(context.getAllUserReviews())
                         .parallel()
                         .map(x -> x.getComments())
                         .collect(Collectors.toList())
@@ -192,7 +191,7 @@ public class GameReviewInformationPanel extends JPanel
         {
             public void actionPerformed(ActionEvent e)
             {
-                WordCloudGenerator.showWorldCloud(Arrays.stream(context.getAllCriticReviews())
+                WordCloudGenerator.showWorldCloud("User Word Cloud", Arrays.stream(context.getAllCriticReviews())
                         .parallel()
                         .map(x -> x.getComments())
                         .collect(Collectors.toList())

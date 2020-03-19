@@ -1,10 +1,7 @@
 package GUI;
 
 import javax.swing.*;
-
-import java.awt.Dimension;
-import java.awt.Color;
-import java.io.IOException;
+import java.awt.*;
 import java.util.List;
 import com.kennycason.kumo.CollisionMode;
 import com.kennycason.kumo.WordCloud;
@@ -15,34 +12,21 @@ import com.kennycason.kumo.nlp.FrequencyAnalyzer;
 import com.kennycason.kumo.palette.ColorPalette;
 import com.kennycason.kumo.wordstart.CenterWordStart;
 
-public class WordCloudGenerator
+public class WordCloudGenerator extends JPanel
 {
-    public static void showWorldCloud(List<String> input)
+    public static void showWorldCloud(String title, List<String> input)
     {
-        final JFrame frame = new JFrame("WordCloud");
+        final JFrame frame = new JFrame(title);
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        try
-        {
-            frame.add(new DefaultWordCloudPanel(input));
-        }
-        catch (IOException e)
-        {
-            e.printStackTrace();
-        }
+        frame.add(new WordCloudGenerator(input));
         frame.pack();
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
     }
-}
 
-class DefaultWordCloudPanel extends JPanel
-{
-
-    public DefaultWordCloudPanel(List<String> input) throws IOException
+    public WordCloudGenerator(List<String> input)
     {
-
         WordCloud wordCloud = buildWordCloud(input);
-
         final JLabel wordCloudLabel = new JLabel(new ImageIcon(wordCloud.getBufferedImage()));
         add(wordCloudLabel);
         repaint();

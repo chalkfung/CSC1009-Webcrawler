@@ -97,6 +97,7 @@ public class GameReviewHomePanel extends JPanel
             {
                 // Search Method
                 String keyword = txtSearchYourGame.getText();
+
                 SearchManager searchManager;
                 try
                 {

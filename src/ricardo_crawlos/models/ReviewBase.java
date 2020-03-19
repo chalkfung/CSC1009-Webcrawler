@@ -49,6 +49,4 @@ public class ReviewBase implements IReview
     {
         return this.author;
     }
-
-
 }
