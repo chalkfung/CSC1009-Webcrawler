@@ -131,7 +131,7 @@ public class GameReviewInformationPanel extends JPanel
 
         JButton back_button = new JButton("Back");
         back_button.setForeground(Color.WHITE);
-        back_button.setFont(new Font("Consolas", Font.PLAIN, 14));
+        back_button.setFont(new Font("Consolas", Font.PLAIN, 12));
         back_button.setBackground(new Color(101, 101, 238));
         back_button.setBounds(161, 750, 180, 40);
         add(back_button);
@@ -166,7 +166,7 @@ public class GameReviewInformationPanel extends JPanel
 
         JButton UserWord_cloud = new JButton("User Word Cloud");
         UserWord_cloud.setForeground(Color.WHITE);
-        UserWord_cloud.setFont(new Font("Consolas", Font.PLAIN, 14));
+        UserWord_cloud.setFont(new Font("Consolas", Font.PLAIN, 12));
         UserWord_cloud.setBackground(new Color(101, 101, 238));
         UserWord_cloud.setBounds(40, 650, 180, 40);
         add(UserWord_cloud);
@@ -184,7 +184,7 @@ public class GameReviewInformationPanel extends JPanel
 
         JButton CriticWord_cloud = new JButton("Critic Word Cloud");
         CriticWord_cloud.setForeground(Color.WHITE);
-        CriticWord_cloud.setFont(new Font("Consolas", Font.PLAIN, 14));
+        CriticWord_cloud.setFont(new Font("Consolas", Font.PLAIN, 12));
         CriticWord_cloud.setBackground(new Color(101, 101, 238));
         CriticWord_cloud.setBounds(280, 650, 180, 40);
         add(CriticWord_cloud);
@@ -202,7 +202,7 @@ public class GameReviewInformationPanel extends JPanel
 
         JButton ShowUser_Review = new JButton("Show User Reviews");
         ShowUser_Review.setForeground(Color.WHITE);
-        ShowUser_Review.setFont(new Font("Consolas", Font.PLAIN, 14));
+        ShowUser_Review.setFont(new Font("Consolas", Font.PLAIN, 12));
         ShowUser_Review.setBackground(new Color(101, 101, 238));
         ShowUser_Review.setBounds(40, 700, 180, 40);
         add(ShowUser_Review);
@@ -222,7 +222,7 @@ public class GameReviewInformationPanel extends JPanel
 
         JButton ShowCritic_Review = new JButton("Show Critic Reviews");
         ShowCritic_Review.setForeground(Color.WHITE);
-        ShowCritic_Review.setFont(new Font("Consolas", Font.PLAIN, 14));
+        ShowCritic_Review.setFont(new Font("Consolas", Font.PLAIN, 12));
         ShowCritic_Review.setBackground(new Color(101, 101, 238));
         ShowCritic_Review.setBounds(280, 700, 180, 40);
         add(ShowCritic_Review);
