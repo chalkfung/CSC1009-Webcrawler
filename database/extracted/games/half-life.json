@@ -1,0 +1,13 @@
+{
+  "gameName": "Half-Life",
+  "gameId": 8,
+  "developer": "Gearbox Software",
+  "genres": [
+    7,
+    8,
+    4,
+    9
+  ],
+  "releasedDate": "1998-11-19T00:00:00.000Z",
+  "description": "Half-Life is the closest thing to a revolutionary step the genre has ever taken."
+}

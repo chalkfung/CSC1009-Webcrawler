@@ -138,6 +138,7 @@ public class GameReviewHomePanel extends JPanel
                     jframe.setContentPane(searchPanel);
                     return null;
                 }
+                Thread.sleep(SLEEPTIME);
 
                 gifLabel.setText("Fetching Data!");
                 searchContext.fetch();

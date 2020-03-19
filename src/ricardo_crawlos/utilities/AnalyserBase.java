@@ -11,9 +11,7 @@ public class AnalyserBase<T extends IReview> implements IAnalyser<List<T>, Stati
 {
     public double getMean(final List<T> inputs)
     {
-        var output = inputs.parallelStream().mapToDouble(x -> x.getScore()).average().orElse(0);
-
-        return output;
+        return inputs.parallelStream().mapToDouble(x -> x.getScore()).average().orElse(0);
     }
 
     public double getMax(final List<T> inputs)
