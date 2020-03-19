@@ -7,6 +7,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.text.NumberFormat;
+import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Dictionary;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -25,6 +27,8 @@ import org.jfree.data.statistics.DefaultBoxAndWhiskerCategoryDataset;
 
 import ricardo_crawlos.core.IGame;
 import ricardo_crawlos.core.IReview;
+import ricardo_crawlos.core.ISearchContext;
+import ricardo_crawlos.models.CriticReview;
 import ricardo_crawlos.utilities.Statistics;
 
 public class GameReviewInformationPanel extends JPanel
@@ -32,7 +36,7 @@ public class GameReviewInformationPanel extends JPanel
 
     private static final long serialVersionUID = 1L;
 
-    public GameReviewInformationPanel(JFrame jframe, Dictionary<Integer, Statistics<Double, IReview>> results, IGame game)
+    public GameReviewInformationPanel(JFrame jframe, Dictionary<Integer, Statistics<Double, IReview>> results, ISearchContext context)
     {
         setBackground(Color.WHITE);
         try
@@ -201,7 +205,7 @@ public class GameReviewInformationPanel extends JPanel
             }
         });
 
-        JButton ShowUser_Review = new JButton("Show User Review");
+        JButton ShowUser_Review = new JButton("Show User Reviews");
         ShowUser_Review.setForeground(Color.WHITE);
         ShowUser_Review.setFont(new Font("Consolas", Font.PLAIN, 14));
         ShowUser_Review.setBackground(new Color(101, 101, 238));
@@ -211,13 +215,18 @@ public class GameReviewInformationPanel extends JPanel
         {
             public void actionPerformed(ActionEvent e)
             {
-                //Go the Display Info panel
-                GameReviewHomePanel searchPanel = new GameReviewHomePanel(jframe);
-                jframe.setContentPane(searchPanel);
+                var content = Arrays.stream(context.getAllUserReviews())
+                        .map(x -> x.getAuthor() + "\n"
+                                + new SimpleDateFormat("dd-MMM-yyyy").format(x.getDateCreated()) + "\n"
+                                + "Score: " + x.getScore() + "\n"
+                                + x.getComments())
+                        .collect(Collectors.joining("\n\n"));
+                var plane = new ScrollingPlane(content, 640, 480, false);
+                plane.showWindow("User Comments Summary");
             }
         });
 
-        JButton ShowCritic_Review = new JButton("Show Critic Review");
+        JButton ShowCritic_Review = new JButton("Show Critic Reviews");
         ShowCritic_Review.setForeground(Color.WHITE);
         ShowCritic_Review.setFont(new Font("Consolas", Font.PLAIN, 14));
         ShowCritic_Review.setBackground(new Color(101, 101, 238));
@@ -227,20 +236,27 @@ public class GameReviewInformationPanel extends JPanel
         {
             public void actionPerformed(ActionEvent e)
             {
-                //Go the Display Info panel
-                GameReviewHomePanel searchPanel = new GameReviewHomePanel(jframe);
-                jframe.setContentPane(searchPanel);
+                var content = Arrays.stream(context.getAllCriticReviews())
+                        .map(x -> (CriticReview)x)
+                        .map(x -> x.getAuthor() + "\n"
+                                + x.getSource() + "\n"
+                                + new SimpleDateFormat("dd-MMM-yyyy").format(x.getDateCreated()) + "\n"
+                                + "Score: " + x.getScore() + "\n"
+                                + x.getComments())
+                        .collect(Collectors.joining("\n\n"));
+                var plane = new ScrollingPlane(content, 640, 480, false);
+                plane.showWindow("Critic Review Summary");
             }
         });
 
 
-        JLabel game_name_value = new JLabel(game.getGameName());
+        JLabel game_name_value = new JLabel(context.getGameInfo().getGameName());
         game_name_value.setVerticalAlignment(SwingConstants.TOP);
         game_name_value.setFont(new Font("Tahoma", Font.PLAIN, 20));
         game_name_value.setBounds(15, 140, 455, 40);
         add(game_name_value);
 
-        JTextArea description_value = new JTextArea(game.toString());
+        JTextArea description_value = new JTextArea(context.getGameInfo().toString());
         description_value.setWrapStyleWord(true);
         description_value.setLineWrap(true);
         description_value.setEditable(false);

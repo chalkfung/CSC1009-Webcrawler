@@ -139,7 +139,7 @@ public class GameReviewHomePanel extends JPanel
                 searchContext.extract();
                 Thread.sleep(SLEEPTIME);
                 gifLabel.setText("Analysing Data!");
-                GameReviewInformationPanel infoPanel = new GameReviewInformationPanel(jframe, searchContext.analyse(), searchContext.getGameInfo());
+                GameReviewInformationPanel infoPanel = new GameReviewInformationPanel(jframe, searchContext.analyse(), searchContext);
                 jframe.setContentPane(infoPanel);
                 return null;
             }

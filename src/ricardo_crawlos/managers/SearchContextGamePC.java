@@ -1,6 +1,8 @@
 package ricardo_crawlos.managers;
 
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.Dictionary;
 import java.util.Hashtable;
@@ -63,33 +65,39 @@ public class SearchContextGamePC implements ISearchContext
     @Override
     public void probe() throws IOException
     {
-        var gameSpotLink = "https://www.gamespot.com/" + getGamespotKey();
-        var metacriticLink = "https://www.metacritic.com/" + getMetacriticKey();
+        var cachePath = Path.of("database/cache/" + gameReference);
 
-        var probeErrors = Arrays.asList(gameSpotLink, metacriticLink)
-                .stream()
-                .parallel()
-                .map(x ->
-                {
-                    try
-                    {
-                        System.out.println("Probing " + x);
-                        Jsoup.connect(x).method(Connection.Method.HEAD).execute();
-                    }
-                    catch (IOException e)
-                    {
-                        System.out.println("Probe failed for " + x);
-                        return e;
-                    }
-                    return null;
-                })
-                .filter(Objects::nonNull)
-                .toArray(IOException[]::new);
-
-        if (probeErrors.length > 0)
+        if (!Files.exists(cachePath))
         {
-            throw probeErrors[0];
+            var gameSpotLink = "https://www.gamespot.com/" + getGamespotKey();
+            var metacriticLink = "https://www.metacritic.com/" + getMetacriticKey();
+
+            var probeErrors = Arrays.asList(gameSpotLink, metacriticLink)
+                    .stream()
+                    .parallel()
+                    .map(x ->
+                    {
+                        try
+                        {
+                            System.out.println("Probing " + x);
+                            Jsoup.connect(x).method(Connection.Method.HEAD).execute();
+                        }
+                        catch (IOException e)
+                        {
+                            System.out.println("Probe failed for " + x);
+                            return e;
+                        }
+                        return null;
+                    })
+                    .filter(Objects::nonNull)
+                    .toArray(IOException[]::new);
+
+            if (probeErrors.length > 0)
+            {
+                throw probeErrors[0];
+            }
         }
+
 
         System.out.println("Starting crawlers");
         gamespotUserReviewExtractable = new GamespotReviewsCrawler(gameReference);
