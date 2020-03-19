@@ -227,7 +227,7 @@ public class GameReviewInformationPanel extends JPanel
                                 + "Helpfulness: " + x.getHelpfulScore() + " of " + x.getHelpfulCount() + "\n"
                                 + x.getComments())
                         .collect(Collectors.joining("\n\n"));
-                ScrollingPlane.createStatic(content, 640, 480).showWindow("User Comments Summary");
+                ScrollingPlane.createStatic(content, 640, 480).showWindow("User Comments Summary", jframe);
             }
         });
 
@@ -249,7 +249,7 @@ public class GameReviewInformationPanel extends JPanel
                                 + "Score: " + x.getScore() + "\n"
                                 + x.getComments())
                         .collect(Collectors.joining("\n\n"));
-                ScrollingPlane.createStatic(content, 640, 480).showWindow("Critic Review Summary");
+                ScrollingPlane.createStatic(content, 640, 480).showWindow("Critic Review Summary", jframe);
             }
         });
 

@@ -11,6 +11,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.IOException;
+import java.util.function.BiFunction;
 import org.jsoup.HttpStatusException;
 
 
@@ -20,6 +21,7 @@ public class GameReviewHomePanel extends JPanel
     private static final long serialVersionUID = 1L;
     private JTextField txtSearchYourGame;
     private JFrame jframe;
+
     public GameReviewHomePanel(JFrame jframe)
     {
         this.jframe = jframe;
@@ -49,47 +51,36 @@ public class GameReviewHomePanel extends JPanel
         {
             public void actionPerformed(ActionEvent e)
             {
-                doSearch();
+                loaderAction(jframe, (x, y) -> getSearchWorker(x, y));
             }
         });
 
         txtSearchYourGame.addKeyListener(new KeyListener()
         {
             @Override
-            public void keyTyped(KeyEvent e){}
+            public void keyTyped(KeyEvent e)
+            {
+            }
 
             @Override
             public void keyPressed(KeyEvent e)
             {
                 if (e.getKeyCode() == KeyEvent.VK_ENTER)
                 {
-                    doSearch();
+                    loaderAction(jframe, (x, y) -> getSearchWorker(x, y));
                 }
-
             }
 
             @Override
-            public void keyReleased(KeyEvent e){}
+            public void keyReleased(KeyEvent e)
+            {
+            }
         });
-
-
     }
 
-    public void doSearch()
+    SwingWorker<String, Void> getSearchWorker(JDialog load, JLabel gifLabel)
     {
-        JDialog load = new JDialog(jframe, true);
-        load.getContentPane().setBackground(Color.gray);
-
-        JLabel gifLabel = new JLabel("Searching!");
-        gifLabel.setIcon(new ImageIcon(this.getClass().getResource("/GUI/Image/25.gif")));
-
-        load.getContentPane().add(gifLabel);
-        load.setUndecorated(true);
-        load.setBounds(300, 300, 50, 50);
-        load.setLocationRelativeTo(jframe);
-        load.setSize(165, 75);
-
-        SwingWorker<String, Void> s_worker = new SwingWorker<String, Void>()
+        return new SwingWorker<String, Void>()
         {
 
             @Override
@@ -167,6 +158,23 @@ public class GameReviewHomePanel extends JPanel
                 load.dispose();
             }
         };
+    }
+
+    public static void loaderAction(JFrame jframe, BiFunction<JDialog, JLabel, SwingWorker<String, Void>> workerSupplier)
+    {
+        JDialog load = new JDialog(jframe, true);
+        load.getContentPane().setBackground(Color.gray);
+
+        JLabel gifLabel = new JLabel("Searching!");
+        gifLabel.setIcon(new ImageIcon(jframe.getClass().getResource("/GUI/Image/25.gif")));
+
+        load.getContentPane().add(gifLabel);
+        load.setUndecorated(true);
+        load.setBounds(300, 300, 50, 50);
+        load.setLocationRelativeTo(jframe);
+        load.setSize(165, 75);
+
+        SwingWorker<String, Void> s_worker = workerSupplier.apply(load, gifLabel);
 
         s_worker.execute();
         load.setVisible(true);
