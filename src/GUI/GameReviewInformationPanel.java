@@ -38,14 +38,6 @@ public class GameReviewInformationPanel extends JPanel
     public GameReviewInformationPanel(JFrame jframe, Dictionary<Integer, Statistics<Double, IReview>> results, ISearchContext context)
     {
         setBackground(Color.WHITE);
-        try
-        {
-            UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
-        }
-        catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException e)
-        {
-            e.printStackTrace();
-        }
 
         setLayout(null);
         setSize(1000, 800);
