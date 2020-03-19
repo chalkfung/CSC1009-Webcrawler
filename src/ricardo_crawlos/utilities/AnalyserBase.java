@@ -100,12 +100,12 @@ public class AnalyserBase<T extends IReview> implements IAnalyser<List<T>, Stati
             return inputs.parallelStream().map(x -> (UserReview) x)
                     .filter(elem -> !(elem.getScore() < getMaxAcceptableValues(inputs)
                             && elem.getScore() > getMinAcceptableValues(inputs))
-                            && ((double) elem.getHelpfulScore() / (double) elem.getHelpfulCount() < 0.5))
+                            && (((double) elem.getHelpfulScore() / (double) elem.getHelpfulCount()) < 0.5))
                     .map(x -> (T) x).collect(Collectors.toList());
         }
         else
         {
-            return inputs.stream().filter(elem -> !(elem.getScore() < getMaxAcceptableValues(inputs)
+            return inputs.parallelStream().filter(elem -> !(elem.getScore() < getMaxAcceptableValues(inputs)
                     && elem.getScore() > getMinAcceptableValues(inputs))).collect(Collectors.toList());
         }
     }
