@@ -83,11 +83,10 @@ public abstract class TraversalCrawlerBase implements ICrawler
                 traversalResults.add(document);
 
                 document.select("a[href]")
-                        .stream()
+                        .parallelStream()
                         .map(x -> x.attr("abs:href"))
                         .filter(this::canTraverse)
                         .sorted(Comparator.comparing((String x) -> x).reversed())
-                        .parallel()
                         .forEach(this::traverse);
             }
             catch (IOException e)

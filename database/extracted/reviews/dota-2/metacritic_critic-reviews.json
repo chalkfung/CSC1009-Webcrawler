@@ -1,5 +1,29 @@
 [
   {
+    "source": "http://www.gameinformer.com/games/dota_2/b/pc/archive/2013/07/16/dota-2-review.aspx",
+    "date": "1970-01-01T07:30:00.000Z",
+    "score": 9.0,
+    "comments": "Valve studiously avoided reinventing the wheel with Dota 2, and given how beloved the gameplay is that is undoubtedly the best thing for the game, the community, and the genre. The infrastructure for matchmaking, spectating, and everything else that surrounds actual matches is executed on a level only the best studios can rival.",
+    "gameID": 0,
+    "author": "Game Informer"
+  },
+  {
+    "source": "",
+    "date": "1970-01-01T07:30:00.000Z",
+    "score": 8.0,
+    "comments": "Right now it’s the only game that I want to come back to even after a solid beating. It offers a dynamic and balanced gameplay based solely on player skills. If you haven’t tried Dota 2 yet, you need to. [CD-Action 09/2013, p.54]",
+    "gameID": 0,
+    "author": ""
+  },
+  {
+    "source": "http://www.gamespot.com/dota-2/reviews/dota-2-review-6411615/",
+    "date": "2013-07-11T00:00:00.000Z",
+    "score": 9.0,
+    "comments": "Those who choose to commit to Dota 2 will find many happy hours within this immaculate update.",
+    "gameID": 0,
+    "author": "GameSpot"
+  },
+  {
     "source": "http://www.vandal.net/analisis/pc/dota-2/13321",
     "date": "2013-07-15T00:00:00.000Z",
     "score": 9.0,
@@ -14,14 +38,6 @@
     "comments": "DOTA has marked the life of millions of persons. Valve and IceFrog has made sure DOTA 2 will be making the same for next decade. An extraordinary formula and a extraordinary work around it.",
     "gameID": 0,
     "author": "Meristation"
-  },
-  {
-    "source": "http://www.gameinformer.com/games/dota_2/b/pc/archive/2013/07/16/dota-2-review.aspx",
-    "date": "2013-07-16T00:00:00.000Z",
-    "score": 9.0,
-    "comments": "Valve studiously avoided reinventing the wheel with Dota 2, and given how beloved the gameplay is that is undoubtedly the best thing for the game, the community, and the genre. The infrastructure for matchmaking, spectating, and everything else that surrounds actual matches is executed on a level only the best studios can rival.",
-    "gameID": 0,
-    "author": "Game Informer"
   },
   {
     "source": "http://www.eurogamer.it/articles/2013-07-16-dota-2-review-recensione",
@@ -48,6 +64,14 @@
     "author": "Eurogamer"
   },
   {
+    "source": "http://metro.co.uk/2013/07/19/dota-2-review-esport-of-kings-3889373/",
+    "date": "2013-07-16T00:00:00.000Z",
+    "score": 8.0,
+    "comments": "Gaming’s ultimate eSport gets a well-considered makeover by the masters at Valve, although new ideas, and fixes for old problems, are currently thin on the ground.",
+    "gameID": 0,
+    "author": "Metro GameCentral"
+  },
+  {
     "source": "http://www.gamestar.de/spiele/dota-2/test/dota_2,46371,3025780.html",
     "date": "2013-07-18T00:00:00.000Z",
     "score": 8.6,
@@ -70,22 +94,6 @@
     "comments": "Dota 2 isn’t for the faint of heart. It isn’t for everyone. But if you play MOBAs, then it is for you. This is the game in the genre you need to play. If you don’t believe me, then consider this: There’s a reason why the community has crowd-funded a total of $900,000-plus to the prize pool for The International 3.",
     "gameID": 0,
     "author": "Cheat Code Central"
-  },
-  {
-    "source": "http://www.gamespot.com/dota-2/reviews/dota-2-review-6411615/",
-    "date": "2013-07-19T00:00:00.000Z",
-    "score": 9.0,
-    "comments": "Those who choose to commit to Dota 2 will find many happy hours within this immaculate update.",
-    "gameID": 0,
-    "author": "GameSpot"
-  },
-  {
-    "source": "http://metro.co.uk/2013/07/19/dota-2-review-esport-of-kings-3889373/",
-    "date": "2013-07-19T00:00:00.000Z",
-    "score": 8.0,
-    "comments": "Gaming’s ultimate eSport gets a well-considered makeover by the masters at Valve, although new ideas, and fixes for old problems, are currently thin on the ground.",
-    "gameID": 0,
-    "author": "Metro GameCentral"
   },
   {
     "source": "http://www.darkstation.com/reviews/dota-2/",
@@ -184,14 +192,6 @@
     "author": "Edge Magazine"
   },
   {
-    "source": "",
-    "date": "2013-08-02T00:00:00.000Z",
-    "score": 8.0,
-    "comments": "Right now it’s the only game that I want to come back to even after a solid beating. It offers a dynamic and balanced gameplay based solely on player skills. If you haven’t tried Dota 2 yet, you need to. [CD-Action 09/2013, p.54]",
-    "gameID": 0,
-    "author": ""
-  },
-  {
     "source": "http://it.ign.com/recensione/7544/recensione-pc-dota-2",
     "date": "2013-08-03T00:00:00.000Z",
     "score": 9.0,
@@ -209,7 +209,7 @@
   },
   {
     "source": "http://www.eurogamer.es/articles/analisis-de-dota-2",
-    "date": "2013-08-12T00:00:00.000Z",
+    "date": "2013-08-11T00:00:00.000Z",
     "score": 9.0,
     "comments": "DotA 2 will be an important highlight for eSports in the following years. Try it and you\u0027ll understand why.",
     "gameID": 0,

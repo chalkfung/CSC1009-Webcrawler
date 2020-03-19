@@ -45,7 +45,7 @@ public class GamespotReviewsExtractor implements IReviewsExtractor
         Document document = Jsoup.parse(html);
 
         return document.select("li.userReview-list__item")
-                .stream()
+                .parallelStream()
                 .map(this::parseElement)
                 .sorted(Comparator.comparing(ReviewBase::getDateCreated))
                 .toArray(UserReview[]::new);
@@ -56,6 +56,13 @@ public class GamespotReviewsExtractor implements IReviewsExtractor
         var title = element.select("h3.media-title > a").text();
         var reviewComponents = element.getElementsByAttributeValueContaining("class", "userReview-list");
         var comment = reviewComponents.get(2).text();
+        var toTrimEnd = "Read Full Review";
+
+        if (comment.endsWith(toTrimEnd))
+        {
+            comment = comment.substring(0, comment.length() - toTrimEnd.length());
+        }
+
         var score = Double.parseDouble(element.select("div.media-well--review-user > strong").text());
         var reviewMeta = reviewComponents.get(1);
         var author = reviewMeta.select("a").text();

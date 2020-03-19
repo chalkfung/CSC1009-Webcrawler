@@ -33,7 +33,7 @@ public class MetacriticCriticReviewsExtractor extends MetacriticReviewsExtractor
         Document document = Jsoup.parse(html);
 
         return document.select("li.review.critic_review")
-                .stream()
+                .parallelStream()
                 .map(this::parseElement)
                 .filter(x -> x.getScore() != -1)
                 .sorted(Comparator.comparing(ReviewBase::getDateCreated))

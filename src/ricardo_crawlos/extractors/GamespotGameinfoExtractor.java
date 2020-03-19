@@ -1,15 +1,12 @@
 package ricardo_crawlos.extractors;
 
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
 import java.util.Date;
-import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Element;
 
 import ricardo_crawlos.core.IExtractable;
-import ricardo_crawlos.core.IReview;
 import ricardo_crawlos.managers.GameManager;
 import ricardo_crawlos.managers.GenreManager;
 import ricardo_crawlos.models.Game;

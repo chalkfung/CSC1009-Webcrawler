@@ -183,6 +183,7 @@ public class GameReviewInformationPanel extends JPanel
             public void actionPerformed(ActionEvent e)
             {
                 WordCloudGenerator.showWorldCloud(Arrays.stream(context.getAllUserReviews())
+                        .parallel()
                         .map(x -> x.getComments())
                         .collect(Collectors.toList())
                 );
@@ -200,6 +201,7 @@ public class GameReviewInformationPanel extends JPanel
             public void actionPerformed(ActionEvent e)
             {
                 WordCloudGenerator.showWorldCloud(Arrays.stream(context.getAllCriticReviews())
+                        .parallel()
                         .map(x -> x.getComments())
                         .collect(Collectors.toList())
                 );
