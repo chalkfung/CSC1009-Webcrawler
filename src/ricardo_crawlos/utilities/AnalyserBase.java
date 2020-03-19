@@ -11,17 +11,17 @@ public class AnalyserBase<T extends IReview> implements IAnalyser<List<T>, Stati
 {
     public double getMean(final List<T> inputs)
     {
-        return Math.round(inputs.stream().mapToDouble(x->x.getScore()).average().getAsDouble() * 100.0)/100.0;
+        return Math.round(inputs.parallelStream().mapToDouble(x->x.getScore()).average().getAsDouble() * 100.0)/100.0;
     }
 
     public double getMax(final List<T> inputs)
     {
-        return inputs.stream().mapToDouble(x -> x.getScore()).max().getAsDouble();
+        return inputs.parallelStream().mapToDouble(x -> x.getScore()).max().getAsDouble();
     }
 
     public double getMin(final List<T> inputs)
     {
-        return inputs.stream().mapToDouble(x -> x.getScore()).min().getAsDouble();
+        return inputs.parallelStream().mapToDouble(x -> x.getScore()).min().getAsDouble();
     }
 
     public double getVariance(final List<T> inputs)
@@ -44,7 +44,7 @@ public class AnalyserBase<T extends IReview> implements IAnalyser<List<T>, Stati
 
     public double getQ2(final List<T> inputs)
     {
-        double[] sorted = inputs.stream().mapToDouble(x->x.getScore()).sorted().toArray();
+        double[] sorted = inputs.parallelStream().mapToDouble(x->x.getScore()).sorted().toArray();
         double Q2 = sorted.length % 2 == 0
                 ? (sorted[sorted.length/2 - 1] + sorted[sorted.length/2])/2
                 : sorted[(int)(Math.ceil((double)(sorted.length) * 0.5))]
@@ -54,7 +54,7 @@ public class AnalyserBase<T extends IReview> implements IAnalyser<List<T>, Stati
 
     public double getQ3(final List<T> inputs)
     {
-        double[] sorted = inputs.stream().mapToDouble(x->x.getScore()).sorted().toArray();
+        double[] sorted = inputs.parallelStream().mapToDouble(x->x.getScore()).sorted().toArray();
         int half =(int) Math.ceil(sorted.length/2);
         double Q3 = half % 2 == 0
                 ? (sorted[(int)(sorted.length * 0.75) - 1] + sorted[(int)(sorted.length * 0.75)])/2
@@ -65,7 +65,7 @@ public class AnalyserBase<T extends IReview> implements IAnalyser<List<T>, Stati
 
     public double getQ1(final List<T> inputs)
     {
-        double[] sorted = inputs.stream().mapToDouble(x->x.getScore()).sorted().toArray();
+        double[] sorted = inputs.parallelStream().mapToDouble(x->x.getScore()).sorted().toArray();
         int half =(int) Math.ceil(sorted.length/2);
         double Q1 = half % 2 == 0
                 ? (sorted[sorted.length/4 - 1]+ sorted[sorted.length/4])/2
@@ -91,28 +91,15 @@ public class AnalyserBase<T extends IReview> implements IAnalyser<List<T>, Stati
 
     public List<T> removeOutliers(final List<T> inputs)
     {
-        if(inputs.size() > 0 && inputs.get(0) instanceof UserReview)
-        {
-            return inputs.stream().map(x -> (UserReview) x).
-                filter(
-                        elem -> (elem.getScore() < getMaxAcceptableValues(inputs)
-                                && elem.getScore() > getMinAcceptableValues(inputs))
-                                || ((double)elem.getHelpfulScore()/(double)elem.getHelpfulCount() >= 0.5)
-                                ).map(x->(T) x).collect(Collectors.toList());
-        }
-        else
-        {
-            return inputs.stream().filter(elem -> (elem.getScore() < getMaxAcceptableValues(inputs)
-                    && elem.getScore() > getMinAcceptableValues(inputs))).collect(Collectors.toList());
-
-        }
+        return inputs.parallelStream().filter(elem -> (elem.getScore() < getMaxAcceptableValues(inputs)
+                && elem.getScore() > getMinAcceptableValues(inputs))).collect(Collectors.toList());
     }
 
     public List<T> showOutliers(final List<T> inputs)
     {
         if(inputs.size() > 0 && inputs.get(0) instanceof UserReview)
         {
-            return inputs.stream().map(x -> (UserReview) x).
+            return inputs.parallelStream().map(x -> (UserReview) x).
                     filter(
                             elem -> !(elem.getScore() < getMaxAcceptableValues(inputs)
                             && elem.getScore() > getMinAcceptableValues(inputs))
