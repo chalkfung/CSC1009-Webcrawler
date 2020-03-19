@@ -53,9 +53,10 @@ public class AnalyserBase<T extends IReview> implements IAnalyser<List<T>, Stati
             return inputs.stream().map(x -> x.getScore()).findFirst().orElse(0.0);
         }
 
-        double[] sorted = inputs.parallelStream().mapToDouble(x -> x.getScore()).sorted().toArray();
-        double Q2 = sorted.length % 2 == 0 ? (sorted[sorted.length / 2 - 1] + sorted[sorted.length / 2]) / 2
-                : sorted[(int) (Math.ceil((double) (sorted.length) * 0.5))];
+        double[] sorted = inputs.parallelStream().mapToDouble(x -> x.getScore()).sorted().sequential().toArray();
+        double Q2 = sorted.length % 2 == 0 ? (sorted[(sorted.length / 2) -1 ] + sorted[sorted.length / 2 ]) / 2
+                : sorted[(int) (Math.floor((double) (sorted.length) * 0.5))];
+
         return Q2;
     }
 
@@ -66,11 +67,12 @@ public class AnalyserBase<T extends IReview> implements IAnalyser<List<T>, Stati
             return inputs.stream().map(x -> x.getScore()).findFirst().orElse(0.0);
         }
 
-        double[] sorted = inputs.parallelStream().mapToDouble(x -> x.getScore()).sorted().toArray();
+        double[] sorted = inputs.stream().mapToDouble(x -> x.getScore()).sorted().toArray();
         int half = (int) Math.ceil(sorted.length / 2);
         double Q3 = half % 2 == 0
                 ? (sorted[(int) (sorted.length * 0.75) - 1] + sorted[(int) (sorted.length * 0.75)]) / 2
                 : sorted[(int) (Math.floor((double) (sorted.length) * 0.75))];
+
         return Q3;
     }
 
@@ -81,7 +83,7 @@ public class AnalyserBase<T extends IReview> implements IAnalyser<List<T>, Stati
             return inputs.stream().map(x -> x.getScore()).findFirst().orElse(0.0);
         }
 
-        double[] sorted = inputs.parallelStream().mapToDouble(x -> x.getScore()).sorted().toArray();
+        double[] sorted = inputs.stream().mapToDouble(x -> x.getScore()).sorted().toArray();
         int half = (int) Math.ceil(sorted.length / 2);
         double Q1 = half % 2 == 0 ? (sorted[sorted.length / 4 - 1] + sorted[sorted.length / 4]) / 2
                 : sorted[(int) (Math.ceil(sorted.length / 4))];
