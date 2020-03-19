@@ -10,7 +10,6 @@ import java.util.Map;
 import com.google.gson.reflect.TypeToken;
 
 import ricardo_crawlos.core.IManager;
-import ricardo_crawlos.models.Game;
 import ricardo_crawlos.storage.JsonSerialiser;
 import ricardo_crawlos.storage.TextWriter;
 

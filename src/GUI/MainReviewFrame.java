@@ -1,12 +1,10 @@
 package GUI;
 
-import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 public class MainReviewFrame extends JFrame 
 {
-
 	private static final long serialVersionUID = 1L;
 
 	public MainReviewFrame() 
