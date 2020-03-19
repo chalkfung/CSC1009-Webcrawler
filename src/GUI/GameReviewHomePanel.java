@@ -45,13 +45,7 @@ public class GameReviewHomePanel extends JPanel
         logo.setBounds(261, 169, 500, 226);
         add(logo);
 
-        search_button.addActionListener(new ActionListener()
-        {
-            public void actionPerformed(ActionEvent e)
-            {
-                doSearch();
-            }
-        });
+        search_button.addActionListener(e -> doSearch());
 
         txtSearchYourGame.addKeyListener(new KeyListener()
         {

@@ -47,30 +47,30 @@ public class GameReviewInformationPanel extends JPanel
         add(header_label);
 
         JLabel game_name_label = new JLabel("Game Name");
-        game_name_label.setFont(new Font("Tahoma", Font.PLAIN, 26));
+        game_name_label.setFont(new Font("Tahoma", Font.BOLD, 26));
         game_name_label.setBounds(15, 100, 200, 40);
         add(game_name_label);
 
         JLabel description_label = new JLabel("Game Information");
-        description_label.setFont(new Font("Tahoma", Font.PLAIN, 26));
+        description_label.setFont(new Font("Tahoma", Font.BOLD, 26));
         description_label.setBounds(15, 170, 400, 40);
         add(description_label);
 
 
         JLabel count_label = new JLabel("Count");
-        count_label.setFont(new Font("Tahoma", Font.PLAIN, 26));
-        count_label.setBounds(15, 350, 400, 40);
+        count_label.setFont(new Font("Tahoma", Font.BOLD, 26));
+        count_label.setBounds(15, 400, 400, 40);
         add(count_label);
 
         JLabel mean_label = new JLabel("Mean Score");
-        mean_label.setFont(new Font("Tahoma", Font.PLAIN, 26));
-        mean_label.setBounds(15, 450, 400, 40);
+        mean_label.setFont(new Font("Tahoma", Font.BOLD, 26));
+        mean_label.setBounds(15, 480, 400, 40);
         add(mean_label);
 
 
         JLabel std_label = new JLabel("S.D. Score");
-        std_label.setFont(new Font("Tahoma", Font.PLAIN, 26));
-        std_label.setBounds(15, 550, 400, 40);
+        std_label.setFont(new Font("Tahoma", Font.BOLD, 26));
+        std_label.setBounds(15, 560, 400, 40);
         add(std_label);
 
 
@@ -134,21 +134,16 @@ public class GameReviewInformationPanel extends JPanel
         back_button.setBackground(new Color(101, 101, 238));
         back_button.setBounds(161, 750, 180, 40);
         add(back_button);
-        back_button.addActionListener(new ActionListener()
+        back_button.addActionListener(e ->
         {
-            public void actionPerformed(ActionEvent e)
-            {
-                //Go the Display Info panel
-                GameReviewHomePanel searchPanel = new GameReviewHomePanel(jframe);
-                jframe.setContentPane(searchPanel);
-            }
+            //Go the Display Info panel
+            GameReviewHomePanel searchPanel = new GameReviewHomePanel(jframe);
+            jframe.setContentPane(searchPanel);
         });
         back_button.addKeyListener(new KeyListener()
         {
             @Override
-            public void keyTyped(KeyEvent e)
-            {
-            }
+            public void keyTyped(KeyEvent e){}
 
             @Override
             public void keyPressed(KeyEvent e)
@@ -158,9 +153,7 @@ public class GameReviewInformationPanel extends JPanel
             }
 
             @Override
-            public void keyReleased(KeyEvent e)
-            {
-            }
+            public void keyReleased(KeyEvent e){}
         });
 
         JButton UserWord_cloud = new JButton("User Word Cloud");
@@ -169,17 +162,11 @@ public class GameReviewInformationPanel extends JPanel
         UserWord_cloud.setBackground(new Color(101, 101, 238));
         UserWord_cloud.setBounds(40, 650, 180, 40);
         add(UserWord_cloud);
-        UserWord_cloud.addActionListener(new ActionListener()
-        {
-            public void actionPerformed(ActionEvent e)
-            {
-                WordCloudGenerator.showWorldCloud("User Word Cloud", Arrays.stream(context.getAllUserReviews())
-                        .parallel()
-                        .map(x -> x.getComments())
-                        .collect(Collectors.toList())
-                );
-            }
-        });
+        UserWord_cloud.addActionListener(e -> WordCloudGenerator.showWorldCloud("User Word Cloud", Arrays.stream(context.getAllUserReviews())
+                .parallel()
+                .map(x -> x.getComments())
+                .collect(Collectors.toList())
+        ));
 
         JButton CriticWord_cloud = new JButton("Critic Word Cloud");
         CriticWord_cloud.setForeground(Color.WHITE);
@@ -187,17 +174,11 @@ public class GameReviewInformationPanel extends JPanel
         CriticWord_cloud.setBackground(new Color(101, 101, 238));
         CriticWord_cloud.setBounds(280, 650, 180, 40);
         add(CriticWord_cloud);
-        CriticWord_cloud.addActionListener(new ActionListener()
-        {
-            public void actionPerformed(ActionEvent e)
-            {
-                WordCloudGenerator.showWorldCloud("User Word Cloud", Arrays.stream(context.getAllCriticReviews())
-                        .parallel()
-                        .map(x -> x.getComments())
-                        .collect(Collectors.toList())
-                );
-            }
-        });
+        CriticWord_cloud.addActionListener(e -> WordCloudGenerator.showWorldCloud("User Word Cloud", Arrays.stream(context.getAllCriticReviews())
+                .parallel()
+                .map(x -> x.getComments())
+                .collect(Collectors.toList())
+        ));
 
         JButton ShowUser_Review = new JButton("Show User Reviews");
         ShowUser_Review.setForeground(Color.WHITE);
@@ -205,18 +186,15 @@ public class GameReviewInformationPanel extends JPanel
         ShowUser_Review.setBackground(new Color(101, 101, 238));
         ShowUser_Review.setBounds(40, 700, 180, 40);
         add(ShowUser_Review);
-        ShowUser_Review.addActionListener(new ActionListener()
+        ShowUser_Review.addActionListener(e ->
         {
-            public void actionPerformed(ActionEvent e)
-            {
-                var content = Arrays.stream(context.getAllUserReviews())
-                        .map(x -> x.getAuthor() + "\n"
-                                + new SimpleDateFormat("dd-MMM-yyyy").format(x.getDateCreated()) + "\n"
-                                + "Score: " + x.getScore() + "\n"
-                                + x.getComments())
-                        .collect(Collectors.joining("\n\n"));
-                ScrollingPlane.createStatic(content, 640, 480).showWindow("User Comments Summary");
-            }
+            var content = Arrays.stream(context.getAllUserReviews())
+                    .map(x -> x.getAuthor() + "\n"
+                            + new SimpleDateFormat("dd-MMM-yyyy").format(x.getDateCreated()) + "\n"
+                            + "Score: " + x.getScore() + "\n"
+                            + x.getComments())
+                    .collect(Collectors.joining("\n\n"));
+            ScrollingPlane.createStatic(content, 640, 480).showWindow("User Comments Summary");
         });
 
         JButton ShowCritic_Review = new JButton("Show Critic Reviews");
@@ -225,20 +203,17 @@ public class GameReviewInformationPanel extends JPanel
         ShowCritic_Review.setBackground(new Color(101, 101, 238));
         ShowCritic_Review.setBounds(280, 700, 180, 40);
         add(ShowCritic_Review);
-        ShowCritic_Review.addActionListener(new ActionListener()
+        ShowCritic_Review.addActionListener(e ->
         {
-            public void actionPerformed(ActionEvent e)
-            {
-                var content = Arrays.stream(context.getAllCriticReviews())
-                        .map(x -> (CriticReview) x)
-                        .map(x -> x.getAuthor() + "\n"
-                                + x.getSource() + "\n"
-                                + new SimpleDateFormat("dd-MMM-yyyy").format(x.getDateCreated()) + "\n"
-                                + "Score: " + x.getScore() + "\n"
-                                + x.getComments())
-                        .collect(Collectors.joining("\n\n"));
-                ScrollingPlane.createStatic(content, 640, 480).showWindow("Critic Review Summary");
-            }
+            var content = Arrays.stream(context.getAllCriticReviews())
+                    .map(x -> (CriticReview) x)
+                    .map(x -> x.getAuthor() + "\n"
+                            + x.getSource() + "\n"
+                            + new SimpleDateFormat("dd-MMM-yyyy").format(x.getDateCreated()) + "\n"
+                            + "Score: " + x.getScore() + "\n"
+                            + x.getComments())
+                    .collect(Collectors.joining("\n\n"));
+            ScrollingPlane.createStatic(content, 640, 480).showWindow("Critic Review Summary");
         });
 
 
@@ -274,7 +249,7 @@ public class GameReviewInformationPanel extends JPanel
 
         count_value.setVerticalAlignment(SwingConstants.TOP);
         count_value.setFont(new Font("Tahoma", Font.PLAIN, 15));
-        count_value.setBounds(15, 400, 500, 100);
+        count_value.setBounds(15, 450, 500, 100);
         add(count_value);
 
         JLabel avg_score_value = null;
@@ -291,7 +266,7 @@ public class GameReviewInformationPanel extends JPanel
         }
         avg_score_value.setVerticalAlignment(SwingConstants.TOP);
         avg_score_value.setFont(new Font("Tahoma", Font.PLAIN, 15));
-        avg_score_value.setBounds(15, 500, 500, 100);
+        avg_score_value.setBounds(15, 530, 500, 100);
         add(avg_score_value);
 
         JLabel std_score_value = null;
@@ -308,7 +283,7 @@ public class GameReviewInformationPanel extends JPanel
         }
         std_score_value.setVerticalAlignment(SwingConstants.TOP);
         std_score_value.setFont(new Font("Tahoma", Font.PLAIN, 15));
-        std_score_value.setBounds(15, 600, 500, 100);
+        std_score_value.setBounds(15, 610, 500, 100);
         add(std_score_value);
     }
 }
