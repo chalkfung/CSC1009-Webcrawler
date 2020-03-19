@@ -11,18 +11,23 @@ public class AnalyserBase<T extends IReview> implements IAnalyser<List<T>, Stati
 {
     public double getMean(final List<T> inputs)
     {
-        return Math.round(inputs.parallelStream().mapToDouble(x -> x.getScore()).average().getAsDouble() * 100.0)
-                / 100.0;
+        var output = inputs.parallelStream().mapToDouble(x -> x.getScore()).average().orElse(0);
+
+        return output;
     }
 
     public double getMax(final List<T> inputs)
     {
-        return inputs.parallelStream().mapToDouble(x -> x.getScore()).max().getAsDouble();
+        if (inputs.size() == 0)
+        {
+            return 0;
+        }
+        return inputs.parallelStream().mapToDouble(x -> x.getScore()).max().orElse(0);
     }
 
     public double getMin(final List<T> inputs)
     {
-        return inputs.parallelStream().mapToDouble(x -> x.getScore()).min().getAsDouble();
+        return inputs.parallelStream().mapToDouble(x -> x.getScore()).min().orElse(0);
     }
 
     public double getVariance(final List<T> inputs)
@@ -45,6 +50,11 @@ public class AnalyserBase<T extends IReview> implements IAnalyser<List<T>, Stati
 
     public double getQ2(final List<T> inputs)
     {
+        if (inputs.size() <= 1)
+        {
+            return inputs.stream().map(x -> x.getScore()).findFirst().orElse(0.0);
+        }
+
         double[] sorted = inputs.parallelStream().mapToDouble(x -> x.getScore()).sorted().toArray();
         double Q2 = sorted.length % 2 == 0 ? (sorted[sorted.length / 2 - 1] + sorted[sorted.length / 2]) / 2
                 : sorted[(int) (Math.ceil((double) (sorted.length) * 0.5))];
@@ -53,6 +63,11 @@ public class AnalyserBase<T extends IReview> implements IAnalyser<List<T>, Stati
 
     public double getQ3(final List<T> inputs)
     {
+        if (inputs.size() <= 1)
+        {
+            return inputs.stream().map(x -> x.getScore()).findFirst().orElse(0.0);
+        }
+
         double[] sorted = inputs.parallelStream().mapToDouble(x -> x.getScore()).sorted().toArray();
         int half = (int) Math.ceil(sorted.length / 2);
         double Q3 = half % 2 == 0
@@ -63,6 +78,11 @@ public class AnalyserBase<T extends IReview> implements IAnalyser<List<T>, Stati
 
     public double getQ1(final List<T> inputs)
     {
+        if (inputs.size() <= 1)
+        {
+            return inputs.stream().map(x -> x.getScore()).findFirst().orElse(0.0);
+        }
+
         double[] sorted = inputs.parallelStream().mapToDouble(x -> x.getScore()).sorted().toArray();
         int half = (int) Math.ceil(sorted.length / 2);
         double Q1 = half % 2 == 0 ? (sorted[sorted.length / 4 - 1] + sorted[sorted.length / 4]) / 2
@@ -96,12 +116,16 @@ public class AnalyserBase<T extends IReview> implements IAnalyser<List<T>, Stati
     {
         if (inputs.size() > 0 && inputs.get(0) instanceof UserReview)
         {
+            var maxAccept = getMaxAcceptableValues(inputs);
+            var minAccept = getMinAcceptableValues(inputs);
 
-            return inputs.parallelStream().map(x -> (UserReview) x)
-                    .filter(elem -> !(elem.getScore() < getMaxAcceptableValues(inputs)
-                            && elem.getScore() > getMinAcceptableValues(inputs))
-                            && ((double) elem.getHelpfulScore() / (double) elem.getHelpfulCount() < 0.5))
+            System.out.println("Max Accept: " + maxAccept + " Min Accept: " + minAccept);
+            var output =inputs.parallelStream().map(x -> (UserReview) x)
+                    .filter(elem -> (elem.getScore() > maxAccept || elem.getScore() < minAccept)
+                            && (((double) elem.getHelpfulScore() / (double) elem.getHelpfulCount()) >= 0.5))
                     .map(x -> (T) x).collect(Collectors.toList());
+
+            return output;
         }
         else
         {

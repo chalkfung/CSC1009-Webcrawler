@@ -28,6 +28,7 @@ import org.jfree.data.statistics.DefaultBoxAndWhiskerCategoryDataset;
 import ricardo_crawlos.core.IReview;
 import ricardo_crawlos.core.ISearchContext;
 import ricardo_crawlos.models.CriticReview;
+import ricardo_crawlos.models.UserReview;
 import ricardo_crawlos.utilities.Statistics;
 
 public class GameReviewInformationPanel extends JPanel
@@ -210,9 +211,11 @@ public class GameReviewInformationPanel extends JPanel
             public void actionPerformed(ActionEvent e)
             {
                 var content = Arrays.stream(context.getAllUserReviews())
+                        .map(x -> (UserReview)x)
                         .map(x -> x.getAuthor() + "\n"
                                 + new SimpleDateFormat("dd-MMM-yyyy").format(x.getDateCreated()) + "\n"
                                 + "Score: " + x.getScore() + "\n"
+                                + "Helpfulness: " + x.getHelpfulScore() + " of " + x.getHelpfulCount() + "\n"
                                 + x.getComments())
                         .collect(Collectors.joining("\n\n"));
                 ScrollingPlane.createStatic(content, 640, 480).showWindow("User Comments Summary");
@@ -280,14 +283,14 @@ public class GameReviewInformationPanel extends JPanel
         JLabel avg_score_value = null;
         if (results.size() > 3 && outBW != null)
         {
-            avg_score_value = new JLabel(results.get(1).getMean().toString() + " (User w/o Outliers), "
-                    + results.get(2).getMean().toString() + " (Acceptable User Outliers), "
-                    + results.get(3).getMean().toString() + " (Critics)");
+            avg_score_value = new JLabel(formatDoubleD2(results.get(1).getMean()) + " (User w/o Outliers), "
+                    + formatDoubleD2(results.get(2).getMean()) + " (Acceptable User Outliers), "
+                    + formatDoubleD2(results.get(3).getMean()) + " (Critics)");
         }
         else
         {
-            avg_score_value = new JLabel(results.get(1).getMean().toString() + " (User w/o Outliers), "
-                    + results.get(2).getMean().toString() + " (Critics)");
+            avg_score_value = new JLabel(formatDoubleD2(results.get(1).getMean()) + " (User w/o Outliers), "
+                    + formatDoubleD2(results.get(2).getMean()) + " (Critics)");
         }
         avg_score_value.setVerticalAlignment(SwingConstants.TOP);
         avg_score_value.setFont(new Font("Tahoma", Font.PLAIN, 15));
@@ -310,5 +313,10 @@ public class GameReviewInformationPanel extends JPanel
         std_score_value.setFont(new Font("Tahoma", Font.PLAIN, 15));
         std_score_value.setBounds(15, 600, 500, 100);
         add(std_score_value);
+    }
+
+    private static String formatDoubleD2(Double input)
+    {
+        return String.format("%.2f", input);
     }
 }
