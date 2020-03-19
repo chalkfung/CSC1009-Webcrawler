@@ -1,18 +1,11 @@
 package ricardo_crawlos.extractors;
 
 import java.text.SimpleDateFormat;
-import java.util.Comparator;
 import java.util.Date;
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
 
-import ricardo_crawlos.core.IReview;
 import ricardo_crawlos.core.IReviewsExtractor;
 import ricardo_crawlos.core.IWebsite;
 import ricardo_crawlos.crawlers.Websites;
-import ricardo_crawlos.models.ReviewBase;
-import ricardo_crawlos.models.UserReview;
 
 public abstract class MetacriticReviewsExtractorBase implements IReviewsExtractor
 {

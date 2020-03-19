@@ -1,12 +1,10 @@
 package GUI;
 
-import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 public class MainReviewFrame extends JFrame 
 {
-
 	private static final long serialVersionUID = 1L;
 
 	public MainReviewFrame() 
@@ -21,22 +19,4 @@ public class MainReviewFrame extends JFrame
 		setResizable(false);
         setVisible(true);
 	}
-	/*
-	public static void main(String[] args) 
-	{
-		EventQueue.invokeLater(new Runnable() 
-		{
-			public void run() 
-			{
-				try 
-				{
-					MainReviewFrame frame = new MainReviewFrame();
-					frame.setVisible(true);
-				} catch (Exception e) 
-				{
-					e.printStackTrace();
-				}
-			}
-		});
-	}	*/
 }

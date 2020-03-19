@@ -1,7 +1,6 @@
 package ricardo_crawlos.crawlers;
 
 import java.io.IOException;
-import java.util.Arrays;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 

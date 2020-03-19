@@ -7,11 +7,11 @@ import java.awt.event.HierarchyEvent;
 import java.awt.event.HierarchyListener;
 import javax.swing.*;
 
-
+/**
+ * This class is a utility to make JOptionPane resizable
+ */
 public class ScrollingPlane
 {
-    //This classs is to make JOptionPane resizable
-
     private String output;
     private int x;
     private int y;
@@ -24,11 +24,6 @@ public class ScrollingPlane
         this.x = x;
         this.y = y;
         this.edit = edit;
-    }
-
-    public void setoutput(String newOutput)
-    {
-        output = newOutput;
     }
 
     public static ScrollingPlane createStatic(String output, int x, int y)
@@ -76,5 +71,4 @@ public class ScrollingPlane
         });
         return scrollPane;
     }
-
 }

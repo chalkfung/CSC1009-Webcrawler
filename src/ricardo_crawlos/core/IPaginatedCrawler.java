@@ -1,7 +1,5 @@
 package ricardo_crawlos.core;
 
-import java.util.function.Function;
-
 /**
  * IPaginatedCrawler
  */

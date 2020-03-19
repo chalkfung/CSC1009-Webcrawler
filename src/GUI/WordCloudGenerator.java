@@ -14,7 +14,9 @@ import com.kennycason.kumo.wordstart.CenterWordStart;
 
 public class WordCloudGenerator extends JPanel
 {
-    public static void showWorldCloud(String title, List<String> input)
+	private static final long serialVersionUID = 1L;
+
+	public static void showWorldCloud(String title, List<String> input)
     {
         final JFrame frame = new JFrame(title);
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
