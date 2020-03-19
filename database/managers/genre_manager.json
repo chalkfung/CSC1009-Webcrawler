@@ -1,0 +1,16 @@
+{
+  "Real-Time": 3,
+  "Free-to-Play": 0,
+  "MOBA": 1,
+  "Strategy": 2,
+  "Shooter": 4,
+  "Tactical": 5,
+  "Third-Person": 6,
+  "Action": 7,
+  "First-Person": 8,
+  "3D": 9,
+  "Sports": 10,
+  "Team-Based": 11,
+  "Simulation": 12,
+  "Soccer": 13
+}

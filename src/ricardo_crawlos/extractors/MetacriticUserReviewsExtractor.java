@@ -32,9 +32,10 @@ public class MetacriticUserReviewsExtractor extends MetacriticReviewsExtractorBa
         Document document = Jsoup.parse(html);
 
         return document.select("li.review.user_review")
-                .stream()
+                .parallelStream()
                 .map(this::parseElement)
                 .sorted(Comparator.comparing(ReviewBase::getDateCreated))
+                .sequential()
                 .toArray(UserReview[]::new);
     }
 
@@ -42,6 +43,14 @@ public class MetacriticUserReviewsExtractor extends MetacriticReviewsExtractorBa
     {
         var author = element.select("div.name > a").text();
         var comment = element.select("div.review_body").text();
+
+        var toTrimEnd = "Expand";
+
+        if (comment.endsWith(toTrimEnd))
+        {
+            comment = comment.substring(0, comment.length() - toTrimEnd.length());
+        }
+
         var score = Double.parseDouble(element.select("div.review_grade > div").text());
         var date = parseDate(element.select("div.date").text());
         var helpfulScore = Integer.parseInt(element.select("span.total_ups").text());

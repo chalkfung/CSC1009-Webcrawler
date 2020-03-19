@@ -1,0 +1,13 @@
+{
+  "gameName": "Half-Life 2",
+  "gameId": 4,
+  "developer": "Valve Software",
+  "genres": [
+    4,
+    9,
+    7,
+    8
+  ],
+  "releasedDate": "2004-11-16T00:00:00.000Z",
+  "description": "Half-Life 2 is a very impressive and engaging shooter, and a faithful follow-up to one of the greatest PC games of all time."
+}

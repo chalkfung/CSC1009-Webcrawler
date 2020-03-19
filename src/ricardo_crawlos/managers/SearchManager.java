@@ -4,18 +4,25 @@ import ricardo_crawlos.core.ISearchContext;
 
 public class SearchManager
 {
-    private String gameSpotKey;
-    private String metaGamePCKey = "game/pc/";
+    private String referenceKEy;
 
-    public SearchManager(String key)
+    public SearchManager(String key) throws Error
     {
+        if (key == null || key.equals(""))
+        {
+            throw new Error("Bad input");
+        }
         key = key.toLowerCase();
-        this.gameSpotKey = key.replaceAll(" ", "-");
-        this.metaGamePCKey += this.gameSpotKey;
+        this.referenceKEy = key.replaceAll(" ", "-");
     }
 
     public ISearchContext retrieve()
     {
-        return new SearchContextGamePC(gameSpotKey);
+        return new SearchContextGamePC(referenceKEy);
+    }
+
+    public String getGameReference()
+    {
+        return referenceKEy;
     }
 }

@@ -1,6 +1,5 @@
 package ricardo_crawlos.crawlers;
 
-import javax.xml.stream.FactoryConfigurationError;
 import org.jsoup.Jsoup;
 
 import ricardo_crawlos.core.IPaginatedCrawler;

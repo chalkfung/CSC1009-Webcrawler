@@ -5,9 +5,8 @@ import org.jsoup.nodes.Document;
 /**
  * IBaseCrawler
  */
-public interface ICrawler
+public interface ICrawler extends Runnable
 {
-    void run();
     String[] getTraversableLinks();
     String[] getTraversedLinks();
     Document[] getTraversalResults();

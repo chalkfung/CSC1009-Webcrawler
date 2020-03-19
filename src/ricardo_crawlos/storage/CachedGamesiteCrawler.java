@@ -25,7 +25,7 @@ public class CachedGamesiteCrawler
     private void storeToCache()
     {
         crawler.run();
-        String[] cacheOutput = Arrays.stream(crawler.getTraversalResults()).map(x -> x.html()).toArray(String[]::new);
+        String[] cacheOutput = Arrays.stream(crawler.getTraversalResults()).map(x -> crawler.extractFrom(x.html())).toArray(String[]::new);
 
         TextWriter.writeAllText(getCachedPath(), JsonSerialiser.DefaultInstance().toJson(cacheOutput));
     }
@@ -40,7 +40,6 @@ public class CachedGamesiteCrawler
                 String[] htmlStrings = JsonSerialiser.DefaultInstance().fromJson(json, String[].class);
 
                 return Arrays.stream(htmlStrings)
-                        .map(crawler::extractFrom)
                         .collect(Collectors.joining("\n"));
             }
             catch (IOException e)

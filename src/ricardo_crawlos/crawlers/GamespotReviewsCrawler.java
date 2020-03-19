@@ -70,7 +70,7 @@ public class GamespotReviewsCrawler extends BaseURLConstrainedCrawler implements
                 .stream()
                 .filter(x ->
                 {
-                    // Remove double counting reviews from most helpful sections
+                    // Remove double counting reviews from the most helpful sections
                     var helpfulHeader = x.parent().parent().selectFirst("header.pod-header");
                     return helpfulHeader == null || !helpfulHeader.html().contains("Most Helpful");
                 })
