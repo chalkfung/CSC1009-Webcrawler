@@ -1,3 +1,4 @@
+import javax.swing.*;
 import java.awt.*;
 import java.io.IOException;
 
@@ -16,6 +17,7 @@ public class Main
         {
             try
             {
+                UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
                 MainReviewFrame frame = new MainReviewFrame();
                 frame.setVisible(true);
             }
