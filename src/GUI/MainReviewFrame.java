@@ -21,22 +21,4 @@ public class MainReviewFrame extends JFrame
 		setResizable(false);
         setVisible(true);
 	}
-	/*
-	public static void main(String[] args) 
-	{
-		EventQueue.invokeLater(new Runnable() 
-		{
-			public void run() 
-			{
-				try 
-				{
-					MainReviewFrame frame = new MainReviewFrame();
-					frame.setVisible(true);
-				} catch (Exception e) 
-				{
-					e.printStackTrace();
-				}
-			}
-		});
-	}	*/
 }
