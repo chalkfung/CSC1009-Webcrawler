@@ -1,12 +1,11 @@
 import javax.swing.*;
 import java.awt.*;
-import java.io.IOException;
 
 import GUI.MainReviewFrame;
 
 public class Main
 {
-    public static void main(String[] args) throws IOException
+    public static void main(String[] args)
     {
         showWindow();
     }
