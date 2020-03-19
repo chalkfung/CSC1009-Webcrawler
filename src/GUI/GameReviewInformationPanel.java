@@ -75,7 +75,8 @@ public class GameReviewInformationPanel extends JPanel
         add(std_label);
 
 
-        List<Double> usrScores = results.get(1).getNonOutliers().stream().map(IReview::getScore).collect(Collectors.toList());
+        BoxAndWhiskerItem userBW = new BoxAndWhiskerItem(results.get(1).getMean(), results.get(1).getQ2(), results.get(1).getQ1(),
+                results.get(1).getQ3(), results.get(1).getMin(), results.get(1).getMax(), null, null, null);
         BoxAndWhiskerItem outBW = null;
         BoxAndWhiskerItem criticBW;
 
@@ -91,7 +92,7 @@ public class GameReviewInformationPanel extends JPanel
                     results.get(2).getQ3(), results.get(2).getMin(), results.get(2).getMax(), null, null, null);
 
         DefaultBoxAndWhiskerCategoryDataset boxData = new DefaultBoxAndWhiskerCategoryDataset();
-        boxData.add(usrScores, "Reviews", "User (w/o Outliers)");
+        boxData.add(userBW, "Reviews", "User (w/o Outliers)");
         if (results.size() > 3 && outBW != null)
         {
             boxData.add(outBW, "Reviews", "Acceptable Outliers");
@@ -264,13 +265,13 @@ public class GameReviewInformationPanel extends JPanel
 
         if (results.size() > 3 && outBW != null)
         {
-            count_value = new JLabel(usrScores.size() + " (User w/o Outliers), "
+            count_value = new JLabel(results.get(1).getOriginal().size() + " (User w/o Outliers), "
                     + results.get(2).getOriginal().size() + " (Acceptable User Outliers), "
                     + results.get(3).getOriginal().size() + " (Critics)");
         }
         else
         {
-            count_value = new JLabel(usrScores.size() + " (User w/o Outliers), "
+            count_value = new JLabel(results.get(1).getOriginal().size() + " (User w/o Outliers), "
                     + results.get(2).getOriginal().size() + " (Critics)");
 
         }

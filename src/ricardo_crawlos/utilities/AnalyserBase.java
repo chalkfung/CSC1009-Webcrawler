@@ -129,7 +129,7 @@ public class AnalyserBase<T extends IReview> implements IAnalyser<List<T>, Stati
         }
         else
         {
-            return inputs.stream().filter(elem -> !(elem.getScore() < getMaxAcceptableValues(inputs)
+            return inputs.parallelStream().filter(elem -> !(elem.getScore() < getMaxAcceptableValues(inputs)
                     && elem.getScore() > getMinAcceptableValues(inputs))).collect(Collectors.toList());
         }
     }
