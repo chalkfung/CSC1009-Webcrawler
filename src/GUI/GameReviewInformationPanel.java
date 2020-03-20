@@ -248,9 +248,9 @@ public class GameReviewInformationPanel extends JPanel
 
         if (results.size() > 3 && outBW != null)
         {
-            count_value = new JLabel(
-                    results.get(1).getOriginal().size() + " (User w/o Outliers), " + results.get(2).getOriginal().size()
-                            + " (Acceptable User Outliers), " + results.get(3).getOriginal().size() + " (Critics)");
+            count_value = new JLabel(results.get(0).getOriginal().size() - results.get(2).getOriginal().size() + " (User w/o Outliers), "
+                    + results.get(2).getOriginal().size() + " (Acceptable User Outliers), "
+                    + results.get(3).getOriginal().size() + " (Critics)");
         }
         else
         {
