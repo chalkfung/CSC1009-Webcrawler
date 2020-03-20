@@ -7,7 +7,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.IOException;
-import java.lang.reflect.Executable;
 import org.jsoup.HttpStatusException;
 
 import ricardo_crawlos.core.ISearchContext;
