@@ -1,6 +1,7 @@
 package ricardo_crawlos.storage;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Arrays;
@@ -44,14 +45,14 @@ public class CachedGamesiteCrawler
         {
             try
             {
-                String json = Files.readString(Path.of(getCachedPath()));
+                String json = Files.readString(Path.of(getCachedPath()), StandardCharsets.UTF_8);
                 String[] htmlStrings = JsonSerialiser.DefaultInstance().fromJson(json, String[].class);
 
-                return Arrays.stream(htmlStrings)
-                        .collect(Collectors.joining("\n"));
+                return Arrays.stream(htmlStrings).collect(Collectors.joining("\n"));
             }
             catch (IOException e)
             {
+                e.printStackTrace();
                 System.out.println("Cached Crawler IO failure for " + gamePathName);
                 return null;
             }

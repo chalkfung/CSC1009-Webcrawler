@@ -1,6 +1,7 @@
 package ricardo_crawlos.managers;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
@@ -28,7 +29,7 @@ public class GameManager extends ItemStoreManagerBase<Game, String>
         try
         {
             var name = reverseLookupMap.get(id);
-            var cached = Files.readString(Path.of("database/extracted/games/" + new SearchManager(name).getGameReference() + ".json"));
+            var cached = Files.readString(Path.of("database/extracted/games/" + new SearchManager(name).getGameReference() + ".json"), StandardCharsets.UTF_8);
             return JsonSerialiser.DefaultInstance().fromJson(cached, Game.class);
         }
         catch (IOException e)

@@ -1,8 +1,7 @@
 package ricardo_crawlos.storage;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileWriter;
+import java.io.*;
+import java.nio.charset.StandardCharsets;
 
 public class TextWriter
 {
@@ -10,8 +9,9 @@ public class TextWriter
     {
         try
         {
-            FileWriter writer = new FileWriter(path);
-            writer.write(text);
+            var writer = new PrintWriter(path, StandardCharsets.UTF_8);
+//            FileWriter writer = new FileWriter(path);
+            writer.println(text);
             writer.close();
         }
         catch (FileNotFoundException e)

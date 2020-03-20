@@ -6,9 +6,9 @@ import com.google.gson.GsonBuilder;
 public class JsonSerialiser
 {
     private static Gson defaultSerialiser = new GsonBuilder()
-        .setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
-        .setPrettyPrinting()
-        .create();
+            .setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
+            .setPrettyPrinting()
+            .create();
 
     public static Gson DefaultInstance()
     {

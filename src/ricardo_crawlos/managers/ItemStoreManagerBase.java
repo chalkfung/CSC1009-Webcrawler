@@ -2,6 +2,7 @@ package ricardo_crawlos.managers;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.HashMap;
@@ -31,7 +32,7 @@ public abstract class ItemStoreManagerBase<T, U> implements IManager<T, U>
             try
             {
                 Type type = new TypeToken<Map<U, Integer>>(){}.getType();
-                itemMap = JsonSerialiser.DefaultInstance().fromJson(Files.readString(path), type);
+                itemMap = JsonSerialiser.DefaultInstance().fromJson(Files.readString(path, StandardCharsets.UTF_8), type);
             }
             catch (IOException e)
             {
