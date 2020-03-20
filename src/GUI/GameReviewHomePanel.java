@@ -139,6 +139,7 @@ public class GameReviewHomePanel extends JPanel
         {
             e.printStackTrace();
             JOptionPane.showMessageDialog(null, "Please try again later.", "Fetch Error", JOptionPane.ERROR_MESSAGE);
+            return null;
         }
 
         Thread.sleep(SLEEPTIME);
@@ -152,6 +153,7 @@ public class GameReviewHomePanel extends JPanel
         {
             e.printStackTrace();
             JOptionPane.showMessageDialog(null, "Please try another game. The web layout may have changed.", "Extraction Error", JOptionPane.ERROR_MESSAGE);
+            return null;
         }
 
         Thread.sleep(SLEEPTIME);
@@ -166,6 +168,7 @@ public class GameReviewHomePanel extends JPanel
         {
             e.printStackTrace();
             JOptionPane.showMessageDialog(null, "Please try another game.", "Analysis Error", JOptionPane.ERROR_MESSAGE);
+            return null;
         }
 
         return null;

@@ -65,6 +65,8 @@ public class CachedGamesiteCrawler
 
             storeToCache();
 
+            if (progressSeeker != null) progressSeeker.accept(1.0);
+
             if (crawler instanceof TraversalCrawlerBase)
             {
                 ((TraversalCrawlerBase) crawler).removeProgressListener(progressSeeker);

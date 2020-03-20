@@ -14,5 +14,7 @@
   "Simulation": 12,
   "Soccer": 13,
   "Role-Playing": 14,
-  "Management": 15
+  "Management": 15,
+  "Adventure": 16,
+  "Open-World": 17
 }

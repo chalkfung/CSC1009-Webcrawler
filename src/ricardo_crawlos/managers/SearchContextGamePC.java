@@ -3,11 +3,10 @@ package ricardo_crawlos.managers;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Arrays;
-import java.util.Dictionary;
-import java.util.Hashtable;
-import java.util.Objects;
+import java.util.*;
+import java.util.function.BiConsumer;
 import java.util.function.Consumer;
+import java.util.function.Function;
 import java.util.stream.Stream;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
@@ -32,54 +31,27 @@ class CrawlingBinder
 {
     private String cached;
     private IExtractableCrawler extractable;
-    private Consumer<Double> progressSeeker;
-    private Runnable extraction;
+    private Function<Double, Double> progressSeekerRedirection;
+    private BiConsumer<String, IExtractableCrawler> extractionConsumer;
 
-    CrawlingBinder(IExtractableCrawler extractable, Consumer<Double> progressSeeker, Runnable extraction)
+    CrawlingBinder(IExtractableCrawler extractable,
+                   Function<Double, Double> progressSeekerRedirection,
+                   BiConsumer<String, IExtractableCrawler> extractionConsumer)
     {
         this.extractable = extractable;
-        this.progressSeeker = progressSeeker;
-        this.extraction = extraction;
+        this.progressSeekerRedirection = progressSeekerRedirection;
+        this.extractionConsumer = extractionConsumer;
     }
 
-    public Runnable getExtraction()
+    public void performCaching(String gameReference, Consumer<Double> progressSeeker)
     {
-        return extraction;
+        cached = new CachedGamesiteCrawler(extractable, gameReference)
+                .getOrCacheHTML(progressSeekerRedirection == null ? null : x -> progressSeeker.accept(progressSeekerRedirection.apply(x)));
     }
 
-    public void setExtraction(Runnable extraction)
+    public void performExtraction()
     {
-        this.extraction = extraction;
-    }
-
-    public Consumer<Double> getProgressSeeker()
-    {
-        return progressSeeker;
-    }
-
-    public void setProgressSeeker(Consumer<Double> progressSeeker)
-    {
-        this.progressSeeker = progressSeeker;
-    }
-
-    public IExtractableCrawler getExtractable()
-    {
-        return extractable;
-    }
-
-    public void setExtractable(IExtractableCrawler extractable)
-    {
-        this.extractable = extractable;
-    }
-
-    public String getCached()
-    {
-        return cached;
-    }
-
-    public void setCached(String cached)
-    {
-        this.cached = cached;
+        this.extractionConsumer.accept(cached, this.extractable);
     }
 }
 
@@ -88,15 +60,7 @@ public class SearchContextGamePC implements ISearchContext
     private String gameReference;
     private int gameId = 0;
 
-    private String cachedGamespotUserReviewRaw;
-    private String cachedMetacriticUSerReviewRaw;
-    private String cachedMetacriticCriticReviewRaw;
-    private String cachedGameinfoRaw;
-
-    private IExtractableCrawler gamespotUserReviewExtractable;
-    private IExtractableCrawler metacriticUserReviewExtractable;
-    private IExtractableCrawler metacriticCriticReviewExtractable;
-    private IExtractableCrawler gameinfoExtractable;
+    private List<CrawlingBinder> binders = new ArrayList<>();
 
     private IReview[] gamespotUserReviews;
     private IReview[] metacriticUserReviews;
@@ -130,20 +94,7 @@ public class SearchContextGamePC implements ISearchContext
 
             var probeErrors = Stream.of(gameSpotLink, metacriticLink)
                     .parallel()
-                    .map(x ->
-                    {
-                        try
-                        {
-                            System.out.println("Probing " + x);
-                            Jsoup.connect(x).method(Connection.Method.HEAD).execute();
-                        }
-                        catch (IOException e)
-                        {
-                            System.out.println("Probe failed for " + x);
-                            return e;
-                        }
-                        return null;
-                    })
+                    .map(this::tryProbe)
                     .filter(Objects::nonNull)
                     .toArray(IOException[]::new);
 
@@ -157,32 +108,60 @@ public class SearchContextGamePC implements ISearchContext
             System.out.println("Found in cache for " + gameReference);
         }
 
-
         System.out.println("Starting crawlers");
-        gamespotUserReviewExtractable = new GamespotReviewsCrawler(gameReference);
-        metacriticUserReviewExtractable = new MetacriticUserReviewsCrawler(getMetacriticKey());
-        metacriticCriticReviewExtractable = new MetacriticCriticReviewsCrawler(getMetacriticKey());
-        gameinfoExtractable = new GameInfoCrawler(gameReference);
+
+        // Binding Gamespot user reviews crawling components
+        binders.add(new CrawlingBinder(new GamespotReviewsCrawler(gameReference),
+                x -> x / 2.0,
+                (cached, extractable) -> this.gamespotUserReviews = extractAndStoreReviews(cached, extractable, new GamespotReviewsExtractor(gameId)))
+        );
+
+        // Bind Metacritic user reviews crawling components
+        binders.add(new CrawlingBinder(new MetacriticUserReviewsCrawler(getMetacriticKey()),
+                x -> 0.5 + x / 2.0,
+                (cached, extractable) -> this.metacriticUserReviews =  extractAndStoreReviews(cached, extractable, new MetacriticUserReviewsExtractor(gameId)))
+        );
+
+        // Bind Metacritic critic reviews crawling components
+        binders.add(new CrawlingBinder(new MetacriticCriticReviewsCrawler(getMetacriticKey()),
+                null,
+                (cached, extractable) -> this.metacriticCriticReviews =  extractAndStoreReviews(cached, extractable, new MetacriticCriticReviewsExtractor(gameId)))
+        );
+
+        // Bind Gamespot game information crawling components
+        binders.add(new CrawlingBinder(new GameInfoCrawler(gameReference),
+                null,
+                (cached, extractable) -> this.gameInfo = extractAndStoreGameInfo(cached, new GamespotGameinfoExtractor()))
+        );
+
         System.out.println("Started crawlers");
+    }
+
+    private IOException tryProbe(String url)
+    {
+        try
+        {
+            System.out.println("Probing " + url);
+            Jsoup.connect(url).method(Connection.Method.HEAD).execute();
+        }
+        catch (IOException e)
+        {
+            System.out.println("Probe failed for " + url);
+            return e;
+        }
+        return null;
     }
 
     @Override
     public void fetch(Consumer<Double> progressListener)
     {
-        cachedGamespotUserReviewRaw = new CachedGamesiteCrawler(gamespotUserReviewExtractable, gameReference).getOrCacheHTML(p -> progressListener.accept(p / 2.0));
-        cachedMetacriticUSerReviewRaw = new CachedGamesiteCrawler(metacriticUserReviewExtractable, gameReference).getOrCacheHTML(p -> progressListener.accept(0.5 + p / 2.0));
-        cachedMetacriticCriticReviewRaw = new CachedGamesiteCrawler(metacriticCriticReviewExtractable, gameReference).getOrCacheHTML(null);
-        cachedGameinfoRaw = new CachedGamesiteCrawler(gameinfoExtractable, gameReference).getOrCacheHTML(null);
+        binders.forEach(x -> x.performCaching(gameReference, progressListener));
     }
 
     @Override
     public void extract()
     {
-        gameInfo = extractAndStoreGameInfo(cachedGameinfoRaw, new GamespotGameinfoExtractor());
-        gamespotUserReviews = extractAndStoreReviews(cachedGamespotUserReviewRaw, gamespotUserReviewExtractable, new GamespotReviewsExtractor(gameId));
-        metacriticUserReviews = extractAndStoreReviews(cachedMetacriticUSerReviewRaw, metacriticUserReviewExtractable, new MetacriticUserReviewsExtractor(gameId));
-        metacriticCriticReviews = extractAndStoreReviews(cachedMetacriticCriticReviewRaw, metacriticCriticReviewExtractable, new MetacriticCriticReviewsExtractor(gameId));
-
+        binders.forEach(CrawlingBinder::performExtraction);
     }
 
     private Game extractAndStoreGameInfo(String rawHtml, IExtractable<String, Game> extractor)
