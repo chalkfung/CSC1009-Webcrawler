@@ -21,7 +21,9 @@ import org.jsoup.HttpStatusException;
 import ricardo_crawlos.core.ISearchContext;
 import ricardo_crawlos.managers.SearchManager;
 
-
+/**
+ * GameReviewHomePanel class inherits JPanel
+ */
 public class GameReviewHomePanel extends JPanel
 {
     private final int SLEEPTIME = 0;
@@ -29,6 +31,13 @@ public class GameReviewHomePanel extends JPanel
     private JTextField txtSearchYourGame;
     private JFrame jframe;
 
+    /**
+     * This constructor is the home page of the GUI, it sets up the search field, search button and logo.
+     * It will display the loading gif with the help of the SwingWorker while the system is searching, analysing etc
+     * and stops the gif when the data is finalised.
+     *
+     * @param jframe Using the settings from the MainReviewFrame
+     */
     public GameReviewHomePanel(JFrame jframe)
     {
         this.jframe = jframe;

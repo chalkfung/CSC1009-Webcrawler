@@ -40,10 +40,24 @@ import ricardo_crawlos.utilities.Statistics;
 
 import static ricardo_crawlos.utilities.StringUtils.*;
 
+/**
+ * GameReviewInformationPanel class inherits JPanel
+ */
 public class GameReviewInformationPanel extends JPanel
 {
     private static final long serialVersionUID = 1L;
 
+    /**
+     * This constructor is used displays all the information, Game Information, statistic data.
+     * Has the option to go back to the Main page of the GUI, GameReviewHomePanel (Back button),
+     * calling the word clouds and displaying the reviews' context.
+     *
+     * @param jframe Using the same JFrame from GameReviewHomePanel to plant in the
+     *               JLabels, JButton and box & whisker plot.
+     * @param results Taking in the results that have been analysed to display it through the different JLabels.
+     * @param context Taking the context of the reviews that has been extracted from the websites and display it
+     *                Eg. Game Name, Game Description etc.
+     */
     public GameReviewInformationPanel(JFrame jframe, Dictionary<Integer, Statistics<Double, IReview>> results,
             ISearchContext context)
     {
