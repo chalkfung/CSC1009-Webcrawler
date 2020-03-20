@@ -248,8 +248,8 @@ public class SearchContextGamePC implements ISearchContext
     }
 
     /**
-     * Produce a Dictionary which values are the Statistic classes after analysing, key 0 should be raw user datas
-     * key 1 should be raw user datas without outliersm.
+     * Produce a Dictionary which values are the Statistic classes after analysing, key 0 should be raw user data
+     * key 1 should be raw user data without outliers.
      * If there are no acceptable outliers, key 2 will be critic stats values.
      * If there exists outliers, key 2 will be the acceptable outliers stats values and key 3 will be the critics.
      * @return Dictionary which values are the Statistic classes after analysing
