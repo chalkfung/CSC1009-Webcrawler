@@ -1,10 +1,10 @@
 {
   "gameName": "Counter-Strike: Global Offensive",
-  "gameId": 3,
+  "gameId": 1,
   "developer": "Valve Software",
   "genres": [
-    7,
-    8,
+    2,
+    3,
     4,
     5
   ],

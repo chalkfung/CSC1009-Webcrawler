@@ -1,12 +1,12 @@
 {
   "gameName": "FIFA 19",
-  "gameId": 5,
+  "gameId": 2,
   "developer": "EA Sports",
   "genres": [
-    10,
-    11,
-    12,
-    13
+    4,
+    5,
+    6,
+    7
   ],
   "releasedDate": "2018-09-20T00:00:00.000Z",
   "description": "The UEFA Champions League is coming to Fifa!"

@@ -1,10 +1,10 @@
 {
   "gameName": "Cities: Skylines",
-  "gameId": 9,
+  "gameId": 0,
   "developer": "Colossal Order",
   "genres": [
-    15,
-    2
+    0,
+    1
   ],
   "releasedDate": "2015-03-10T00:00:00.000Z",
   "description": "Developed by Colossal Order, Cities: Skylines offers sprawling landscapes and maps with endless sandbox gameplay and new ways to expand your city."

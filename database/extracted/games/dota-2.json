@@ -1,11 +1,11 @@
 {
   "gameName": "Dota 2",
-  "gameId": 0,
+  "gameId": 7,
   "developer": "Valve Software",
   "genres": [
-    1,
-    2,
-    0
+    15,
+    16,
+    1
   ],
   "releasedDate": "2013-07-09T00:00:00.000Z",
   "description": "Dota 2 features the characters and factions from the original Defense of the Ancients title with new features."

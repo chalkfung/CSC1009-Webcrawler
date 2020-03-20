@@ -1,0 +1,11 @@
+{
+  "gameName": "Diablo",
+  "gameId": 1,
+  "developer": "Blizzard Entertainment",
+  "genres": [
+    2,
+    3
+  ],
+  "releasedDate": "1996-11-30T00:00:00.000Z",
+  "description": "Diablo is the best game to come out in the past year, and you should own a copy. Period."
+}

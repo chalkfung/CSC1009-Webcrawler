@@ -1,12 +1,12 @@
 {
   "gameName": "Minecraft",
-  "gameId": 12,
+  "gameId": 5,
   "developer": "Notch",
   "genres": [
+    12,
+    13,
     8,
-    9,
-    16,
-    17
+    11
   ],
   "releasedDate": "2009-05-10T00:00:00.000Z",
   "description": "Minecraft is a game that involves players creating and destroying various types of blocks in a three dimensional environment."
