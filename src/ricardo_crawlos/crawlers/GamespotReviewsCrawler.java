@@ -9,6 +9,7 @@ import ricardo_crawlos.core.IWebsite;
 
 /**
  * GameSpotReviewCrawler
+ * Gets user reviews pages from gamespot
  */
 public class GamespotReviewsCrawler extends BaseURLConstrainedCrawler implements IPaginatedCrawler
 {
@@ -62,6 +63,11 @@ public class GamespotReviewsCrawler extends BaseURLConstrainedCrawler implements
         return Websites.getGamespot();
     }
 
+    /**
+     * Trim other content of the pages which are not reviews
+     * @param html The full html of all the pages
+     * @return Stripped html
+     */
     @Override
     public String extractFrom(String html)
     {

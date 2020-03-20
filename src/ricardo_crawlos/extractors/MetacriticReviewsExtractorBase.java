@@ -7,6 +7,9 @@ import ricardo_crawlos.core.IReviewsExtractor;
 import ricardo_crawlos.core.IWebsite;
 import ricardo_crawlos.crawlers.Websites;
 
+/**
+ * The base extractor to extract reviews from metacritic
+ */
 public abstract class MetacriticReviewsExtractorBase implements IReviewsExtractor
 {
     protected int gameId;

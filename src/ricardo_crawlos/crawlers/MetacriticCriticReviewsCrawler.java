@@ -7,6 +7,9 @@ import org.jsoup.nodes.Document;
 import ricardo_crawlos.core.IExtractableCrawler;
 import ricardo_crawlos.core.IWebsite;
 
+/**
+ * Crawls the critic summarised reviews from metacritic, critic reviews are not paginated
+ */
 public class MetacriticCriticReviewsCrawler implements IExtractableCrawler
 {
     protected String gamePath;
@@ -68,6 +71,11 @@ public class MetacriticCriticReviewsCrawler implements IExtractableCrawler
         return new Document[]{ loadedDocument };
     }
 
+    /**
+     * Strip down the html page from other content
+     * @param html raw html
+     * @return
+     */
     @Override
     public String extractFrom(String html)
     {

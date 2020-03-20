@@ -1,14 +1,12 @@
 package ricardo_crawlos.crawlers;
 
 import java.io.IOException;
-
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
-import ricardo_crawlos.crawlers.TraversalCrawlerBase;
-
 /**
- * CrawlerRunner
+ * BaseURLConstrainedCrawler
+ * Recursively crawls the site pages but constrained to its base url
  */
 public class BaseURLConstrainedCrawler extends TraversalCrawlerBase
 {
@@ -20,6 +18,10 @@ public class BaseURLConstrainedCrawler extends TraversalCrawlerBase
         baseUrl = theBaseUrl;
     }
 
+    /**
+     * Get all the constrained links from the base page to crawl recursively
+     * @return Array of urls in String
+     */
     @Override
     public String[] getTraversableLinks()
     {
@@ -35,15 +37,23 @@ public class BaseURLConstrainedCrawler extends TraversalCrawlerBase
         return getTraversableLinks(baseDocument);
     }
 
+    /**
+     * @param url The url to check if it is candidate to crawl recursively
+     */
     @Override
     protected boolean canTraverse(String url)
     {
         return url.startsWith(baseUrl);
     }
 
+    /**
+     * Traverse the crawling pages
+     * @param url The url to the page to look for more urls
+     */
     @Override
     public void traverse(String url)
     {
+        // Remove id jump markers
         if (url.contains("#"))
         {
             url = url.split("#")[0];
@@ -51,6 +61,9 @@ public class BaseURLConstrainedCrawler extends TraversalCrawlerBase
         super.traverse(url);
     }
 
+    /**
+     * Starts the traversal process
+     */
     @Override
     public void run()
     {

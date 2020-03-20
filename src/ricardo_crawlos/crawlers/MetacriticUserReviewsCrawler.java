@@ -5,6 +5,9 @@ import org.jsoup.Jsoup;
 import ricardo_crawlos.core.IPaginatedCrawler;
 import ricardo_crawlos.core.IWebsite;
 
+/**
+ * Crawls the user reviews pages from metacritic
+ */
 public class MetacriticUserReviewsCrawler extends BaseURLConstrainedCrawler implements IPaginatedCrawler
 {
     protected String gamePath;
@@ -24,6 +27,7 @@ public class MetacriticUserReviewsCrawler extends BaseURLConstrainedCrawler impl
     @Override
     public void run()
     {
+        // String query to start from page 0 and sort by date with 100 items per page
         traverse(this.baseUrl + "?sort-by=date&num_items=100&page=0");
     }
 

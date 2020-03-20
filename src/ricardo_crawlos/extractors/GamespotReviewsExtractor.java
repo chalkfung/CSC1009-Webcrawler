@@ -15,7 +15,7 @@ import ricardo_crawlos.models.ReviewBase;
 import ricardo_crawlos.models.UserReview;
 
 /**
- * GamespotReviewsExtractor
+ * Extract Gamesport user reviews HTML pages into UserReview model
  */
 public class GamespotReviewsExtractor implements IReviewsExtractor
 {

@@ -10,6 +10,9 @@ import ricardo_crawlos.core.IReview;
 import ricardo_crawlos.models.ReviewBase;
 import ricardo_crawlos.models.UserReview;
 
+/**
+ * Extractor to extract metacritic user review pages into UserReview model
+ */
 public class MetacriticUserReviewsExtractor extends MetacriticReviewsExtractorBase
 {
     public MetacriticUserReviewsExtractor(int theGameId)

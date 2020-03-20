@@ -13,18 +13,27 @@ import ricardo_crawlos.crawlers.TraversalCrawlerBase;
 
 /**
  * CachedCrawler
+ * This class will check if the cache of the crawl target exists in the file database, only crawl if it does not exist
  */
 public class CachedGamesiteCrawler
 {
     private IExtractableCrawler crawler;
     private String gamePathName;
 
+    /**
+     *
+     * @param theCrawler The extractable crawler to run to crawl if cache is not found
+     * @param theGamePathName The folder path name of the game
+     */
     public CachedGamesiteCrawler(IExtractableCrawler theCrawler, String theGamePathName)
     {
         crawler = theCrawler;
         gamePathName = theGamePathName;
     }
 
+    /**
+     * Run the crawler and store the extracted crawled result to file database to cache it for faster subsequent access
+     */
     private void storeToCache()
     {
         crawler.run();
@@ -41,6 +50,7 @@ public class CachedGamesiteCrawler
      */
     public String getOrCacheHTML(Consumer<Double> progressSeeker)
     {
+        // Cache exist
         if (Files.exists(Path.of(getCachedPath())))
         {
             try
@@ -57,6 +67,7 @@ public class CachedGamesiteCrawler
                 return null;
             }
         }
+        // Cache does not exist
         else
         {
             if (crawler instanceof TraversalCrawlerBase)
@@ -77,6 +88,10 @@ public class CachedGamesiteCrawler
         }
     }
 
+    /**
+     * Get the file path to store the cache
+     * @return the relative file path
+     */
     public String getCachedPath()
     {
         return "database/cache/" + gamePathName + "/" + crawler.getWebsiteInfo().getDomain() + "_"

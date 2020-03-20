@@ -13,24 +13,34 @@ import org.jsoup.select.Elements;
 import ricardo_crawlos.core.ICrawler;
 
 /**
- * BaseCrawler
+ * TraversalCrawlerBase
  */
 public abstract class TraversalCrawlerBase implements ICrawler
 {
     protected final Set<String> links;
     protected final Queue<Document> traversalResults;
 
+    /**
+     * Event listen to report the current crawling progress
+     */
     protected List<Consumer<Double>> onProgressListeners;
 
+    /**
+     * Using atomic counter as crawling is parallelised to prevent race conditions
+     */
     private AtomicInteger maxPageSeen = new AtomicInteger(0);
 
     public TraversalCrawlerBase()
     {
+        // Using concurrent data structures are crawling is parallelised
         links = Collections.newSetFromMap(new ConcurrentHashMap<>());
         traversalResults = new ConcurrentLinkedQueue<>();
         onProgressListeners = new ArrayList<>();
     }
 
+    /**
+     * Progress event subscription point
+     */
     public void addProgressListener(Consumer<Double> listener)
     {
         if (listener == null)
@@ -40,6 +50,9 @@ public abstract class TraversalCrawlerBase implements ICrawler
         onProgressListeners.add(listener);
     }
 
+    /**
+     * Progress event unsubscription point
+     */
     public void removeProgressListener(Consumer<Double> listener)
     {
         if (listener == null)
@@ -49,8 +62,14 @@ public abstract class TraversalCrawlerBase implements ICrawler
         onProgressListeners.remove(listener);
     }
 
+    /**
+     * Traversal filter condition to be implemented by child classes
+     */
     protected abstract boolean canTraverse(String url);
 
+    /**
+     * Get all absolute links from elements with href attribute
+     */
     public String[] getTraversableLinks(Document document)
     {
         Elements linksOnPage = document.select("a[href]");
@@ -62,6 +81,11 @@ public abstract class TraversalCrawlerBase implements ICrawler
                 .toArray(String[]::new);
     }
 
+    /**
+     * Estimate the current recursive crawling process based on the largest paging number seen
+     * @param currentUrl Current crawled url
+     * @return Progress from 0.0 ~ 1.0
+     */
     public double estimateTraversalProgress(String currentUrl)
     {
         try
@@ -71,6 +95,7 @@ public abstract class TraversalCrawlerBase implements ICrawler
             {
                 maxPageSeen.set(currentPage);
             }
+            // Just return 0 of the max page seen is 3, the UI will not display the progress as it is probably not accurate yet
             if (maxPageSeen.get() < 3)
             {
                 return 0;

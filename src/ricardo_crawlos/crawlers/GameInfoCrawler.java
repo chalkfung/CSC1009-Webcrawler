@@ -7,6 +7,9 @@ import org.jsoup.nodes.Document;
 import ricardo_crawlos.core.IExtractableCrawler;
 import ricardo_crawlos.core.IWebsite;
 
+/**
+ * Gets the information of a game by scrapping from Gamespot
+ */
 public class GameInfoCrawler implements IExtractableCrawler
 {
     private final String gamePath;
@@ -35,6 +38,9 @@ public class GameInfoCrawler implements IExtractableCrawler
         return "game-info";
     }
 
+    /**
+     * Load the HTML document
+     */
     @Override
     public void run()
     {

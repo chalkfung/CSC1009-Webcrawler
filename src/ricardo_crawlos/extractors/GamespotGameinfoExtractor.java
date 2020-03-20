@@ -11,6 +11,9 @@ import ricardo_crawlos.managers.GameManager;
 import ricardo_crawlos.managers.GenreManager;
 import ricardo_crawlos.models.Game;
 
+/**
+ * Extract from Gamespot main game page HTML into game model
+ */
 public class GamespotGameinfoExtractor implements IExtractable<String, Game>
 {
     private SimpleDateFormat dateParser = new SimpleDateFormat("MMM dd, yyyy");
