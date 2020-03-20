@@ -11,6 +11,7 @@ import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Dictionary;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -38,6 +39,8 @@ import ricardo_crawlos.core.ISearchContext;
 import ricardo_crawlos.models.CriticReview;
 import ricardo_crawlos.models.UserReview;
 import ricardo_crawlos.utilities.Statistics;
+
+import static ricardo_crawlos.utilities.StringUtils.*;
 
 public class GameReviewInformationPanel extends JPanel
 {
@@ -185,7 +188,7 @@ public class GameReviewInformationPanel extends JPanel
             {
                 WordCloudGenerator.showWorldCloud("User Word Cloud", Arrays.stream(context.getAllUserReviews())
                         .parallel()
-                        .map(x -> x.getComments())
+                        .map(IReview::getComments)
                         .collect(Collectors.toList())
                 );
             }
@@ -203,7 +206,7 @@ public class GameReviewInformationPanel extends JPanel
             {
                 WordCloudGenerator.showWorldCloud("User Word Cloud", Arrays.stream(context.getAllCriticReviews())
                         .parallel()
-                        .map(x -> x.getComments())
+                        .map(IReview::getComments)
                         .collect(Collectors.toList())
                 );
             }
@@ -219,14 +222,19 @@ public class GameReviewInformationPanel extends JPanel
         {
             public void actionPerformed(ActionEvent e)
             {
-                var content = Arrays.stream(context.getAllUserReviews())
-                        .map(x -> (UserReview)x)
-                        .map(x -> x.getAuthor() + "\n"
-                                + new SimpleDateFormat("dd-MMM-yyyy").format(x.getDateCreated()) + "\n"
-                                + "Score: " + x.getScore() + "\n"
-                                + "Helpfulness: " + x.getHelpfulScore() + " of " + x.getHelpfulCount() + "\n"
-                                + x.getComments())
-                        .collect(Collectors.joining("\n\n"));
+                var reviews = context.getAllUserReviews();
+                var content = IntStream.range(0, reviews.length)
+                        .mapToObj(i ->
+                        {
+                            var userReview = (UserReview) reviews[i];
+                            return "#" + (i + 1) + "\n"
+                                    + userReview.getAuthor() + "\n"
+                                    + new SimpleDateFormat("dd-MMM-yyyy").format(userReview.getDateCreated()) + "\n"
+                                    + "Score: " + userReview.getScore() + "\n"
+                                    + "Helpfulness: " + userReview.getHelpfulScore() + " of " + userReview.getHelpfulCount() + "\n"
+                                    + userReview.getComments();
+                        })
+                        .collect(Collectors.toList());
                 ScrollingPlane.createStatic(content, 640, 480).showWindow("User Comments Summary", jframe);
             }
         });
@@ -241,14 +249,19 @@ public class GameReviewInformationPanel extends JPanel
         {
             public void actionPerformed(ActionEvent e)
             {
-                var content = Arrays.stream(context.getAllCriticReviews())
-                        .map(x -> (CriticReview) x)
-                        .map(x -> x.getAuthor() + "\n"
-                                + x.getSource() + "\n"
-                                + new SimpleDateFormat("dd-MMM-yyyy").format(x.getDateCreated()) + "\n"
-                                + "Score: " + x.getScore() + "\n"
-                                + x.getComments())
-                        .collect(Collectors.joining("\n\n"));
+                var reviews = context.getAllCriticReviews();
+                var content = IntStream.range(0, reviews.length)
+                        .mapToObj(i ->
+                        {
+                            var criticReview = (CriticReview) reviews[i];
+                            return "#" + (i + 1) + "\n"
+                                    + criticReview.getAuthor() + "\n"
+                                    + criticReview.getSource() + "\n"
+                                    + new SimpleDateFormat("dd-MMM-yyyy").format(criticReview.getDateCreated()) + "\n"
+                                    + "Score: " + criticReview.getScore() + "\n"
+                                    + criticReview.getComments();
+                        })
+                        .collect(Collectors.toList());
                 ScrollingPlane.createStatic(content, 640, 480).showWindow("Critic Review Summary", jframe);
             }
         });
@@ -260,7 +273,7 @@ public class GameReviewInformationPanel extends JPanel
         game_name_value.setBounds(15, 140, 455, 40);
         add(game_name_value);
 
-        JTextArea description_value = new JTextArea(context.getGameInfo().toString());
+        JTextArea description_value = new JTextArea(trimEndExcess(context.getGameInfo().toString(), 300, "..."));
         description_value.setWrapStyleWord(true);
         description_value.setLineWrap(true);
         description_value.setEditable(false);
@@ -322,10 +335,5 @@ public class GameReviewInformationPanel extends JPanel
         std_score_value.setFont(new Font("Tahoma", Font.PLAIN, 15));
         std_score_value.setBounds(15, 600, 500, 100);
         add(std_score_value);
-    }
-
-    private static String formatDoubleD2(Double input)
-    {
-        return String.format("%.2f", input);
     }
 }

@@ -1,13 +1,11 @@
 package ricardo_crawlos.crawlers;
 
 import java.io.IOException;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Queue;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.Consumer;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
@@ -22,12 +20,33 @@ public abstract class TraversalCrawlerBase implements ICrawler
     protected final Set<String> links;
     protected final Queue<Document> traversalResults;
 
+    protected List<Consumer<Double>> onProgressListeners;
+
     private AtomicInteger maxPageSeen = new AtomicInteger(0);
 
     public TraversalCrawlerBase()
     {
         links = Collections.newSetFromMap(new ConcurrentHashMap<>());
         traversalResults = new ConcurrentLinkedQueue<>();
+        onProgressListeners = new ArrayList<>();
+    }
+
+    public void addProgressListener(Consumer<Double> listener)
+    {
+        if (listener == null)
+        {
+            return;
+        }
+        onProgressListeners.add(listener);
+    }
+
+    public void removeProgressListener(Consumer<Double> listener)
+    {
+        if (listener == null)
+        {
+            return;
+        }
+        onProgressListeners.remove(listener);
     }
 
     protected abstract boolean canTraverse(String url);
@@ -52,11 +71,11 @@ public abstract class TraversalCrawlerBase implements ICrawler
             {
                 maxPageSeen.set(currentPage);
             }
-            if (maxPageSeen.get() < 4)
+            if (maxPageSeen.get() < 3)
             {
                 return 0;
             }
-            return (traversalResults.size() / ((double) maxPageSeen.get())) * 100;
+            return (traversalResults.size() / ((double) maxPageSeen.get()));
         }
         catch (Exception e)
         {
@@ -75,8 +94,8 @@ public abstract class TraversalCrawlerBase implements ICrawler
         if (links.add(url))
         {
             var progress = estimateTraversalProgress(url);
-
-            System.out.println("Traversing: " + (progress == 0 ? "" : String.format("est %.2f%% ", progress)) + url);
+            onProgressListeners.forEach(x -> x.accept(progress));
+            System.out.println("Traversing: " + (progress == 0 ? "" : String.format("est %.2f%% ", progress * 100)) + url);
             try
             {
                 // Load the html document using jsoup

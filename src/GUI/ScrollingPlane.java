@@ -1,79 +1,107 @@
 package GUI;
 
-import java.awt.*;
-import java.awt.event.HierarchyEvent;
-import java.awt.event.HierarchyListener;
 import javax.swing.*;
+import java.awt.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * This class is a utility to make JOptionPane resizable
  */
 public class ScrollingPlane
 {
-    private final int cutoff = 10000;
-    private String source;
+    private final int cutoff = 100;
+    private List<String> source;
     private String output;
     private int x;
     private int y;
     private boolean edit;
 
-    public ScrollingPlane(String output, int x, int y, Boolean edit)
-    {
+    JScrollPane plane;
 
-        this.output = this.source = output;
+    public void setPlane(JScrollPane plane)
+    {
+        this.plane = plane;
+    }
+
+    public ScrollingPlane(List<String> source, int x, int y, Boolean edit)
+    {
+        this.output = "";
+        this.source = source;
         this.x = x;
         this.y = y;
         this.edit = edit;
     }
 
-    public static ScrollingPlane createStatic(String output, int x, int y)
+    public static ScrollingPlane createStatic(List<String> output, int x, int y)
     {
         return new ScrollingPlane(output, x, y, false);
     }
 
     public void showWindow(String title, JFrame jFrame)
     {
-        JButton loadMore = new JButton("Load All");
-        Object[] buttons = new Object[]{ "OK", loadMore };
+        var buttons = new ArrayList<>();
+        buttons.add("Close");
 
-        loadMore.addActionListener(x ->
+        if (source.size() > cutoff)
         {
-            output = source;
-
-            var result = JOptionPane.showOptionDialog(
-                    null,
-                    "This operation is very resource intensive",
-                    "Warning",
-                    JOptionPane.OK_CANCEL_OPTION,
-                    JOptionPane.QUESTION_MESSAGE,
-                    null,
-                    new Object[] {"Load", "Cancel"},
-                    null
-            );
-
-            if (result == JOptionPane.OK_OPTION)
+            output = source.stream().limit(cutoff).collect(Collectors.joining("\n\n"));
+            var loadMore = new JButton("Load All");
+            buttons.add(loadMore);
+            loadMore.addActionListener(x ->
             {
-                GameReviewHomePanel.loaderAction(jFrame, (dialog, lable) -> startLoading(dialog, lable, title));
-            }
-        });
+                var result = JOptionPane.showOptionDialog(
+                        null,
+                        "This operation is very resource intensive. Continue?",
+                        "Warning",
+                        JOptionPane.OK_CANCEL_OPTION,
+                        JOptionPane.QUESTION_MESSAGE,
+                        null,
+                        new Object[]{ "Load", "Cancel" },
+                        null
+                );
 
-        if (output.length() < cutoff)
-        {
-            loadMore.setEnabled(false);
+                if (result == JOptionPane.OK_OPTION)
+                {
+                    output = String.join("\n\n", source);
+
+                    SimpleLoaderManager.StartLoadingInstance(jFrame, () ->
+                            {
+                                JOptionPane.getRootFrame().dispose();
+                                setPlane(getPlane());
+                                return null;
+                            },
+                            () ->
+                            {
+                                JOptionPane.showOptionDialog(
+                                        null,
+                                        new Object[]{ plane },
+                                        title + " " + source.size() + " Entries",
+                                        JOptionPane.DEFAULT_OPTION,
+                                        JOptionPane.PLAIN_MESSAGE,
+                                        null,
+                                        new Object[]{ "Close" },
+                                        null
+                                );
+                            }
+                    );
+                }
+            });
         }
         else
         {
-            output = output.substring(0, cutoff);
+            output = String.join("\n\n", source);
         }
 
         JOptionPane.showOptionDialog(
                 null,
                 new Object[]{ getPlane() },
-                title,
+                title + " " + (Math.min(source.size(), cutoff)) + " of " + source.size() + " Entries",
                 JOptionPane.DEFAULT_OPTION,
                 JOptionPane.PLAIN_MESSAGE,
                 null,
-                buttons,
+                buttons.toArray(),
                 null
         );
     }
@@ -93,56 +121,18 @@ public class ScrollingPlane
 
         scrollPane.getViewport().setView(textArea);
 
-        scrollPane.addHierarchyListener(new HierarchyListener()
+        scrollPane.addHierarchyListener(e ->
         {
-            public void hierarchyChanged(HierarchyEvent e)
+            Window window = SwingUtilities.getWindowAncestor(scrollPane);
+            if (window instanceof Dialog)
             {
-                Window window = SwingUtilities.getWindowAncestor(scrollPane);
-                if (window instanceof Dialog)
+                Dialog dialog = (Dialog) window;
+                if (!dialog.isResizable())
                 {
-                    Dialog dialog = (Dialog) window;
-                    if (!dialog.isResizable())
-                    {
-                        dialog.setResizable(true);
-                    }
+                    dialog.setResizable(true);
                 }
             }
         });
         return scrollPane;
-    }
-
-    public SwingWorker<String, Void> startLoading(JDialog load, JLabel gifLabel, String title)
-    {
-        gifLabel.setText("Loading");
-        return new SwingWorker<String, Void>()
-        {
-            JScrollPane plane;
-            @Override
-            protected String doInBackground() throws InterruptedException
-            {
-                System.out.println("Getting");
-                JOptionPane.getRootFrame().dispose();
-                plane = getPlane();
-                System.out.println("Gotten");
-                return null;
-            }
-
-            @Override
-            protected void done()
-            {
-                load.dispose();
-
-                JOptionPane.showOptionDialog(
-                        null,
-                        new Object[]{ plane },
-                        title,
-                        JOptionPane.DEFAULT_OPTION,
-                        JOptionPane.PLAIN_MESSAGE,
-                        null,
-                        new Object[] {"Ok"},
-                        null
-                );
-            }
-        };
     }
 }

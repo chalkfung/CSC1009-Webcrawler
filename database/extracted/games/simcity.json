@@ -1,0 +1,11 @@
+{
+  "gameName": "SimCity",
+  "gameId": 10,
+  "developer": "Maxis",
+  "genres": [
+    2,
+    15
+  ],
+  "releasedDate": "2013-03-05T00:00:00.000Z",
+  "description": "SimCity is a city-building simulation game that lets players create the city they desire to make the choices that shape your city and power the citizens within it."
+}

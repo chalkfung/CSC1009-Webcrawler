@@ -7,6 +7,7 @@ import java.util.Arrays;
 import java.util.Dictionary;
 import java.util.Hashtable;
 import java.util.Objects;
+import java.util.function.Consumer;
 import java.util.stream.Stream;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
@@ -26,6 +27,61 @@ import ricardo_crawlos.storage.JsonSerialiser;
 import ricardo_crawlos.storage.TextWriter;
 import ricardo_crawlos.utilities.AnalyserBase;
 import ricardo_crawlos.utilities.Statistics;
+
+class CrawlingBinder
+{
+    private String cached;
+    private IExtractableCrawler extractable;
+    private Consumer<Double> progressSeeker;
+    private Runnable extraction;
+
+    CrawlingBinder(IExtractableCrawler extractable, Consumer<Double> progressSeeker, Runnable extraction)
+    {
+        this.extractable = extractable;
+        this.progressSeeker = progressSeeker;
+        this.extraction = extraction;
+    }
+
+    public Runnable getExtraction()
+    {
+        return extraction;
+    }
+
+    public void setExtraction(Runnable extraction)
+    {
+        this.extraction = extraction;
+    }
+
+    public Consumer<Double> getProgressSeeker()
+    {
+        return progressSeeker;
+    }
+
+    public void setProgressSeeker(Consumer<Double> progressSeeker)
+    {
+        this.progressSeeker = progressSeeker;
+    }
+
+    public IExtractableCrawler getExtractable()
+    {
+        return extractable;
+    }
+
+    public void setExtractable(IExtractableCrawler extractable)
+    {
+        this.extractable = extractable;
+    }
+
+    public String getCached()
+    {
+        return cached;
+    }
+
+    public void setCached(String cached)
+    {
+        this.cached = cached;
+    }
+}
 
 public class SearchContextGamePC implements ISearchContext
 {
@@ -72,8 +128,7 @@ public class SearchContextGamePC implements ISearchContext
             var gameSpotLink = "https://www.gamespot.com/" + getGamespotKey();
             var metacriticLink = "https://www.metacritic.com/" + getMetacriticKey();
 
-            var probeErrors = Arrays.asList(gameSpotLink, metacriticLink)
-                    .stream()
+            var probeErrors = Stream.of(gameSpotLink, metacriticLink)
                     .parallel()
                     .map(x ->
                     {
@@ -112,12 +167,12 @@ public class SearchContextGamePC implements ISearchContext
     }
 
     @Override
-    public void fetch()
+    public void fetch(Consumer<Double> progressListener)
     {
-        cachedGamespotUserReviewRaw = new CachedGamesiteCrawler(gamespotUserReviewExtractable, gameReference).getOrCacheHTML();
-        cachedMetacriticUSerReviewRaw = new CachedGamesiteCrawler(metacriticUserReviewExtractable, gameReference).getOrCacheHTML();
-        cachedMetacriticCriticReviewRaw = new CachedGamesiteCrawler(metacriticCriticReviewExtractable, gameReference).getOrCacheHTML();
-        cachedGameinfoRaw = new CachedGamesiteCrawler(gameinfoExtractable, gameReference).getOrCacheHTML();
+        cachedGamespotUserReviewRaw = new CachedGamesiteCrawler(gamespotUserReviewExtractable, gameReference).getOrCacheHTML(p -> progressListener.accept(p / 2.0));
+        cachedMetacriticUSerReviewRaw = new CachedGamesiteCrawler(metacriticUserReviewExtractable, gameReference).getOrCacheHTML(p -> progressListener.accept(0.5 + p / 2.0));
+        cachedMetacriticCriticReviewRaw = new CachedGamesiteCrawler(metacriticCriticReviewExtractable, gameReference).getOrCacheHTML(null);
+        cachedGameinfoRaw = new CachedGamesiteCrawler(gameinfoExtractable, gameReference).getOrCacheHTML(null);
     }
 
     @Override
@@ -167,7 +222,7 @@ public class SearchContextGamePC implements ISearchContext
         AnalyserBase<IReview> analyser = new AnalyserBase<>();
         result.put(0, analyser.Analyse(Arrays.asList(getAllUserReviews())));
         result.put(1, analyser.Analyse(result.get(0).getNonOutliers()));
-        if(result.get(0).getOutliers().size() > 0)
+        if (result.get(0).getOutliers().size() > 0)
         {
             result.put(2, analyser.Analyse(result.get(0).getOutliers()));
             result.put(3, analyser.Analyse(Arrays.asList(getAllCriticReviews())));

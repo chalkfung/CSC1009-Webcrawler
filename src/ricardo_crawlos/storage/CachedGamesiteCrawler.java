@@ -4,9 +4,11 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Arrays;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 import ricardo_crawlos.core.IExtractableCrawler;
+import ricardo_crawlos.crawlers.TraversalCrawlerBase;
 
 /**
  * CachedCrawler
@@ -28,9 +30,15 @@ public class CachedGamesiteCrawler
         String[] cacheOutput = Arrays.stream(crawler.getTraversalResults()).map(x -> crawler.extractFrom(x.html())).toArray(String[]::new);
 
         TextWriter.writeAllText(getCachedPath(), JsonSerialiser.DefaultInstance().toJson(cacheOutput));
+        System.out.println("Cached: " + getCachedPath());
     }
 
-    public String getOrCacheHTML()
+    /**
+     * Get the html either through crawling or cached if has crawled before
+     * @param progressSeeker Event listener to report the crawling progress, such as from a UI
+     * @return The full html
+     */
+    public String getOrCacheHTML(Consumer<Double> progressSeeker)
     {
         if (Files.exists(Path.of(getCachedPath())))
         {
@@ -50,8 +58,19 @@ public class CachedGamesiteCrawler
         }
         else
         {
+            if (crawler instanceof TraversalCrawlerBase)
+            {
+                ((TraversalCrawlerBase) crawler).addProgressListener(progressSeeker);
+            }
+
             storeToCache();
-            return getOrCacheHTML();
+
+            if (crawler instanceof TraversalCrawlerBase)
+            {
+                ((TraversalCrawlerBase) crawler).removeProgressListener(progressSeeker);
+            }
+
+            return getOrCacheHTML(progressSeeker);
         }
     }
 

@@ -3,10 +3,10 @@
   "gameId": 2,
   "developer": "Epic Games",
   "genres": [
+    7,
     4,
     5,
-    6,
-    7
+    6
   ],
   "releasedDate": "2015-12-31T00:00:00.000Z",
   "description": "In Fortnite, players and their friends lead a group of Heroes to reclaim and rebuild a homeland that has been left empty by a mysterious darkness only known as “the Storm.”"
