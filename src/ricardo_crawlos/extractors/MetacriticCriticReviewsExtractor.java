@@ -10,6 +10,9 @@ import ricardo_crawlos.core.IReview;
 import ricardo_crawlos.models.CriticReview;
 import ricardo_crawlos.models.ReviewBase;
 
+/**
+ * Extractor to extract Metacritic critic reviews into CriticReview model
+ */
 public class MetacriticCriticReviewsExtractor extends MetacriticReviewsExtractorBase
 {
     public MetacriticCriticReviewsExtractor(int theGameId)
