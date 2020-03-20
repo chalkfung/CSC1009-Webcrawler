@@ -2,8 +2,6 @@ package GUI;
 
 import java.awt.Color;
 import java.awt.Font;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.text.NumberFormat;
@@ -46,7 +44,8 @@ public class GameReviewInformationPanel extends JPanel
 {
     private static final long serialVersionUID = 1L;
 
-    public GameReviewInformationPanel(JFrame jframe, Dictionary<Integer, Statistics<Double, IReview>> results, ISearchContext context)
+    public GameReviewInformationPanel(JFrame jframe, Dictionary<Integer, Statistics<Double, IReview>> results,
+            ISearchContext context)
     {
         setBackground(Color.WHITE);
 
@@ -68,7 +67,6 @@ public class GameReviewInformationPanel extends JPanel
         description_label.setBounds(15, 170, 400, 40);
         add(description_label);
 
-
         JLabel count_label = new JLabel("Count");
         count_label.setFont(new Font("Tahoma", Font.BOLD, 26));
         count_label.setBounds(15, 400, 400, 40);
@@ -79,15 +77,14 @@ public class GameReviewInformationPanel extends JPanel
         mean_label.setBounds(15, 480, 400, 40);
         add(mean_label);
 
-
         JLabel std_label = new JLabel("S.D. Score");
         std_label.setFont(new Font("Tahoma", Font.BOLD, 26));
         std_label.setBounds(15, 560, 400, 40);
         add(std_label);
 
-
-        BoxAndWhiskerItem userBW = new BoxAndWhiskerItem(results.get(1).getMean(), results.get(1).getQ2(), results.get(1).getQ1(),
-                results.get(1).getQ3(), results.get(1).getMin(), results.get(1).getMax(), null, null, null);
+        BoxAndWhiskerItem userBW = new BoxAndWhiskerItem(results.get(1).getMean(), results.get(1).getQ2(),
+                results.get(1).getQ1(), results.get(1).getQ3(), results.get(1).getMin(), results.get(1).getMax(), null,
+                null, null);
         BoxAndWhiskerItem outBW = null;
         BoxAndWhiskerItem criticBW;
 
@@ -110,7 +107,6 @@ public class GameReviewInformationPanel extends JPanel
         }
         boxData.add(criticBW, "Reviews", "Critics");
 
-
         BoxAndWhiskerRenderer boxRenderer = new BoxAndWhiskerRenderer();
         DefaultCategoryDataset catData = new DefaultCategoryDataset();
         catData.addValue(boxData.getMeanValue(0, 0), "Mean", boxData.getColumnKey(0));
@@ -132,7 +128,8 @@ public class GameReviewInformationPanel extends JPanel
         JFreeChart chart = new JFreeChart("", JFreeChart.DEFAULT_TITLE_FONT, plot, true);
 
         String tooltipformat = "<html><body>Q1: {6}<br>Q3: {7}<br>Min: {4}<br>Max: {5}<br>Median: {3}<br>Mean: {2}</body></html>";
-        boxRenderer.setBaseToolTipGenerator(new BoxAndWhiskerToolTipGenerator(tooltipformat, NumberFormat.getNumberInstance()));
+        boxRenderer.setBaseToolTipGenerator(
+                new BoxAndWhiskerToolTipGenerator(tooltipformat, NumberFormat.getNumberInstance()));
         boxRenderer.setMeanVisible(false);
 
         ChartPanel panel = new ChartPanel(chart);
@@ -149,7 +146,7 @@ public class GameReviewInformationPanel extends JPanel
         add(back_button);
         back_button.addActionListener(e ->
         {
-            //Go the Display Info panel
+            // Go the Display Info panel
             GameReviewHomePanel searchPanel = new GameReviewHomePanel(jframe);
             jframe.setContentPane(searchPanel);
         });
@@ -179,11 +176,9 @@ public class GameReviewInformationPanel extends JPanel
         UserWord_cloud.setBackground(new Color(101, 101, 238));
         UserWord_cloud.setBounds(40, 650, 180, 40);
         add(UserWord_cloud);
-        UserWord_cloud.addActionListener(e -> WordCloudGenerator.showWorldCloud("User Word Cloud", Arrays.stream(context.getAllUserReviews())
-                .parallel()
-                .map(x -> x.getComments())
-                .collect(Collectors.toList())
-        ));
+        UserWord_cloud.addActionListener(
+                e -> WordCloudGenerator.showWorldCloud("User Word Cloud", Arrays.stream(context.getAllUserReviews())
+                        .parallel().map(x -> x.getComments()).collect(Collectors.toList())));
 
         JButton CriticWord_cloud = new JButton("Critic Word Cloud");
         CriticWord_cloud.setForeground(Color.WHITE);
@@ -191,11 +186,9 @@ public class GameReviewInformationPanel extends JPanel
         CriticWord_cloud.setBackground(new Color(101, 101, 238));
         CriticWord_cloud.setBounds(280, 650, 180, 40);
         add(CriticWord_cloud);
-        CriticWord_cloud.addActionListener(e -> WordCloudGenerator.showWorldCloud("User Word Cloud", Arrays.stream(context.getAllCriticReviews())
-                .parallel()
-                .map(x -> x.getComments())
-                .collect(Collectors.toList())
-        ));
+        CriticWord_cloud.addActionListener(
+                e -> WordCloudGenerator.showWorldCloud("User Word Cloud", Arrays.stream(context.getAllCriticReviews())
+                        .parallel().map(x -> x.getComments()).collect(Collectors.toList())));
 
         JButton ShowUser_Review = new JButton("Show User Reviews");
         ShowUser_Review.setForeground(Color.WHITE);
@@ -206,18 +199,14 @@ public class GameReviewInformationPanel extends JPanel
         ShowUser_Review.addActionListener(e ->
         {
             var reviews = context.getAllUserReviews();
-            var content = IntStream.range(0, reviews.length)
-                    .mapToObj(i ->
-                    {
-                        var userReview = (UserReview) reviews[i];
-                        return "#" + (i + 1) + "\n"
-                                + userReview.getAuthor() + "\n"
-                                + new SimpleDateFormat("dd-MMM-yyyy").format(userReview.getDateCreated()) + "\n"
-                                + "Score: " + userReview.getScore() + "\n"
-                                + "Helpfulness: " + userReview.getHelpfulScore() + " of " + userReview.getHelpfulCount() + "\n"
-                                + userReview.getComments();
-                    })
-                    .collect(Collectors.toList());
+            var content = IntStream.range(0, reviews.length).mapToObj(i ->
+            {
+                var userReview = (UserReview) reviews[i];
+                return "#" + (i + 1) + "\n" + userReview.getAuthor() + "\n"
+                        + new SimpleDateFormat("dd-MMM-yyyy").format(userReview.getDateCreated()) + "\n" + "Score: "
+                        + userReview.getScore() + "\n" + "Helpfulness: " + userReview.getHelpfulScore() + " of "
+                        + userReview.getHelpfulCount() + "\n" + userReview.getComments();
+            }).collect(Collectors.toList());
             ScrollingPlane.createStatic(content, 640, 480).showWindow("User Comments Summary", jframe);
         });
 
@@ -230,21 +219,15 @@ public class GameReviewInformationPanel extends JPanel
         ShowCritic_Review.addActionListener(e ->
         {
             var reviews = context.getAllCriticReviews();
-            var content = IntStream.range(0, reviews.length)
-                    .mapToObj(i ->
-                    {
-                        var criticReview = (CriticReview) reviews[i];
-                        return "#" + (i + 1) + "\n"
-                                + criticReview.getAuthor() + "\n"
-                                + criticReview.getSource() + "\n"
-                                + new SimpleDateFormat("dd-MMM-yyyy").format(criticReview.getDateCreated()) + "\n"
-                                + "Score: " + criticReview.getScore() + "\n"
-                                + criticReview.getComments();
-                    })
-                    .collect(Collectors.toList());
+            var content = IntStream.range(0, reviews.length).mapToObj(i ->
+            {
+                var criticReview = (CriticReview) reviews[i];
+                return "#" + (i + 1) + "\n" + criticReview.getAuthor() + "\n" + criticReview.getSource() + "\n"
+                        + new SimpleDateFormat("dd-MMM-yyyy").format(criticReview.getDateCreated()) + "\n" + "Score: "
+                        + criticReview.getScore() + "\n" + criticReview.getComments();
+            }).collect(Collectors.toList());
             ScrollingPlane.createStatic(content, 640, 480).showWindow("Critic Review Summary", jframe);
         });
-
 
         JLabel game_name_value = new JLabel(context.getGameInfo().getGameName());
         game_name_value.setVerticalAlignment(SwingConstants.TOP);
@@ -256,7 +239,7 @@ public class GameReviewInformationPanel extends JPanel
         description_value.setWrapStyleWord(true);
         description_value.setLineWrap(true);
         description_value.setEditable(false);
-//        description_value.setal(SwingConstants.TOP);
+        // description_value.setal(SwingConstants.TOP);
         description_value.setFont(new Font("Tahoma", Font.PLAIN, 15));
         description_value.setBounds(15, 210, 455, 200);
         add(description_value);
@@ -265,9 +248,9 @@ public class GameReviewInformationPanel extends JPanel
 
         if (results.size() > 3 && outBW != null)
         {
-            count_value = new JLabel(results.get(1).getOriginal().size() + " (User w/o Outliers), "
-                    + results.get(2).getOriginal().size() + " (Acceptable User Outliers), "
-                    + results.get(3).getOriginal().size() + " (Critics)");
+            count_value = new JLabel(
+                    results.get(1).getOriginal().size() + " (User w/o Outliers), " + results.get(2).getOriginal().size()
+                            + " (Acceptable User Outliers), " + results.get(3).getOriginal().size() + " (Critics)");
         }
         else
         {
@@ -301,9 +284,9 @@ public class GameReviewInformationPanel extends JPanel
         JLabel std_score_value = null;
         if (results.size() > 3 && outBW != null)
         {
-            std_score_value = new JLabel(results.get(1).getSd().toString() + " (User w/o Outliers), "
-                    + results.get(2).getSd().toString() + " (Acceptable Outliers), "
-                    + results.get(3).getSd().toString() + " (Critics)");
+            std_score_value = new JLabel(
+                    results.get(1).getSd().toString() + " (User w/o Outliers), " + results.get(2).getSd().toString()
+                            + " (Acceptable Outliers), " + results.get(3).getSd().toString() + " (Critics)");
         }
         else
         {
