@@ -55,6 +55,9 @@ class CrawlingBinder
     }
 }
 
+/**
+ * SearchContextGamePC
+ */
 public class SearchContextGamePC implements ISearchContext
 {
     private String gameReference;
@@ -67,21 +70,37 @@ public class SearchContextGamePC implements ISearchContext
     private IReview[] metacriticCriticReviews;
     private Game gameInfo;
 
+    /**
+     * Constructor of SearchContextGamePC class
+     * @param theGameReference the game tag String, e.g. DotA 2 game would be dota-2
+     */
     public SearchContextGamePC(String theGameReference)
     {
         gameReference = theGameReference;
     }
 
+    /**
+     * Getter of the game tag string for GameSpot
+     * @return game tag string for GameSpot
+     */
     private String getGamespotKey()
     {
         return gameReference;
     }
 
+    /**
+     * Getter of the game tag string for Metacritic
+     * @return game tag string for Metacritic
+     */
     private String getMetacriticKey()
     {
         return "game/pc/" + gameReference;
     }
 
+    /**
+     * Checks if the given tag is not giving any faults, i.e. the game has not been crawled before, then crawl.
+     * @throws IOException Exception when the tag is invalid and giving errors.
+     */
     @Override
     public void probe() throws IOException
     {
@@ -137,6 +156,11 @@ public class SearchContextGamePC implements ISearchContext
         System.out.println("Started crawlers");
     }
 
+    /**
+     * Try probing with the given URL
+     * @param url URL of the game
+     * @return If exception occurs, returns the exception. Else, nothing.
+     */
     private IOException tryProbe(String url)
     {
         try
@@ -152,18 +176,32 @@ public class SearchContextGamePC implements ISearchContext
         return null;
     }
 
+    /**
+     * Crawling process
+     * @param progressListener Any changes in the progress and update the GUI to display the changes.
+     */
     @Override
     public void fetch(Consumer<Double> progressListener)
     {
         binders.forEach(x -> x.performCaching(gameReference, progressListener));
     }
 
+    /**
+     * Extracting process
+     */
     @Override
     public void extract()
     {
         binders.forEach(CrawlingBinder::performExtraction);
     }
 
+
+     /**
+     * To parse the json file of the reviews into Game class object
+     * @param rawHtml HTML of the game
+     * @param extractor The extractor instance
+     * @return  Game class objects parsed from the database json files.
+     */
     private Game extractAndStoreGameInfo(String rawHtml, IExtractable<String, Game> extractor)
     {
         var game = extractor.extractFrom(rawHtml);
@@ -174,6 +212,13 @@ public class SearchContextGamePC implements ISearchContext
         return game;
     }
 
+    /**
+     * To parse the json file of the reviews into data structure classes
+     * @param rawHTML HTML of the game
+     * @param crawler   The Crawler instance
+     * @param extractor The extractor instance
+     * @return  Array of IReview class objects parsed from the database json files.
+     */
     private IReview[] extractAndStoreReviews(String rawHTML, IExtractableCrawler crawler, IReviewsExtractor extractor)
     {
         var extractedReviews = extractor.extractFrom(rawHTML);
@@ -183,17 +228,32 @@ public class SearchContextGamePC implements ISearchContext
         return extractedReviews;
     }
 
+    /**
+     * Getter for the array of gamespot and metacritic users reviews of IReview type after concatenation of both arrays
+     * @return Array of IReviews from GameSpot and Metacritic
+     */
     public IReview[] getAllUserReviews()
     {
         return Stream.concat(Arrays.stream(gamespotUserReviews), Arrays.stream(metacriticUserReviews))
                 .toArray(IReview[]::new);
     }
 
+    /**
+     * Getter for the array of Metacritic critics reviews of IReview type
+     * @return Array of IReviews from Metacritic
+     */
     public IReview[] getAllCriticReviews()
     {
         return metacriticCriticReviews;
     }
 
+    /**
+     * Produce a Dictionary which values are the Statistic classes after analysing, key 0 should be raw user datas
+     * key 1 should be raw user datas without outliersm.
+     * If there are no acceptable outliers, key 2 will be critic stats values.
+     * If there exists outliers, key 2 will be the acceptable outliers stats values and key 3 will be the critics.
+     * @return Dictionary which values are the Statistic classes after analysing
+     */
     @Override
     public Dictionary<Integer, Statistics<Double, IReview>> analyse()
     {
@@ -211,6 +271,10 @@ public class SearchContextGamePC implements ISearchContext
         return result;
     }
 
+    /**
+     * Getter to get Game class object which contains game information
+     * @return Game class object which contains game information
+     */
     public Game getGameInfo()
     {
         return gameInfo;

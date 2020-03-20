@@ -6,8 +6,10 @@ import java.util.stream.Collectors;
 import ricardo_crawlos.core.IAnalyser;
 import ricardo_crawlos.core.IReview;
 import ricardo_crawlos.models.UserReview;
-/*
- * AnalyserBase class
+
+/**
+ * AnalyserBase class analyses List of Ts which inherits IReview only.
+ * @param <T> Object classes which inherits IReviews
  */
 public class AnalyserBase<T extends IReview> implements IAnalyser<List<T>, Statistics<Double, T>>
 {
