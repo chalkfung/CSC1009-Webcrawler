@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 import org.jsoup.Jsoup;
@@ -17,6 +19,7 @@ import ricardo_crawlos.core.ICrawler;
  */
 public abstract class TraversalCrawlerBase implements ICrawler
 {
+    protected final int ParallelismLimit = 8;
     protected final Set<String> links;
     protected final Queue<Document> traversalResults;
 
@@ -82,7 +85,9 @@ public abstract class TraversalCrawlerBase implements ICrawler
     }
 
     /**
-     * Estimate the current recursive crawling process based on the largest paging number seen
+     * Estimate the current recursive crawling process based on the largest paging
+     * number seen
+     * 
      * @param currentUrl Current crawled url
      * @return Progress from 0.0 ~ 1.0
      */
@@ -95,7 +100,8 @@ public abstract class TraversalCrawlerBase implements ICrawler
             {
                 maxPageSeen.set(currentPage);
             }
-            // Just return 0 of the max page seen is 3, the UI will not display the progress as it is probably not accurate yet
+            // Just return 0 of the max page seen is 3, the UI will not display the progress
+            // as it is probably not accurate yet
             if (maxPageSeen.get() < 3)
             {
                 return 0;
@@ -125,20 +131,29 @@ public abstract class TraversalCrawlerBase implements ICrawler
             {
                 // Load the html document using jsoup
                 Document document = Jsoup.connect(url).get();
-
-                // Store the document to crawled result
                 traversalResults.add(document);
 
-                document.select("a[href]") // Select all anchors
+                ForkJoinPool customThreadPool = new ForkJoinPool(ParallelismLimit);
+                
+                // Store the document to crawled result
+                var task = customThreadPool.submit(() ->  document.select("a[href]") // Select all anchors
                         .parallelStream() // Using concurrency to speed up crawling
                         .map(x -> x.attr("abs:href")) // Get the url of the anchors
                         .filter(this::canTraverse) // Check if the url is valid candidate for the crawling context
                         .sorted(Comparator.comparing((String x) -> x).reversed()) // Crawl the furthest page first
-                        .forEach(this::traverse); // Recursively call this function for each links
+                        .forEach(this::traverse) // Recursively call this function for each links
+                );
+
+                task.get();
             }
             catch (IOException e)
             {
                 System.err.println("For '" + url + "': " + e.getMessage());
+            }
+            catch (ExecutionException | InterruptedException e)
+            {
+                System.err.println("ExecutionException | InterruptedException e " + e.getClass().getName() + " " + e.getMessage());
+                e.printStackTrace();
             }
         }
     }
